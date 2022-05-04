@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "lib/lago/ruby/client/version"
+$LOAD_PATH.push File.expand_path('lib', __dir__)
+
+require 'lago/version'
 
 Gem::Specification.new do |spec|
   spec.name = 'lago-ruby-client'
-  spec.version = Lago::Ruby::Client::VERSION
+  spec.version = Lago::VERSION
   spec.authors = ['Lovro Colic']
   spec.email = ['lovro@getlago.com']
 
