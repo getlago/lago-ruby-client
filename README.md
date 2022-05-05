@@ -1,4 +1,4 @@
-# Lago::Ruby::Client
+# Lago Ruby Client
 
 This is a ruby wrapper for Lago API
 
