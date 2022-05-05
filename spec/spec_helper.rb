@@ -1,8 +1,20 @@
 # frozen_string_literal: true
 
-require "lago/ruby/client"
+require 'factory_bot'
+require 'lago/api/client'
+require 'lago/api/connection'
+require 'lago/api/http_error'
+require 'lago/api/resources/base'
+require 'lago/api/resources/customer'
+require 'webmock/rspec'
 
 RSpec.configure do |config|
+  config.include FactoryBot::Syntax::Methods
+
+  config.before(:suite) do
+    FactoryBot.find_definitions
+  end
+
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
 

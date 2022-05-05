@@ -13,7 +13,6 @@ Gem::Specification.new do |spec|
   spec.summary = 'Lago Rest API client'
   spec.homepage = 'https://github.com/getlago/lago-ruby-client'
   spec.license = 'MIT'
-  spec.required_ruby_version = '>= 2.6.0'
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
@@ -22,9 +21,11 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_development_dependency 'factory_bot'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
   spec.add_development_dependency 'rubocop', '~> 1.21'
+  spec.add_development_dependency 'webmock'
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
