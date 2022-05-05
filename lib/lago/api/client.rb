@@ -26,6 +26,10 @@ module Lago
       def subscriptions
         Lago::Api::Resources::Subscription.new(self)
       end
+
+      def events
+        Lago::Api::Resources::Event.new(self)
+      end
     end
   end
 end

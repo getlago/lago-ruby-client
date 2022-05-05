@@ -6,6 +6,7 @@ require 'lago/api/connection'
 require 'lago/api/http_error'
 require 'lago/api/resources/base'
 require 'lago/api/resources/customer'
+require 'lago/api/resources/event'
 require 'lago/api/resources/subscription'
 require 'webmock/rspec'
 
