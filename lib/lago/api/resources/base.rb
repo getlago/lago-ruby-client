@@ -24,6 +24,12 @@ module Lago
           OpenStruct.new(response)
         end
 
+        def delete(params)
+          response = connection.delete(params)[response_root_name]
+
+          OpenStruct.new(response)
+        end
+
         private
 
         def connection

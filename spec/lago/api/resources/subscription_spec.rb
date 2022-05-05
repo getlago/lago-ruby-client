@@ -57,4 +57,48 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
     end
   end
+
+  describe '#delete' do
+    let(:params) { { 'customer_id' => factory_subscription.customer_id } }
+
+    context 'when subscription is successfully terminated' do
+      let(:response) do
+        {
+          'subscription' => factory_subscription.to_h
+        }.to_json
+      end
+
+      before do
+        stub_request(:delete, 'http://api.lago.dev/api/v1/subscriptions')
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns subscription' do
+        subscription = resource.delete(params)
+
+        expect(subscription.customer_id).to eq(factory_subscription.customer_id)
+        expect(subscription.plan_code).to eq(factory_subscription.plan_code)
+        expect(subscription.status).to eq(factory_subscription.status)
+      end
+    end
+
+    context 'when subscription is NOT successfully terminated' do
+      let(:response) do
+        {
+          'status' => 422,
+          'error' => 'Unprocessable Entity',
+          'message' => 'Validation error on the record'
+        }.to_json
+      end
+
+      before do
+        stub_request(:delete, 'http://api.lago.dev/api/v1/subscriptions')
+          .to_return(body: response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.delete(params) }.to raise_error Lago::Api::HttpError
+      end
+    end
+  end
 end
