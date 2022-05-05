@@ -3,13 +3,13 @@
 module Lago
   module Api
     module Resources
-      class Customer < Base
+      class Subscription < Base
         def api_resource
-          'customers'
+          'subscriptions'
         end
 
         def response_root_name
-          'customer'
+          'subscription'
         end
       end
     end

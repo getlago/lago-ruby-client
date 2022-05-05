@@ -22,6 +22,10 @@ module Lago
       def customers
         Lago::Api::Resources::Customer.new(self)
       end
+
+      def subscriptions
+        Lago::Api::Resources::Subscription.new(self)
+      end
     end
   end
 end
