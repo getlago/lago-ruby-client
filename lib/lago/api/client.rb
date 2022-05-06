@@ -2,7 +2,7 @@
 
 module Lago
   module Api
-    BASE_URL = 'http://api.lago.dev/'.freeze
+    BASE_URL = 'http://api.getlago.com/'.freeze
     API_PATH = 'api/v1/'.freeze
 
     class Client
