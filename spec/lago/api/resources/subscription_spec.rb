@@ -3,17 +3,20 @@
 require 'spec_helper'
 
 RSpec.describe Lago::Api::Resources::Subscription do
+  subject(:resource) { described_class.new(client) }
   let(:client) { Lago::Api::Client.new }
   let(:factory_subscription) { FactoryBot.build(:subscription) }
-  subject(:resource) { described_class.new(client) }
 
   describe '#create' do
     let(:params) do
       {
-        'subscription' => {
-          'customer_id' => factory_subscription.customer_id,
-          'plan_code' => factory_subscription.plan_code
-        }
+        customer_id: factory_subscription.customer_id,
+        plan_code: factory_subscription.plan_code
+      }
+    end
+    let(:body) do
+      {
+        'subscription' => params
       }
     end
 
@@ -23,9 +26,9 @@ RSpec.describe Lago::Api::Resources::Subscription do
           'subscription' => factory_subscription.to_h
         }.to_json
       end
-
       before do
         stub_request(:post, 'http://api.lago.dev/api/v1/subscriptions')
+          .with(body: body)
           .to_return(body: response, status: 200)
       end
 
@@ -49,6 +52,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
       before do
         stub_request(:post, 'http://api.lago.dev/api/v1/subscriptions')
+          .with(body: body)
           .to_return(body: response, status: 422)
       end
 
@@ -70,6 +74,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
       before do
         stub_request(:delete, 'http://api.lago.dev/api/v1/subscriptions')
+          .with(body: params)
           .to_return(body: response, status: 200)
       end
 
@@ -93,6 +98,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
       before do
         stub_request(:delete, 'http://api.lago.dev/api/v1/subscriptions')
+          .with(body: params)
           .to_return(body: response, status: 422)
       end
 

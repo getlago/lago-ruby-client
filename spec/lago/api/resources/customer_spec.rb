@@ -3,23 +3,23 @@
 require 'spec_helper'
 
 RSpec.describe Lago::Api::Resources::Customer do
+  subject(:resource) { described_class.new(client) }
   let(:client) { Lago::Api::Client.new }
   let(:factory_customer) { FactoryBot.build(:customer) }
-  subject(:resource) { described_class.new(client) }
 
   describe '#create' do
-    let(:params) { { 'customer' => factory_customer.to_h } }
+    let(:params) { factory_customer.to_h }
+    let(:body) do
+      {
+        'customer' => factory_customer.to_h
+      }
+    end
 
-    context 'when customer is successfully created or finded' do
-      let(:response) do
-        {
-          'customer' => factory_customer.to_h
-        }.to_json
-      end
-
+    context 'when customer is successfully created or found' do
       before do
         stub_request(:post, 'http://api.lago.dev/api/v1/customers')
-          .to_return(body: response, status: 200)
+          .with(body: body)
+          .to_return(body: body.to_json, status: 200)
       end
 
       it 'returns customer' do
@@ -41,6 +41,7 @@ RSpec.describe Lago::Api::Resources::Customer do
 
       before do
         stub_request(:post, 'http://api.lago.dev/api/v1/customers')
+          .with(body: body)
           .to_return(body: response, status: 422)
       end
 

@@ -14,18 +14,23 @@ module Lago
           raise NotImplementedError
         end
 
-        def response_root_name
+        def root_name
+          raise NotImplementedError
+        end
+
+        def whitelist_params(_params)
           raise NotImplementedError
         end
 
         def create(params)
-          response = connection.post(params)[response_root_name]
+          payload = whitelist_params(params)
+          response = connection.post(payload)[root_name]
 
           OpenStruct.new(response)
         end
 
         def delete(params)
-          response = connection.delete(params)[response_root_name]
+          response = connection.delete(params)[root_name]
 
           OpenStruct.new(response)
         end

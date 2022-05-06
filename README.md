@@ -20,46 +20,60 @@ require 'lago-ruby-client'
 client = Lago::Api::Client.new({api_key: 'key'})
 ```
 
-#### Events
+### Events
+[Api reference](https://doc.getlago.com/docs/api-reference/events)
+
 ``` ruby
-params = {
-    "event" => {
-        "customer_id" => "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
-        "code" => "code",
-        "timestamp" => 1650893379,
-        "properties" => {
-            "custom_field" => "custom"
-        }
+event = {
+    transaction_id: "__UNIQUE_ID__",
+    customer_id:  "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
+    code:  "code",
+    timestamp:  1650893379,
+    properties: {
+        custom_field: "custom"
     }
 }
-client.events.create(params)
+client.events.create(event)
 ```
 
-#### Customers
+### Customers
+[Api reference](https://doc.getlago.com/docs/api-reference/customers)
+
 ``` ruby
-params = {
-    "customer" => {
-        "customer_id" => "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
-        "name" => "Name"
-    }
+customer = {
+    customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
+    address_line1: nil,
+    address_line2: nil,
+    city: nil,
+    country: nil,
+    email: "test@example.com",
+    legal_name: nil,
+    legal_number: nil,
+    logo_url: nil,
+    name: "test name",
+    phone: nil,
+    state: nil,
+    url: nil,
+    vat_rate: nil,
+    zipcode: nil
 }
-client.customers.create(params)
+client.customers.create(customer)
 ```
 
-#### Subscriptions
+### Subscriptions
+[Api reference](https://doc.getlago.com/docs/api-reference/subscriptions)
+
 ``` ruby
-params_create = {
-    "subscription" => {
-        "customer_id" => "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
-        "plan_code" => "code"
-    }
+subscription = {
+    customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
+    plan_code: "code"
 }
-client.subscription.create(params_create)
+client.subscriptions.create(subscription)
 
 params_delete = {
-    "customer_id" => "5eb02857-a71e-4ea2-bcf9-57d8885990ba"
+    customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba"
 }
-client.subscription.delete(params_delete)
+client.subscriptions.delete(params_delete)
 ```
 
 ## Development

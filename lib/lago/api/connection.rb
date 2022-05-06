@@ -10,10 +10,10 @@ module Lago
         @uri = uri
       end
 
-      def post(body)
+      def post(body, path = uri.path)
         response = http_client.send_request(
           'POST',
-          uri.path,
+          path,
           prepare_payload(body),
           headers
         )
@@ -21,10 +21,10 @@ module Lago
         handle_response(response)
       end
 
-      def delete(body)
+      def delete(body, path = uri.path)
         response = http_client.send_request(
           'DELETE',
-          uri.path,
+          path,
           prepare_payload(body),
           headers
         )

@@ -8,8 +8,17 @@ module Lago
           'subscriptions'
         end
 
-        def response_root_name
+        def root_name
           'subscription'
+        end
+
+        def whitelist_params(params)
+          {
+            root_name => {
+              customer_id: params[:customer_id],
+              plan_code: params[:plan_code]
+            }
+          }
         end
       end
     end

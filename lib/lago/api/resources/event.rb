@@ -8,8 +8,25 @@ module Lago
           'events'
         end
 
+        def root_name
+          'event'
+        end
+
         def create(params)
-          connection.post(params)
+          payload = whitelist_params(params)
+          connection.post(payload)
+        end
+
+        def whitelist_params(params)
+          {
+            root_name => {
+              transaction_id: params[:transaction_id],
+              customer_id: params[:customer_id],
+              code: params[:code],
+              timestamp: params[:timestamp],
+              properties: params[:properties]
+            }
+          }
         end
       end
     end
