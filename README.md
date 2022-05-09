@@ -1,8 +1,6 @@
-# Lago::Ruby::Client
+# Lago Ruby Client
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/lago/ruby/client`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This is a ruby wrapper for Lago API
 
 ## Installation
 
@@ -16,18 +14,70 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-TODO: Write usage instructions here
+``` ruby
+require 'lago-ruby-client'
+
+client = Lago::Api::Client.new({api_key: 'key'})
+```
+
+### Events
+[Api reference](https://doc.getlago.com/docs/api-reference/events)
+
+``` ruby
+event = {
+    transaction_id: "__UNIQUE_ID__",
+    customer_id:  "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
+    code:  "code",
+    timestamp:  1650893379,
+    properties: {
+        custom_field: "custom"
+    }
+}
+client.events.create(event)
+```
+
+### Customers
+[Api reference](https://doc.getlago.com/docs/api-reference/customers)
+
+``` ruby
+customer = {
+    customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
+    address_line1: nil,
+    address_line2: nil,
+    city: nil,
+    country: nil,
+    email: "test@example.com",
+    legal_name: nil,
+    legal_number: nil,
+    logo_url: nil,
+    name: "test name",
+    phone: nil,
+    state: nil,
+    url: nil,
+    vat_rate: nil,
+    zipcode: nil
+}
+client.customers.create(customer)
+```
+
+### Subscriptions
+[Api reference](https://doc.getlago.com/docs/api-reference/subscriptions)
+
+``` ruby
+subscription = {
+    customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
+    plan_code: "code"
+}
+client.subscriptions.create(subscription)
+
+params_delete = {
+    customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba"
+}
+client.subscriptions.delete(params_delete)
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Run all tests:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/lago-ruby-client.
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+    $ bundle exec rspec

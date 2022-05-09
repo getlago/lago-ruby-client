@@ -10,17 +10,26 @@ module Lago
         @uri = uri
       end
 
-      def post(body)
+      def post(body, path = uri.path)
         response = http_client.send_request(
           'POST',
-          uri.path,
+          path,
           prepare_payload(body),
           headers
         )
 
-        raise_error(response) unless RESPONSE_SUCCESS_CODES.include?(response.code.to_i)
+        handle_response(response)
+      end
 
-        JSON.parse(response.body)
+      def delete(body, path = uri.path)
+        response = http_client.send_request(
+          'DELETE',
+          path,
+          prepare_payload(body),
+          headers
+        )
+
+        handle_response(response)
       end
 
       private
@@ -32,6 +41,12 @@ module Lago
           'Authorization' => "Bearer #{api_key}",
           'Content-Type' => 'application/json'
         }
+      end
+
+      def handle_response(response)
+        raise_error(response) unless RESPONSE_SUCCESS_CODES.include?(response.code.to_i)
+
+        response.body.empty? ? true : JSON.parse(response.body)
       end
 
       def http_client

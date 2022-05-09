@@ -2,7 +2,7 @@
 
 module Lago
   module Api
-    BASE_URL = 'http://api.lago.dev/'.freeze
+    BASE_URL = 'http://api.getlago.com/'.freeze
     API_PATH = 'api/v1/'.freeze
 
     class Client
@@ -21,6 +21,14 @@ module Lago
 
       def customers
         Lago::Api::Resources::Customer.new(self)
+      end
+
+      def subscriptions
+        Lago::Api::Resources::Subscription.new(self)
+      end
+
+      def events
+        Lago::Api::Resources::Event.new(self)
       end
     end
   end
