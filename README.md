@@ -21,7 +21,7 @@ client = Lago::Api::Client.new({api_key: 'key'})
 ```
 
 ### Events
-[Api reference](https://doc.getlago.com/docs/api-reference/events)
+[Api reference](https://doc.getlago.com/docs/api/events)
 
 ``` ruby
 event = {
@@ -37,7 +37,7 @@ client.events.create(event)
 ```
 
 ### Customers
-[Api reference](https://doc.getlago.com/docs/api-reference/customers)
+[Api reference](https://doc.getlago.com/docs/api/customers/customer-object)
 
 ``` ruby
 customer = {
@@ -61,7 +61,7 @@ client.customers.create(customer)
 ```
 
 ### Subscriptions
-[Api reference](https://doc.getlago.com/docs/api-reference/subscriptions)
+[Api reference](https://doc.getlago.com/docs/api/subscriptions/subscription-object)
 
 ``` ruby
 subscription = {
