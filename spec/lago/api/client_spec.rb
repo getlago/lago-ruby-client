@@ -20,7 +20,7 @@ RSpec.describe Lago::Api::Client do
     context 'when api_url is NOT given' do
       let(:api_url) { nil }
 
-      it { expect(client.base_api_url).to eq(URI('http://api.lago.dev/api/v1/')) }
+      it { expect(client.base_api_url).to eq(URI('https://api.getlago.com/api/v1/')) }
     end
   end
 end

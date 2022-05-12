@@ -27,7 +27,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         }.to_json
       end
       before do
-        stub_request(:post, 'http://api.lago.dev/api/v1/subscriptions')
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
           .with(body: body)
           .to_return(body: response, status: 200)
       end
@@ -51,7 +51,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
 
       before do
-        stub_request(:post, 'http://api.lago.dev/api/v1/subscriptions')
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
           .with(body: body)
           .to_return(body: response, status: 422)
       end
@@ -73,7 +73,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
 
       before do
-        stub_request(:delete, 'http://api.lago.dev/api/v1/subscriptions')
+        stub_request(:delete, 'https://api.getlago.com/api/v1/subscriptions')
           .with(body: params)
           .to_return(body: response, status: 200)
       end
@@ -97,7 +97,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
 
       before do
-        stub_request(:delete, 'http://api.lago.dev/api/v1/subscriptions')
+        stub_request(:delete, 'https://api.getlago.com/api/v1/subscriptions')
           .with(body: params)
           .to_return(body: response, status: 422)
       end
