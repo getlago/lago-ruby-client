@@ -17,7 +17,7 @@ RSpec.describe Lago::Api::Resources::Customer do
 
     context 'when customer is successfully created or found' do
       before do
-        stub_request(:post, 'http://api.lago.dev/api/v1/customers')
+        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
           .with(body: body)
           .to_return(body: body.to_json, status: 200)
       end
@@ -40,7 +40,7 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
 
       before do
-        stub_request(:post, 'http://api.lago.dev/api/v1/customers')
+        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
           .with(body: body)
           .to_return(body: response, status: 422)
       end
