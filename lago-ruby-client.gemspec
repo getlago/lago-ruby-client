@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.bindir = 'exe'
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  spec.files = `git ls-files lib`.split("\n")
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'factory_bot'
