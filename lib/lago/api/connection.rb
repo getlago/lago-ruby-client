@@ -39,7 +39,8 @@ module Lago
       def headers
         {
           'Authorization' => "Bearer #{api_key}",
-          'Content-Type' => 'application/json'
+          'Content-Type' => 'application/json',
+          'User-Agent' => "Lago Ruby v#{Lago::VERSION}"
         }
       end
 
