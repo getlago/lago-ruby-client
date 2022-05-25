@@ -78,6 +78,14 @@ client.subscriptions.delete(params_delete)
 
 ## Development
 
-Run all tests:
+### Install the dependencies
 
-    $ bundle exec rspec
+```bash
+bundle install
+```
+
+### Run tests
+
+```bash
+bundle exec rspec
+```
