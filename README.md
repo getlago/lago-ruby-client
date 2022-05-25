@@ -76,6 +76,20 @@ params_delete = {
 client.subscriptions.delete(params_delete)
 ```
 
+### Applied coupons
+[Api reference](https://doc.getlago.com/docs/api/applied_coupons/applied-coupon-object)
+
+```ruby
+applied_coupon = {
+  customer_id: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba",
+  coupon_code: "code",
+  amount_cents: 123,
+  amount_currency: "EUR"
+}
+
+client.applied_coupons.create(applied_coupon)
+```
+
 ## Development
 
 ### Install the dependencies
