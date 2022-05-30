@@ -34,6 +34,10 @@ module Lago
       def applied_coupons
         Lago::Api::Resources::AppliedCoupon.new(self)
       end
+
+      def applied_add_ons
+        Lago::Api::Resources::AppliedAddOn.new(self)
+      end
     end
   end
 end
