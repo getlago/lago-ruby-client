@@ -122,6 +122,10 @@ bundle exec rspec
 
 The Lago documentation is available at [doc.getlago.com](https://doc.getlago.com/docs/api/intro).
 
+## Contributing
+
+The contribution documentation is available [here](https://github.com/getlago/lago-front/blob/main/CONTRIBUTING.md)
+
 ## License
 
 Lago Node.js client is distributed under [AGPL-3.0](LICENSE).
