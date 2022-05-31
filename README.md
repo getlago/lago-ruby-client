@@ -2,6 +2,8 @@
 
 This is a ruby wrapper for Lago API
 
+[![Gem Version](https://badge.fury.io/rb/lago-ruby-client.svg)](https://badge.fury.io/rb/lago-ruby-client)
+
 ## Installation
 
 Install the gem and add to the application's Gemfile by executing:
