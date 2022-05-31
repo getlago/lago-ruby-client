@@ -117,3 +117,11 @@ bundle install
 ```bash
 bundle exec rspec
 ```
+
+## Documentation
+
+The Lago documentation is available at [doc.getlago.com](https://doc.getlago.com/docs/api/intro).
+
+## License
+
+Lago Node.js client is distributed under [AGPL-3.0-only](LICENSE).
