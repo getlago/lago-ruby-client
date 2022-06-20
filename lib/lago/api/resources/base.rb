@@ -29,6 +29,13 @@ module Lago
           OpenStruct.new(response)
         end
 
+        def update(params)
+          payload = whitelist_params(params)
+          response = connection.put(lago_id: params[:lago_id], body: payload)[root_name]
+
+          OpenStruct.new(response)
+        end
+
         def delete(params)
           response = connection.delete(params)[root_name]
 

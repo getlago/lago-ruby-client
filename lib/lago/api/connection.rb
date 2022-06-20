@@ -21,6 +21,18 @@ module Lago
         handle_response(response)
       end
 
+      def put(path = uri.path, lago_id:, body:)
+        uri_path = "#{path}/#{lago_id}"
+        response = http_client.send_request(
+          'PUT',
+          uri_path,
+          prepare_payload(body),
+          headers
+        )
+
+        handle_response(response)
+      end
+
       def delete(body, path = uri.path)
         response = http_client.send_request(
           'DELETE',
