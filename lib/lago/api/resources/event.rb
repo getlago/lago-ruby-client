@@ -17,6 +17,11 @@ module Lago
           connection.post(payload)
         end
 
+        def find(transaction_id)
+          uri = URI("#{client.base_api_url}#{api_resource}/#{transaction_id}")
+          connection.get(uri)
+        end
+
         def whitelist_params(params)
           {
             root_name => {

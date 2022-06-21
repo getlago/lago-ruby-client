@@ -44,6 +44,17 @@ module Lago
         handle_response(response)
       end
 
+      def get(path)
+        response = http_client.send_request(
+          'GET',
+          path,
+          prepare_payload(nil),
+          headers
+        )
+
+        handle_response(response)
+      end
+
       private
 
       attr_reader :api_key, :uri
