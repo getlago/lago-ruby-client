@@ -57,7 +57,11 @@ customer = {
     state: nil,
     url: nil,
     vat_rate: nil,
-    zipcode: nil
+    zipcode: nil,
+    billing_configuration: {
+        payment_provider: nil,
+        provider_customer_id: nil,
+    }
 }
 client.customers.create(customer)
 ```

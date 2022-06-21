@@ -15,5 +15,11 @@ FactoryBot.define do
     logo_url { 'http://hooli.com/logo.png' }
     legal_name { 'Coleman-Blair' }
     legal_number { '49-008-2965' }
+    billing_configuration do
+      {
+        payment_provider: 'stripe',
+        provider_customer_id: 'cus_123456',
+      }
+    end
   end
 end
