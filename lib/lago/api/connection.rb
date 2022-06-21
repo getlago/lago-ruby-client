@@ -87,7 +87,7 @@ module Lago
       end
 
       def raise_error(response)
-        raise Lago::Api::HttpError.new(response.code, response.body, uri)
+        raise Lago::Api::HttpError.new(response.code.to_i, response.body, uri)
       end
     end
   end
