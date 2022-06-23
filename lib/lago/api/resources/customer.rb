@@ -13,25 +13,33 @@ module Lago
         end
 
         def whitelist_params(params)
-          {
-            root_name => {
-              customer_id: params[:customer_id],
-              address_line1: params[:address_line1],
-              address_line2: params[:address_line2],
-              city: params[:city],
-              country: params[:country],
-              email: params[:email],
-              legal_name: params[:legal_name],
-              legal_number: params[:legal_number],
-              logo_url: params[:logo_url],
-              name: params[:name],
-              phone: params[:phone],
-              state: params[:state],
-              url: params[:url],
-              vat_rate: params[:vat_rate],
-              zipcode: params[:zipcode]
-            }
+          result_hash = {
+            customer_id: params[:customer_id],
+            address_line1: params[:address_line1],
+            address_line2: params[:address_line2],
+            city: params[:city],
+            country: params[:country],
+            email: params[:email],
+            legal_name: params[:legal_name],
+            legal_number: params[:legal_number],
+            logo_url: params[:logo_url],
+            name: params[:name],
+            phone: params[:phone],
+            state: params[:state],
+            url: params[:url],
+            vat_rate: params[:vat_rate],
+            zipcode: params[:zipcode]
           }
+
+          whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
+            result_hash[:billing_configuration] = config unless config.empty?
+          end
+
+          { root_name => result_hash }
+        end
+
+        def whitelist_billing_configuration(billing_params)
+          (billing_params || {}).slice(:payment_provider, :provider_customer_id)
         end
       end
     end

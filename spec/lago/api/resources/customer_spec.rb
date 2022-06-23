@@ -27,6 +27,7 @@ RSpec.describe Lago::Api::Resources::Customer do
 
         expect(customer.customer_id).to eq(factory_customer.customer_id)
         expect(customer.name).to eq(factory_customer.name)
+        expect(customer.billing_configuration.provider_customer_id).to eq(factory_customer.billing_configuration[:provider_customer_id])
       end
     end
 
