@@ -39,7 +39,7 @@ module Lago
         end
 
         def whitelist_billing_configuration(billing_params)
-          (billing_params || {}).slice(:payment_provider, :provider_customer_id)
+          (billing_params || {}).slice(:payment_provider, :provider_customer_id, :sync)
         end
       end
     end

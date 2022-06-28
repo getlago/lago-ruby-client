@@ -66,6 +66,7 @@ customer = {
     billing_configuration: {
         payment_provider: nil,
         provider_customer_id: nil,
+        sync: true,
     }
 }
 client.customers.create(customer)
