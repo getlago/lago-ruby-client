@@ -29,9 +29,27 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def update(params)
+        def update(identifier, params)
           payload = whitelist_params(params)
-          response = connection.put(lago_id: params[:lago_id], body: payload)[root_name]
+          response = connection.put(identifier: identifier, body: payload)[root_name]
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def get(identifier)
+          response = connection.get(identifier: identifier)[root_name]
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def destroy(identifier)
+          response = connection.destroy(identifier: identifier)[root_name]
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def get_all(options = {})
+          response = connection.get_all(options)
 
           JSON.parse(response.to_json, object_class: OpenStruct)
         end

@@ -18,8 +18,7 @@ module Lago
         end
 
         def find(transaction_id)
-          uri = URI("#{client.base_api_url}#{api_resource}/#{transaction_id}")
-          connection.get(uri)
+          connection.get(identifier: transaction_id)
         end
 
         def whitelist_params(params)

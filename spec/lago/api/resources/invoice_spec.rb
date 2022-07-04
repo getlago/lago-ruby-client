@@ -6,11 +6,11 @@ RSpec.describe Lago::Api::Resources::Invoice do
   subject(:resource) { described_class.new(client) }
   let(:client) { Lago::Api::Client.new }
   let(:factory_invoice) { FactoryBot.build(:invoice) }
+  let(:lago_id) { 'this_is_lago_internal_id' }
 
   describe '#update' do
     let(:params) do
       {
-        lago_id: 'this_is_lago_internal_id',
         status: 'succeeded'
       }
     end
@@ -29,13 +29,13 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
     context 'when invoice status is successfully updated' do
       before do
-        stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{params[:lago_id]}")
+        stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{lago_id}")
           .with(body: request_body)
           .to_return(body: response_body.to_json, status: 200)
       end
 
       it 'returns invoice' do
-        invoice = resource.update(params)
+        invoice = resource.update(lago_id, params)
 
         expect(invoice.lago_id).to eq(factory_invoice.lago_id)
         expect(invoice.status).to eq(factory_invoice.status)
@@ -52,13 +52,13 @@ RSpec.describe Lago::Api::Resources::Invoice do
       end
 
       before do
-        stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{params[:lago_id]}")
+        stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{lago_id}")
           .with(body: request_body)
           .to_return(body: response, status: 422)
       end
 
       it 'raises an error' do
-        expect { resource.update(params) }.to raise_error Lago::Api::HttpError
+        expect { resource.update(lago_id, params) }.to raise_error Lago::Api::HttpError
       end
     end
   end
