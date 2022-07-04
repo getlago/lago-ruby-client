@@ -77,10 +77,9 @@ client.customers.create(customer)
 
 ``` ruby
 params = {
-    lago_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
     status: 'succeeded'
 }
-client.invoices.update(params)
+client.invoices.update('5eb02857-a71e-4ea2-bcf9-57d8885990ba', params)
 ```
 
 ### Subscriptions
@@ -125,6 +124,32 @@ applied_add_on = {
 }
 
 client.applied_add_ons.create(applied_add_on)
+```
+
+### Billable Metrics
+[Api reference](https://doc.getlago.com/docs/api/billable_metrics/billable-metric-object)
+
+```ruby
+billable_metric = {
+  name: 'BM1',
+  code: 'code_bm',
+  description: 'description',
+  aggregation_type: 'sum_agg',
+  field_name: 'amount_sum',
+}
+
+client.billable_metrics.create(billable_metric)
+
+update_params = {
+  description: 'description'
+}
+client.billable_metrics.update('code_bm', update_params)
+
+client.billable_metrics.get('code_bm')
+
+client.billable_metrics.destroy('code_bm')
+
+client.billable_metrics.get_all({ per_page: 2, page: 3 })
 ```
 
 ## Development
