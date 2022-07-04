@@ -69,7 +69,7 @@ module Lago
       end
 
       def get_all(options, path = uri.path)
-        uri_path = options.blank? ? path : "#{path}?#{URI.encode_www_form(options)}"
+        uri_path = options.empty? ? path : "#{path}?#{URI.encode_www_form(options)}"
 
         response = http_client.send_request(
           'GET',
