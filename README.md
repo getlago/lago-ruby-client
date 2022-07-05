@@ -79,7 +79,7 @@ client.customers.create(customer)
 params = {
     status: 'succeeded'
 }
-client.invoices.update('5eb02857-a71e-4ea2-bcf9-57d8885990ba', params)
+client.invoices.update(params, '5eb02857-a71e-4ea2-bcf9-57d8885990ba')
 ```
 
 ### Subscriptions
@@ -143,7 +143,7 @@ client.billable_metrics.create(billable_metric)
 update_params = {
   description: 'description'
 }
-client.billable_metrics.update('code_bm', update_params)
+client.billable_metrics.update(update_params, 'code_bm')
 
 client.billable_metrics.get('code_bm')
 

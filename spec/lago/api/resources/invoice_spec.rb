@@ -35,7 +35,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
       end
 
       it 'returns invoice' do
-        invoice = resource.update(lago_id, params)
+        invoice = resource.update(params, lago_id)
 
         expect(invoice.lago_id).to eq(factory_invoice.lago_id)
         expect(invoice.status).to eq(factory_invoice.status)
@@ -58,7 +58,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
       end
 
       it 'raises an error' do
-        expect { resource.update(lago_id, params) }.to raise_error Lago::Api::HttpError
+        expect { resource.update(params, lago_id) }.to raise_error Lago::Api::HttpError
       end
     end
   end

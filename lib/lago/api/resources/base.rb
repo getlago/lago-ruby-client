@@ -29,7 +29,7 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def update(identifier, params)
+        def update(params, identifier = nil)
           payload = whitelist_params(params)
           response = connection.put(identifier: identifier, body: payload)[root_name]
 

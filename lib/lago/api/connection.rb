@@ -22,7 +22,7 @@ module Lago
       end
 
       def put(path = uri.path, identifier:, body:)
-        uri_path = "#{path}/#{identifier}"
+        uri_path = identifier.nil? ? path : "#{path}/#{identifier}"
         response = http_client.send_request(
           'PUT',
           uri_path,

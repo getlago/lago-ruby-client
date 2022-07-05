@@ -81,7 +81,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
       end
 
       it 'returns an billable metric' do
-        billable_metric = resource.update(factory_billable_metric.code, params)
+        billable_metric = resource.update(params, factory_billable_metric.code)
 
         expect(billable_metric.lago_id).to eq('this-is-lago-id')
         expect(billable_metric.name).to eq(factory_billable_metric.name)
@@ -104,7 +104,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
       end
 
       it 'raises an error' do
-        expect { resource.update(factory_billable_metric.code, params) }.to raise_error Lago::Api::HttpError
+        expect { resource.update(params, factory_billable_metric.code) }.to raise_error Lago::Api::HttpError
       end
     end
   end
