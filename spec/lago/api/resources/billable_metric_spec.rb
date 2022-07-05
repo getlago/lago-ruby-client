@@ -20,6 +20,13 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
       }
     }.to_json
   end
+  let(:error_response) do
+    {
+      'status' => 422,
+      'error' => 'Unprocessable Entity',
+      'message' => 'Validation error on the record'
+    }.to_json
+  end
 
   describe '#create' do
     let(:params) { factory_billable_metric.to_h }
@@ -45,18 +52,10 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
     end
 
     context 'when billable_metric failed to create' do
-      let(:response) do
-        {
-          'status' => 422,
-          'error' => 'Unprocessable Entity',
-          'message' => 'Validation error on the record'
-        }.to_json
-      end
-
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/billable_metrics')
           .with(body: body)
-          .to_return(body: response, status: 422)
+          .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
@@ -89,18 +88,10 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
     end
 
     context 'when billable_metric failed to update' do
-      let(:response) do
-        {
-          'status' => 422,
-          'error' => 'Unprocessable Entity',
-          'message' => 'Validation error on the record'
-        }.to_json
-      end
-
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/billable_metrics/#{factory_billable_metric.code}")
           .with(body: body)
-          .to_return(body: response, status: 422)
+          .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
@@ -125,17 +116,9 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
     end
 
     context 'when there is an issue' do
-      let(:response) do
-        {
-          'status' => 422,
-          'error' => 'Unprocessable Entity',
-          'message' => 'Validation error on the record'
-        }.to_json
-      end
-
       before do
         stub_request(:get, "https://api.getlago.com/api/v1/billable_metrics/#{factory_billable_metric.code}")
-          .to_return(body: response, status: 422)
+          .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
@@ -160,17 +143,9 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
     end
 
     context 'when there is an issue' do
-      let(:response) do
-        {
-          'status' => 422,
-          'error' => 'Unprocessable Entity',
-          'message' => 'Validation error on the record'
-        }.to_json
-      end
-
       before do
         stub_request(:delete, "https://api.getlago.com/api/v1/billable_metrics/#{factory_billable_metric.code}")
-          .to_return(body: response, status: 422)
+          .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
@@ -209,7 +184,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
           .to_return(body: response, status: 200)
       end
 
-      it 'returns an billable metrics on the first page' do
+      it 'returns billable metrics on the first page' do
         response = resource.get_all
 
         expect(response['billable_metrics'].first['lago_id']).to eq('this-is-lago-id')
@@ -224,7 +199,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
           .to_return(body: response, status: 200)
       end
 
-      it 'returns an billable metrics on selected page' do
+      it 'returns billable metrics on selected page' do
         response = resource.get_all({ per_page: 2, page: 1 })
 
         expect(response['billable_metrics'].first['lago_id']).to eq('this-is-lago-id')
@@ -234,17 +209,9 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
     end
 
     context 'when there is an issue' do
-      let(:response) do
-        {
-          'status' => 422,
-          'error' => 'Unprocessable Entity',
-          'message' => 'Validation error on the record'
-        }.to_json
-      end
-
       before do
         stub_request(:get, 'https://api.getlago.com/api/v1/billable_metrics')
-          .to_return(body: response, status: 422)
+          .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do

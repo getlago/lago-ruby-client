@@ -7,6 +7,18 @@ RSpec.describe Lago::Api::Resources::Invoice do
   let(:client) { Lago::Api::Client.new }
   let(:factory_invoice) { FactoryBot.build(:invoice) }
   let(:lago_id) { 'this_is_lago_internal_id' }
+  let(:error_response) do
+    {
+      'status' => 422,
+      'error' => 'Unprocessable Entity',
+      'message' => 'Validation error on the record'
+    }.to_json
+  end
+  let(:response_body) do
+    {
+      'invoice' => factory_invoice.to_h
+    }
+  end
 
   describe '#update' do
     let(:params) do
@@ -19,11 +31,6 @@ RSpec.describe Lago::Api::Resources::Invoice do
         'invoice' => {
           'status' => factory_invoice.status
         }
-      }
-    end
-    let(:response_body) do
-      {
-        'invoice' => factory_invoice.to_h
       }
     end
 
@@ -43,22 +50,99 @@ RSpec.describe Lago::Api::Resources::Invoice do
     end
 
     context 'when invoice is NOT successfully updated' do
-      let(:response) do
-        {
-          'status' => 422,
-          'error' => 'Unprocessable Entity',
-          'message' => 'Validation error on the record'
-        }.to_json
-      end
-
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{lago_id}")
           .with(body: request_body)
-          .to_return(body: response, status: 422)
+          .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
         expect { resource.update(params, lago_id) }.to raise_error Lago::Api::HttpError
+      end
+    end
+  end
+
+  describe '#get' do
+    context 'when invoice is successfully fetched' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/invoices/#{lago_id}")
+          .to_return(body: response_body.to_json, status: 200)
+      end
+
+      it 'returns an invoice' do
+        invoice = resource.get(lago_id)
+
+        expect(invoice.lago_id).to eq(factory_invoice.lago_id)
+        expect(invoice.status).to eq(factory_invoice.status)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/invoices/#{lago_id}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get(lago_id) }.to raise_error Lago::Api::HttpError
+      end
+    end
+  end
+
+  describe '#get_all' do
+    let(:response) do
+      {
+        'invoices' => [
+          factory_invoice.to_h
+        ],
+        'meta': {
+          'current_page' => 1,
+          'next_page' => 2,
+          'prev_page' => nil,
+          'total_pages' => 7,
+          'total_count' => 63
+        }
+      }.to_json
+    end
+
+    context 'when there is no options' do
+      before do
+        stub_request(:get, 'https://api.getlago.com/api/v1/invoices')
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns invoices on the first page' do
+        response = resource.get_all
+
+        expect(response['invoices'].first['lago_id']).to eq(factory_invoice.lago_id)
+        expect(response['invoices'].first['status']).to eq(factory_invoice.status)
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when options are present' do
+      before do
+        stub_request(:get, 'https://api.getlago.com/api/v1/invoices?per_page=2&page=1')
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns invoices on selected page' do
+        response = resource.get_all({ per_page: 2, page: 1 })
+
+        expect(response['invoices'].first['lago_id']).to eq(factory_invoice.lago_id)
+        expect(response['invoices'].first['status']).to eq(factory_invoice.status)
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:get, 'https://api.getlago.com/api/v1/invoices')
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get_all }.to raise_error Lago::Api::HttpError
       end
     end
   end
