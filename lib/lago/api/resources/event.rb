@@ -17,10 +17,6 @@ module Lago
           connection.post(payload)
         end
 
-        def find(transaction_id)
-          connection.get(identifier: transaction_id)
-        end
-
         def whitelist_params(params)
           {
             root_name => {

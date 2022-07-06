@@ -40,7 +40,7 @@ client.events.create(event)
 
 ``` ruby
 transaction_id = "6afadc2a-f28c-40a4-a868-35636f229765"
-event = client.events.find(transaction_id)
+event = client.events.get(transaction_id)
 ```
 
 ### Customers
