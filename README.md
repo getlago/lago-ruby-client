@@ -72,10 +72,14 @@ customer = {
 client.customers.create(customer)
 ```
 
+```ruby
+customer_usage = client.customer.current_usage(customer_id)
+```
+
 ### Invoices
 [Api reference](https://doc.getlago.com/docs/api/invoices/invoice-object)
 
-``` ruby
+``` ruby`
 params = {
     lago_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
     status: 'succeeded'

@@ -51,4 +51,45 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
     end
   end
+
+  describe '#current_usage' do
+    let(:factory_customer_usage) { FactoryBot.build(:customer_usage) }
+
+    context 'when the customer exists' do
+      before do
+        usage_json = JSON.generate('customer_usage' => factory_customer_usage.to_h)
+
+        stub_request(:get, 'https://api.getlago.com/api/v1/customers/customer_id/current_usage')
+          .to_return(body: usage_json, status: 200)
+      end
+
+      it 'returns the usage of the customer' do
+        response = resource.current_usage('customer_id')
+
+        expect(response['customer_usage']['from_date']).to eq(factory_customer_usage.from_date)
+      end
+    end
+
+    context 'when the customer does not exists' do
+      before do
+        stub_request(:get, 'https://api.getlago.com/api/v1/customers/DOESNOTEXIST/current_usage')
+          .to_return(body: JSON.generate(status: 404, error: 'Not Found'), status: 404)
+      end
+
+      it 'raises an error' do
+        expect { resource.current_usage('DOESNOTEXIST') }.to raise_error
+      end
+    end
+
+    context 'when the customer does not have a subscription' do
+      before do
+        stub_request(:get, 'https://api.getlago.com/api/v1/customers/NOSUBSCRIPTION/current_usage')
+          .to_return(body: JSON.generate(status: 422, error: 'no_active_subscription'), status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.current_usage('DOESNOTEXIST') }.to raise_error
+      end
+    end
+  end
 end
