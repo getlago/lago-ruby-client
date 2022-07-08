@@ -27,7 +27,7 @@ module Lago
               legal_name: params[:legal_name],
               legal_number: params[:legal_number],
               invoice_footer: params[:invoice_footer]
-            }
+            }.compact
           }
         end
       end

@@ -20,7 +20,7 @@ module Lago
               description: params[:description],
               aggregation_type: params[:aggregation_type],
               field_name: params[:field_name]
-            }
+            }.compact
           }
         end
       end

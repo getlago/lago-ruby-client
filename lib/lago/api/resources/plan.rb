@@ -23,7 +23,7 @@ module Lago
             trial_period: params[:trial_period],
             pay_in_advance: params[:pay_in_advance],
             bill_charges_monthly: params[:bill_charges_monthly]
-          }
+          }.compact
 
           whitelist_charges(params[:charges]).tap do |charges|
             result_hash[:charges] = charges unless charges.empty?

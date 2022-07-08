@@ -20,7 +20,7 @@ module Lago
               description: params[:description],
               amount_cents: params[:amount_cents],
               amount_currency: params[:amount_currency]
-            }
+            }.compact
           }
         end
       end

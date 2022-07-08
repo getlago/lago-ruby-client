@@ -21,7 +21,7 @@ module Lago
               amount_currency: params[:amount_currency],
               expiration: params[:expiration],
               expiration_duration: params[:expiration_duration]
-            }
+            }.compact
           }
         end
       end
