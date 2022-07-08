@@ -12,6 +12,11 @@ module Lago
           'customer'
         end
 
+        def current_usage(customer_id)
+          uri = URI("#{client.base_api_url}#{api_resource}/#{customer_id}/current_usage")
+          connection.get(uri)
+        end
+
         def whitelist_params(params)
           result_hash = {
             customer_id: params[:customer_id],
