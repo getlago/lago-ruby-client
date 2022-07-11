@@ -255,7 +255,7 @@ update_params = {
   webhook_url: 'https://webhook_url.com',
   vat_rate: 10
 }
-client.organizations.update(update_params, 'code_bm')
+client.organizations.update(update_params)
 ```
 
 ## Development
