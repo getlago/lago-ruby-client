@@ -30,30 +30,30 @@ RSpec.describe Lago::Api::Resources::Event do
     end
   end
 
-  describe '#find' do
+  describe '#get' do
     context 'when the event exists' do
       before do
-        event_json = JSON.generate({'event' => factory_event.to_h})
+        event_json = JSON.generate({ 'event' => factory_event.to_h })
 
         stub_request(:get, 'https://api.getlago.com/api/v1/events/UNIQUE_ID')
           .to_return(body: event_json, status: 200)
       end
 
       it 'returns the matching event if it exists' do
-        response = resource.find(factory_event.transaction_id)
+        response = resource.get(factory_event.transaction_id)
 
-        expect(response['event']['transaction_id']).to eq factory_event.transaction_id
+        expect(response.transaction_id).to eq factory_event.transaction_id
       end
     end
 
     context 'when the event does not exist' do
       before do
         stub_request(:get, 'https://api.getlago.com/api/v1/events/DOESNOTEXIST')
-          .to_return(body: JSON.generate({status: 404, error: "Not Found"}), status: 404)
+          .to_return(body: JSON.generate({ status: 404, error: 'Not Found' }), status: 404)
       end
 
       it 'raises an error' do
-        expect { resource.find('DOESNOTEXIST') }.to raise_error
+        expect { resource.get('DOESNOTEXIST') }.to raise_error
       end
     end
   end

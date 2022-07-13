@@ -21,8 +21,8 @@ module Lago
         handle_response(response)
       end
 
-      def put(path = uri.path, lago_id:, body:)
-        uri_path = "#{path}/#{lago_id}"
+      def put(path = uri.path, identifier:, body:)
+        uri_path = identifier.nil? ? path : "#{path}/#{identifier}"
         response = http_client.send_request(
           'PUT',
           uri_path,
@@ -44,10 +44,36 @@ module Lago
         handle_response(response)
       end
 
-      def get(path)
+      def get(path = uri.path, identifier:)
+        uri_path = identifier.nil? ? path : "#{path}/#{identifier}"
         response = http_client.send_request(
           'GET',
-          path,
+          uri_path,
+          prepare_payload(nil),
+          headers
+        )
+
+        handle_response(response)
+      end
+
+      def destroy(path = uri.path, identifier:)
+        uri_path = "#{path}/#{identifier}"
+        response = http_client.send_request(
+          'DELETE',
+          uri_path,
+          prepare_payload(nil),
+          headers
+        )
+
+        handle_response(response)
+      end
+
+      def get_all(options, path = uri.path)
+        uri_path = options.empty? ? path : "#{path}?#{URI.encode_www_form(options)}"
+
+        response = http_client.send_request(
+          'GET',
+          uri_path,
           prepare_payload(nil),
           headers
         )

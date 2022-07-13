@@ -42,6 +42,26 @@ module Lago
       def applied_add_ons
         Lago::Api::Resources::AppliedAddOn.new(self)
       end
+
+      def billable_metrics
+        Lago::Api::Resources::BillableMetric.new(self)
+      end
+
+      def plans
+        Lago::Api::Resources::Plan.new(self)
+      end
+
+      def coupons
+        Lago::Api::Resources::Coupon.new(self)
+      end
+
+      def add_ons
+        Lago::Api::Resources::AddOn.new(self)
+      end
+
+      def organizations
+        Lago::Api::Resources::Organization.new(self)
+      end
     end
   end
 end
