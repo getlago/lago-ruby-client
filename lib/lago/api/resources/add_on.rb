@@ -3,13 +3,13 @@
 module Lago
   module Api
     module Resources
-      class BillableMetric < Base
+      class AddOn < Base
         def api_resource
-          'billable_metrics'
+          'add_ons'
         end
 
         def root_name
-          'billable_metric'
+          'add_on'
         end
 
         def whitelist_params(params)
@@ -18,8 +18,8 @@ module Lago
               name: params[:name],
               code: params[:code],
               description: params[:description],
-              aggregation_type: params[:aggregation_type],
-              field_name: params[:field_name]
+              amount_cents: params[:amount_cents],
+              amount_currency: params[:amount_currency]
             }.compact
           }
         end
