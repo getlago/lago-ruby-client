@@ -79,7 +79,7 @@ customer_usage = client.customer.current_usage(customer_id)
 ### Invoices
 [Api reference](https://doc.getlago.com/docs/api/invoices/invoice-object)
 
-``` ruby`
+``` ruby
 params = {
     status: 'succeeded'
 }
