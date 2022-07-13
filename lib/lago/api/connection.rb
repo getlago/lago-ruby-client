@@ -45,7 +45,7 @@ module Lago
       end
 
       def get(path = uri.path, identifier:)
-        uri_path = "#{path}/#{identifier}"
+        uri_path = identifier.nil? ? path : "#{path}/#{identifier}"
         response = http_client.send_request(
           'GET',
           uri_path,
