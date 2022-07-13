@@ -12,6 +12,13 @@ module Lago
           'invoice'
         end
 
+        def download(invoice_id)
+          path = "/api/v1/invoices/#{invoice_id}/download"
+          response = connection.post({}, path)
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def whitelist_params(params)
           {
             root_name => {

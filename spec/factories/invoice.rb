@@ -13,5 +13,6 @@ FactoryBot.define do
     vat_amount_currency { 'EUR' }
     total_amount_cents { 120 }
     total_amount_currency { 'EUR' }
+    file_url { 'http://file.url' }
   end
 end

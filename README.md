@@ -88,6 +88,8 @@ client.invoices.update(params, '5eb02857-a71e-4ea2-bcf9-57d8885990ba')
 client.invoices.get('5eb02857-a71e-4ea2-bcf9-57d8885990ba')
 
 client.invoices.get_all({ per_page: 2, page: 3 })
+
+client.invoices.download("5eb02857-a71e-4ea2-bcf9-57d8885990ba")
 ```
 
 ### Subscriptions

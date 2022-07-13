@@ -146,4 +146,24 @@ RSpec.describe Lago::Api::Resources::Invoice do
       end
     end
   end
+
+  describe '#download' do
+    let(:response_body) do
+      {
+        'invoice' => factory_invoice.to_h
+      }
+    end
+
+    before do
+      stub_request(:post, 'https://api.getlago.com/api/v1/invoices/123456/download')
+        .with(body: {})
+        .to_return(body: response_body.to_json, status: 200)
+    end
+
+    it 'returns invoice' do
+      invoice = resource.download('123456')
+
+      expect(invoice.lago_id).to eq(factory_invoice.id)
+    end
+  end
 end
