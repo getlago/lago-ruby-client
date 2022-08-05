@@ -33,17 +33,6 @@ module Lago
         handle_response(response)
       end
 
-      def delete(body, path = uri.path)
-        response = http_client.send_request(
-          'DELETE',
-          path,
-          prepare_payload(body),
-          headers
-        )
-
-        handle_response(response)
-      end
-
       def get(path = uri.path, identifier:)
         uri_path = identifier.nil? ? path : "#{path}/#{identifier}"
         response = http_client.send_request(

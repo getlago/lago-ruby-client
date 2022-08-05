@@ -12,8 +12,10 @@ module Lago
           'customer'
         end
 
-        def current_usage(customer_id)
-          uri = URI("#{client.base_api_url}#{api_resource}/#{customer_id}/current_usage")
+        def current_usage(customer_id, subscription_id)
+          uri = URI(
+            "#{client.base_api_url}#{api_resource}/#{customer_id}/current_usage?subscription_id=#{subscription_id}"
+          )
           connection.get(uri, identifier: nil)
         end
 

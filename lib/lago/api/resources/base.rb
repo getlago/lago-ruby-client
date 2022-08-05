@@ -54,12 +54,6 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def delete(params)
-          response = connection.delete(params)[root_name]
-
-          JSON.parse(response.to_json, object_class: OpenStruct)
-        end
-
         private
 
         def connection

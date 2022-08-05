@@ -36,6 +36,19 @@ event = {
     }
 }
 client.events.create(event)
+
+event = {
+    transaction_id: "__UNIQUE_ID__",
+    subscription_ids:  [
+      "5eb02857-a71e-4ea2-bcf9-57d8885990ba", "5eb01117-a71e-4ea2-bcf9-57d8885990ba"
+    ],
+    code:  "code",
+    timestamp:  1650893379,
+    properties: {
+        custom_field: "custom"
+    }
+}
+client.events.batch_create(event)
 ```
 
 ``` ruby
@@ -73,7 +86,7 @@ client.customers.create(customer)
 ```
 
 ```ruby
-customer_usage = client.customer.current_usage(customer_id)
+customer_usage = client.customer.current_usage(customer_id, subscription_id)
 ```
 
 ### Invoices
@@ -98,14 +111,21 @@ client.invoices.download("5eb02857-a71e-4ea2-bcf9-57d8885990ba")
 ``` ruby
 subscription = {
     customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
-    plan_code: "code"
+    plan_code: "code",
+    subscription_id: "sub-id",
+    name: "name",
+    unique_id: "unique-id"
 }
 client.subscriptions.create(subscription)
 
-params_delete = {
-    customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba"
+update_params = {
+  name: 'new name'
 }
-client.subscriptions.delete(params_delete)
+client.subscriptions.update(update_params, 'sub_id')
+
+client.subscriptions.destroy('sub_id')
+
+client.subscriptions.get_all({ customer_id: '123' })
 ```
 
 ### Applied coupons

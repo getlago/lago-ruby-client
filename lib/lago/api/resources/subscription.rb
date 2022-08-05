@@ -16,8 +16,11 @@ module Lago
           {
             root_name => {
               customer_id: params[:customer_id],
-              plan_code: params[:plan_code]
-            }
+              plan_code: params[:plan_code],
+              name: params[:name],
+              unique_id: params[:unique_id],
+              subscription_id: params[:subscription_id]
+            }.compact
           }
         end
       end
