@@ -49,6 +49,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
         expect(subscription.unique_id).to eq(factory_subscription.unique_id)
+        expect(subscription.billing_time).to eq(factory_subscription.billing_time)
       end
     end
 
