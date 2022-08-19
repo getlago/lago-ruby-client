@@ -26,7 +26,6 @@ RSpec.describe Lago::Api::Resources::Plan do
             'lago_id' => 'id',
             'lago_billable_metric_id' => factory_plan.charges.first[:lago_billable_metric_id],
             'created_at' => '2022-04-29T08:59:51Z',
-            'amount_currency' => factory_plan.charges.first[:amount_currency],
             'charge_model' => factory_plan.charges.first[:charge_model],
             'properties' => factory_plan.charges.first[:properties]
           }
@@ -189,7 +188,6 @@ RSpec.describe Lago::Api::Resources::Plan do
                 'lago_id' => 'id',
                 'lago_billable_metric_id' => factory_plan.charges.first[:lago_billable_metric_id],
                 'created_at' => '2022-04-29T08:59:51Z',
-                'amount_currency' => factory_plan.charges.first[:amount_currency],
                 'charge_model' => factory_plan.charges.first[:charge_model],
                 'properties' => factory_plan.charges.first[:properties]
               }
