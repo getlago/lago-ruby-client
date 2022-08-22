@@ -115,6 +115,7 @@ subscription = {
     subscription_id: "sub-id",
     name: "name",
     unique_id: "unique-id"
+    billing_time: "anniversary"
 }
 client.subscriptions.create(subscription)
 

@@ -7,6 +7,7 @@ FactoryBot.define do
     unique_id { 'sdwfzf-a71e-4ea2-bcf9-57d8885990ba' }
     plan_code { 'eartha lynch' }
     status { 'active' }
+    billing_time { 'calendar' }
     started_at { '2022-05-05T12:27:30Z' }
     terminated_at { nil }
     canceled_at { nil }

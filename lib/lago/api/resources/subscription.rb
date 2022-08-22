@@ -19,7 +19,8 @@ module Lago
               plan_code: params[:plan_code],
               name: params[:name],
               unique_id: params[:unique_id],
-              subscription_id: params[:subscription_id]
+              subscription_id: params[:subscription_id],
+              billing_time: params[:billing_time]
             }.compact
           }
         end
