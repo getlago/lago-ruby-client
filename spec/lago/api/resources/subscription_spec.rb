@@ -25,7 +25,8 @@ RSpec.describe Lago::Api::Resources::Subscription do
         customer_id: factory_subscription.customer_id,
         plan_code: factory_subscription.plan_code,
         unique_id: factory_subscription.unique_id,
-        subscription_id: factory_subscription.subscription_id
+        subscription_id: factory_subscription.subscription_id,
+        billing_time: factory_subscription.billing_time
       }
     end
     let(:body) do
@@ -48,6 +49,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
         expect(subscription.unique_id).to eq(factory_subscription.unique_id)
+        expect(subscription.billing_time).to eq(factory_subscription.billing_time)
       end
     end
 
