@@ -24,7 +24,6 @@ RSpec.describe Lago::Api::Resources::Subscription do
       {
         customer_id: factory_subscription.customer_id,
         plan_code: factory_subscription.plan_code,
-        unique_id: factory_subscription.unique_id,
         subscription_id: factory_subscription.subscription_id,
         billing_time: factory_subscription.billing_time
       }
@@ -48,7 +47,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.customer_id).to eq(factory_subscription.customer_id)
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
-        expect(subscription.unique_id).to eq(factory_subscription.unique_id)
+        expect(subscription.subscription_id).to eq(factory_subscription.subscription_id)
         expect(subscription.billing_time).to eq(factory_subscription.billing_time)
       end
     end
@@ -115,7 +114,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.customer_id).to eq(factory_subscription.customer_id)
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
-        expect(subscription.unique_id).to eq(factory_subscription.unique_id)
+        expect(subscription.subscription_id).to eq(factory_subscription.subscription_id)
       end
     end
 
@@ -158,7 +157,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         response = resource.get_all({ customer_id: '123' })
 
         expect(response['subscriptions'].first['lago_id']).to eq(factory_subscription.lago_id)
-        expect(response['subscriptions'].first['unique_id']).to eq(factory_subscription.unique_id)
+        expect(response['subscriptions'].first['subscription_id']).to eq(factory_subscription.subscription_id)
         expect(response['meta']['current_page']).to eq(1)
       end
     end

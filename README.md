@@ -110,12 +110,11 @@ client.invoices.download("5eb02857-a71e-4ea2-bcf9-57d8885990ba")
 
 ``` ruby
 subscription = {
-    customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
-    plan_code: "code",
-    subscription_id: "sub-id",
-    name: "name",
-    unique_id: "unique-id"
-    billing_time: "anniversary"
+  customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
+  plan_code: "code",
+  name: "name",
+  subscription_id: "673c2243-873b-4d55-b3eb-5e98c4677980",
+  billing_time: "anniversary"
 }
 client.subscriptions.create(subscription)
 
