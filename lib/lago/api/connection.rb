@@ -90,7 +90,7 @@ module Lago
 
       def http_client
         http_client = Net::HTTP.new(uri.hostname, uri.port)
-        http_client.use_ssl = true
+        http_client.use_ssl = true if uri.scheme == 'https'
 
         http_client
       end
