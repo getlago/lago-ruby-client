@@ -16,6 +16,8 @@ require 'lago/api/resources/plan'
 require 'lago/api/resources/organization'
 require 'lago/api/resources/event'
 require 'lago/api/resources/subscription'
+require 'lago/api/resources/wallet'
+require 'lago/api/resources/wallet_transaction'
 require 'webmock/rspec'
 
 RSpec.configure do |config|

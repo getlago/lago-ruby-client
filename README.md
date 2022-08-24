@@ -285,6 +285,46 @@ update_params = {
 client.organizations.update(update_params)
 ```
 
+### Wallets
+[Api reference](https://doc.getlago.com/docs/api/wallets/wallet-object)
+
+```ruby
+wallet = {
+  name: 'wallet name',
+  customer_id: 'id',
+  expiration_date: '2022-07-07',
+  rate_amount: 1,
+  paid_credits: 100,
+  granted_credits: 100,
+}
+
+client.wallets.create(wallet)
+
+update_params = {
+  name: 'new name'
+}
+client.wallets.update(update_params, 'id')
+
+client.wallets.get('id')
+
+client.wallets.destroy('id')
+
+client.wallets.get_all({ customer_id: '123', per_page: 2, page: 3 })
+```
+
+### Wallet transactions
+[Api reference](https://doc.getlago.com/docs/api/wallet_transactions/wallet-transaction-object)
+
+```ruby
+wallet_transaction = {
+  wallet_id: '123',
+  paid_credits: 100,
+  granted_credits: 100,
+}
+
+client.wallet_transactions.create(wallet_transaction)
+```
+
 ## Development
 
 ### Install the dependencies
