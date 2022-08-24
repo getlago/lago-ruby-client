@@ -14,8 +14,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
         'lago_customer_id' => factory_wallet.customer_id,
         'name' => factory_wallet.name,
         'expiration_date' => factory_wallet.expiration_date,
-        'paid_credits' => factory_wallet.paid_credits,
-        'granted_credits' => factory_wallet.granted_credits,
+        'balance' => 100,
         'rate_amount' => factory_wallet.rate_amount,
         'created_at' => '2022-04-29T08:59:51Z'
       }

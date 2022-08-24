@@ -9,12 +9,12 @@ module Lago
         end
 
         def root_name
-          'wallet_transaction'
+          'wallet_transactions'
         end
 
         def whitelist_params(params)
           {
-            root_name => {
+            'wallet_transaction' => {
               wallet_id: params[:wallet_id],
               paid_credits: params[:paid_credits],
               granted_credits: params[:granted_credits]

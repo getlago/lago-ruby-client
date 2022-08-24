@@ -9,13 +9,28 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
   let(:factory_wallet_transaction) { FactoryBot.build(:wallet_transaction) }
   let(:response) do
     {
-      'wallet_transaction' => {
-        'lago_id' => 'this-is-lago-id',
-        'lago_wallet_id' => factory_wallet_transaction.wallet_id,
-        'paid_credits' => factory_wallet_transaction.paid_credits,
-        'granted_credits' => factory_wallet_transaction.granted_credits,
-        'created_at' => '2022-04-29T08:59:51Z'
-      }
+      'wallet_transactions' => [
+        {
+          'lago_id' => 'this-is-lago-id',
+          'lago_wallet_id' => factory_wallet_transaction.wallet_id,
+          'amount' => factory_wallet_transaction.paid_credits,
+          'status' => 'pending',
+          'transaction_type' => 'inbound',
+          'credit_amount' => factory_wallet_transaction.paid_credits,
+          'settled_at' => '2022-04-29T08:59:51Z',
+          'created_at' => '2022-04-29T08:59:51Z'
+        },
+        {
+          'lago_id' => 'this-is-lago-id2',
+          'lago_wallet_id' => factory_wallet_transaction.wallet_id,
+          'amount' => factory_wallet_transaction.granted_credits,
+          'status' => 'settled',
+          'transaction_type' => 'inbound',
+          'credit_amount' => factory_wallet_transaction.granted_credits,
+          'settled_at' => '2022-04-29T08:59:51Z',
+          'created_at' => '2022-04-29T08:59:51Z'
+        }
+      ]
     }.to_json
   end
   let(:error_response) do
@@ -41,10 +56,11 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
           .to_return(body: response, status: 200)
       end
 
-      it 'returns an wallet_transaction' do
-        wallet_transaction = resource.create(params)
+      it 'returns an wallet_transactions' do
+        wallet_transactions = resource.create(params)
 
-        expect(wallet_transaction.lago_id).to eq('this-is-lago-id')
+        expect(wallet_transactions.first.lago_id).to eq('this-is-lago-id')
+        expect(wallet_transactions.last.lago_id).to eq('this-is-lago-id2')
       end
     end
 
