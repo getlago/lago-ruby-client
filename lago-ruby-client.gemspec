@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata["homepage_uri"] = 'https://www.getlago.com/'
   spec.metadata["source_code_uri"] = spec.homepage
-  spec.metadata["documentation_uri"] = 'https://doc.getlago.com/docs/guide/intro'
+  spec.metadata["documentation_uri"] = 'https://doc.getlago.com'
 
   spec.bindir = 'exe'
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
