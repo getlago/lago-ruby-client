@@ -12,16 +12,16 @@ module Lago
           'customer'
         end
 
-        def current_usage(customer_id, subscription_id)
+        def current_usage(external_customer_id, external_subscription_id)
           uri = URI(
-            "#{client.base_api_url}#{api_resource}/#{customer_id}/current_usage?subscription_id=#{subscription_id}"
+            "#{client.base_api_url}#{api_resource}/#{external_customer_id}/current_usage?external_subscription_id=#{external_subscription_id}"
           )
           connection.get(uri, identifier: nil)
         end
 
         def whitelist_params(params)
           result_hash = {
-            customer_id: params[:customer_id],
+            external_customer_id: params[:external_customer_id],
             address_line1: params[:address_line1],
             address_line2: params[:address_line2],
             city: params[:city],

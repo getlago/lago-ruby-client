@@ -28,10 +28,10 @@ module Lago
           {
             root_name => {
               transaction_id: params[:transaction_id],
-              customer_id: params[:customer_id],
+              external_customer_id: params[:external_customer_id],
               code: params[:code],
               timestamp: params[:timestamp],
-              subscription_id: params[:subscription_id],
+              external_subscription_id: params[:external_subscription_id],
               properties: params[:properties]
             }.compact
           }
@@ -41,10 +41,10 @@ module Lago
           {
             root_name => {
               transaction_id: params[:transaction_id],
-              customer_id: params[:customer_id],
+              external_customer_id: params[:external_customer_id],
               code: params[:code],
               timestamp: params[:timestamp],
-              subscription_ids: params[:subscription_ids],
+              external_subscription_ids: params[:external_subscription_ids],
               properties: params[:properties]
             }.compact
           }
