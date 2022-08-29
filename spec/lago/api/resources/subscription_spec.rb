@@ -22,10 +22,9 @@ RSpec.describe Lago::Api::Resources::Subscription do
   describe '#create' do
     let(:params) do
       {
-        customer_id: factory_subscription.customer_id,
+        external_customer_id: factory_subscription.external_customer_id,
         plan_code: factory_subscription.plan_code,
-        unique_id: factory_subscription.unique_id,
-        subscription_id: factory_subscription.subscription_id,
+        external_id: factory_subscription.external_id,
         billing_time: factory_subscription.billing_time
       }
     end
@@ -45,10 +44,10 @@ RSpec.describe Lago::Api::Resources::Subscription do
       it 'returns subscription' do
         subscription = resource.create(params)
 
-        expect(subscription.customer_id).to eq(factory_subscription.customer_id)
+        expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
-        expect(subscription.unique_id).to eq(factory_subscription.unique_id)
+        expect(subscription.external_id).to eq(factory_subscription.external_id)
         expect(subscription.billing_time).to eq(factory_subscription.billing_time)
       end
     end
@@ -76,7 +75,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
       it 'returns subscription' do
         subscription = resource.destroy('123')
 
-        expect(subscription.customer_id).to eq(factory_subscription.customer_id)
+        expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
       end
@@ -112,10 +111,10 @@ RSpec.describe Lago::Api::Resources::Subscription do
       it 'returns an subscription' do
         subscription = resource.update(params, '123')
 
-        expect(subscription.customer_id).to eq(factory_subscription.customer_id)
+        expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
-        expect(subscription.unique_id).to eq(factory_subscription.unique_id)
+        expect(subscription.external_id).to eq(factory_subscription.external_id)
       end
     end
 
@@ -148,17 +147,17 @@ RSpec.describe Lago::Api::Resources::Subscription do
       }.to_json
     end
 
-    context 'when customer_id is given' do
+    context 'when external_customer_id is given' do
       before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/subscriptions?customer_id=123')
+        stub_request(:get, 'https://api.getlago.com/api/v1/subscriptions?external_customer_id=123')
           .to_return(body: response, status: 200)
       end
 
       it 'returns subscriptions on selected page' do
-        response = resource.get_all({ customer_id: '123' })
+        response = resource.get_all({ external_customer_id: '123' })
 
         expect(response['subscriptions'].first['lago_id']).to eq(factory_subscription.lago_id)
-        expect(response['subscriptions'].first['unique_id']).to eq(factory_subscription.unique_id)
+        expect(response['subscriptions'].first['external_id']).to eq(factory_subscription.external_id)
         expect(response['meta']['current_page']).to eq(1)
       end
     end

@@ -25,7 +25,7 @@ RSpec.describe Lago::Api::Resources::Customer do
       it 'returns customer' do
         customer = resource.create(params)
 
-        expect(customer.customer_id).to eq(factory_customer.customer_id)
+        expect(customer.external_id).to eq(factory_customer.external_id)
         expect(customer.name).to eq(factory_customer.name)
         expect(customer.billing_configuration.provider_customer_id).to eq(factory_customer.billing_configuration[:provider_customer_id])
       end
@@ -59,12 +59,12 @@ RSpec.describe Lago::Api::Resources::Customer do
       before do
         usage_json = JSON.generate('customer_usage' => factory_customer_usage.to_h)
 
-        stub_request(:get, 'https://api.getlago.com/api/v1/customers/customer_id/current_usage?subscription_id=123')
+        stub_request(:get, 'https://api.getlago.com/api/v1/customers/external_customer_id/current_usage?external_subscription_id=123')
           .to_return(body: usage_json, status: 200)
       end
 
       it 'returns the usage of the customer' do
-        response = resource.current_usage('customer_id', '123')
+        response = resource.current_usage('external_customer_id', '123')
 
         expect(response['customer_usage']['from_date']).to eq(factory_customer_usage.from_date)
       end
@@ -72,7 +72,7 @@ RSpec.describe Lago::Api::Resources::Customer do
 
     context 'when the customer does not exists' do
       before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/customers/DOESNOTEXIST/current_usage?subscription_id=123')
+        stub_request(:get, 'https://api.getlago.com/api/v1/customers/DOESNOTEXIST/current_usage?external_subscription_id=123')
           .to_return(body: JSON.generate(status: 404, error: 'Not Found'), status: 404)
       end
 
@@ -83,7 +83,7 @@ RSpec.describe Lago::Api::Resources::Customer do
 
     context 'when the customer does not have a subscription' do
       before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/customers/NOSUBSCRIPTION/current_usage?subscription_id=123')
+        stub_request(:get, 'https://api.getlago.com/api/v1/customers/NOSUBSCRIPTION/current_usage?external_subscription_id=123')
           .to_return(body: JSON.generate(status: 422, error: 'no_active_subscription'), status: 422)
       end
 

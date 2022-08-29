@@ -22,8 +22,7 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
           'applied_coupon' => {
             'lago_id' => 'b7ab2926-1de8-4428-9bcd-779314ac129b',
             'lago_coupon_id' => 'b7ab2926-1de8-4428-9bcd-779314ac129b',
-
-            'customer_id' => factory_applied_coupon.customer_id,
+            'external_customer_id' => factory_applied_coupon.external_customer_id,
             'lago_customer_id' => '99a6094e-199b-4101-896a-54e927ce7bd7',
             'amount_cents' => 123,
             'amount_currency' => 'EUR',
@@ -43,7 +42,7 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
       it 'returns an applied_coupon' do
         applied_coupon = resource.create(params)
 
-        expect(applied_coupon.customer_id).to eq(factory_applied_coupon.customer_id)
+        expect(applied_coupon.external_customer_id).to eq(factory_applied_coupon.external_customer_id)
       end
     end
 

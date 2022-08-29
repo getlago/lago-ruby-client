@@ -15,11 +15,10 @@ module Lago
         def whitelist_params(params)
           {
             root_name => {
-              customer_id: params[:customer_id],
+              external_customer_id: params[:external_customer_id],
               plan_code: params[:plan_code],
               name: params[:name],
-              unique_id: params[:unique_id],
-              subscription_id: params[:subscription_id],
+              external_id: params[:external_id],
               billing_time: params[:billing_time]
             }.compact
           }
