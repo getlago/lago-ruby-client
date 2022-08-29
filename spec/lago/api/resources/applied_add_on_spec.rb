@@ -22,8 +22,7 @@ RSpec.describe Lago::Api::Resources::AppliedAddOn do
           'applied_add_on' => {
             'lago_id' => 'b7ab2926-1de8-4428-9bcd-779314ac129b',
             'lago_add_on_id' => 'b7ab2926-1de8-4428-9bcd-779314ac129b',
-
-            'customer_id' => factory_applied_add_on.customer_id,
+            'external_customer_id' => factory_applied_add_on.external_customer_id,
             'lago_customer_id' => '99a6094e-199b-4101-896a-54e927ce7bd7',
             'amount_cents' => 123,
             'amount_currency' => 'EUR',
@@ -41,7 +40,7 @@ RSpec.describe Lago::Api::Resources::AppliedAddOn do
       it 'returns an applied add-on' do
         applied_add_on = resource.create(params)
 
-        expect(applied_add_on.customer_id).to eq(factory_applied_add_on.customer_id)
+        expect(applied_add_on.external_customer_id).to eq(factory_applied_add_on.external_customer_id)
       end
     end
 

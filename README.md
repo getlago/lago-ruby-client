@@ -28,7 +28,7 @@ client = Lago::Api::Client.new({api_key: 'key'})
 ``` ruby
 event = {
     transaction_id: "__UNIQUE_ID__",
-    customer_id:  "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
+    external_customer_id:  "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
     code:  "code",
     timestamp:  1650893379,
     properties: {
@@ -39,7 +39,7 @@ client.events.create(event)
 
 event = {
     transaction_id: "__UNIQUE_ID__",
-    subscription_ids:  [
+    external_subscription_ids:  [
       "5eb02857-a71e-4ea2-bcf9-57d8885990ba", "5eb01117-a71e-4ea2-bcf9-57d8885990ba"
     ],
     code:  "code",
@@ -61,7 +61,7 @@ event = client.events.get(transaction_id)
 
 ``` ruby
 customer = {
-    customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
+    external_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
     address_line1: nil,
     address_line2: nil,
     city: nil,
@@ -86,7 +86,7 @@ client.customers.create(customer)
 ```
 
 ```ruby
-customer_usage = client.customer.current_usage(customer_id, subscription_id)
+customer_usage = client.customer.current_usage(external_customer_id, external_subscription_id)
 ```
 
 ### Invoices
@@ -110,11 +110,10 @@ client.invoices.download("5eb02857-a71e-4ea2-bcf9-57d8885990ba")
 
 ``` ruby
 subscription = {
-    customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
+    external_customer_id: "5eb02857-a71e-4ea2-bcf9-57d8885990ba",
     plan_code: "code",
-    subscription_id: "sub-id",
+    external_id: "sub-id",
     name: "name",
-    unique_id: "unique-id"
     billing_time: "anniversary"
 }
 client.subscriptions.create(subscription)
@@ -126,7 +125,7 @@ client.subscriptions.update(update_params, 'sub_id')
 
 client.subscriptions.destroy('sub_id')
 
-client.subscriptions.get_all({ customer_id: '123' })
+client.subscriptions.get_all({ external_customer_id: '123' })
 ```
 
 ### Applied coupons
@@ -134,7 +133,7 @@ client.subscriptions.get_all({ customer_id: '123' })
 
 ```ruby
 applied_coupon = {
-  customer_id: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba",
+  external_customer_id: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba",
   coupon_code: "code",
   amount_cents: 123,
   amount_currency: "EUR"
@@ -148,7 +147,7 @@ client.applied_coupons.create(applied_coupon)
 
 ```ruby
 applied_add_on = {
-  customer_id: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba",
+  external_customer_id: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba",
   add_on_code: "code",
   amount_cents: 123,
   amount_currency: "EUR"
