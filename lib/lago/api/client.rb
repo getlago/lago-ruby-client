@@ -62,6 +62,14 @@ module Lago
       def organizations
         Lago::Api::Resources::Organization.new(self)
       end
+
+      def wallets
+        Lago::Api::Resources::Wallet.new(self)
+      end
+
+      def wallet_transactions
+        Lago::Api::Resources::WalletTransaction.new(self)
+      end
     end
   end
 end
