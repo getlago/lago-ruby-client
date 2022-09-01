@@ -293,9 +293,9 @@ wallet = {
   name: 'wallet name',
   external_customer_id: 'id',
   expiration_date: '2022-07-07',
-  rate_amount: 1,
-  paid_credits: 100,
-  granted_credits: 100,
+  rate_amount: '1',
+  paid_credits: '100',
+  granted_credits: '100',
 }
 
 client.wallets.create(wallet)
@@ -318,8 +318,8 @@ client.wallets.get_all({ external_customer_id: '123', per_page: 2, page: 3 })
 ```ruby
 wallet_transaction = {
   wallet_id: '123',
-  paid_credits: 100,
-  granted_credits: 100,
+  paid_credits: '100',
+  granted_credits: '100',
 }
 
 client.wallet_transactions.create(wallet_transaction)
