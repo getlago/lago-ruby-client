@@ -291,7 +291,7 @@ client.organizations.update(update_params)
 ```ruby
 wallet = {
   name: 'wallet name',
-  customer_id: 'id',
+  external_customer_id: 'id',
   expiration_date: '2022-07-07',
   rate_amount: 1,
   paid_credits: 100,
@@ -309,7 +309,7 @@ client.wallets.get('id')
 
 client.wallets.destroy('id')
 
-client.wallets.get_all({ customer_id: '123', per_page: 2, page: 3 })
+client.wallets.get_all({ external_customer_id: '123', per_page: 2, page: 3 })
 ```
 
 ### Wallet transactions

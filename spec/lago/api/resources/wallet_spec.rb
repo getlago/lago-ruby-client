@@ -11,7 +11,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
     {
       'wallet' => {
         'lago_id' => 'this-is-lago-id',
-        'lago_customer_id' => factory_wallet.customer_id,
+        'lago_customer_id' => factory_wallet.id,
         'name' => factory_wallet.name,
         'expiration_date' => factory_wallet.expiration_date,
         'balance' => 100,
@@ -165,7 +165,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
         'wallets' => [
           {
             'lago_id' => 'this-is-lago-id',
-            'customer_id' => factory_wallet.customer_id,
+            'external_customer_id' => factory_wallet.external_customer_id,
             'name' => factory_wallet.name,
             'expiration_date' => factory_wallet.expiration_date,
             'paid_credits' => factory_wallet.paid_credits,
@@ -201,12 +201,12 @@ RSpec.describe Lago::Api::Resources::Wallet do
 
     context 'when options are present' do
       before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/wallets?customer_id=123&per_page=2&page=1')
+        stub_request(:get, 'https://api.getlago.com/api/v1/wallets?external_customer_id=123&per_page=2&page=1')
           .to_return(body: response, status: 200)
       end
 
       it 'returns wallets on selected page' do
-        response = resource.get_all({ customer_id: '123', per_page: 2, page: 1 })
+        response = resource.get_all({ external_customer_id: '123', per_page: 2, page: 1 })
 
         expect(response['wallets'].first['lago_id']).to eq('this-is-lago-id')
         expect(response['wallets'].first['name']).to eq(factory_wallet.name)

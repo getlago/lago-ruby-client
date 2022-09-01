@@ -15,7 +15,7 @@ module Lago
         def whitelist_params(params)
           {
             root_name => {
-              customer_id: params[:customer_id],
+              external_customer_id: params[:external_customer_id],
               rate_amount: params[:rate_amount],
               name: params[:name],
               paid_credits: params[:paid_credits],
