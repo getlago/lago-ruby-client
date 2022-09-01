@@ -313,7 +313,7 @@ client.wallets.get_all({ external_customer_id: '123', per_page: 2, page: 3 })
 ```
 
 ### Wallet transactions
-[Api reference](https://doc.getlago.com/docs/api/wallet_transactions/wallet-transaction-object)
+[Api reference](https://doc.getlago.com/docs/api/wallets/wallet-transaction-object)
 
 ```ruby
 wallet_transaction = {
