@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :plan, class: OpenStruct do
     name { 'plan1' }
@@ -13,7 +15,6 @@ FactoryBot.define do
       [
         {
           billable_metric_id: 'id',
-          amount_currency: 'EUR',
           charge_model: 'standard',
           properties: { amount: '0.22' }
         }

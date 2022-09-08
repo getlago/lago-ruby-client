@@ -250,7 +250,6 @@ plan = {
   charges: [
     {
       billable_metric_id: 'id',
-      amount_currency: 'EUR',
       charge_model: 'standard',
       properties: {
         amount: 0.22
