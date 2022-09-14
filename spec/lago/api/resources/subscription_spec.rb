@@ -65,6 +65,65 @@ RSpec.describe Lago::Api::Resources::Subscription do
     end
   end
 
+  describe '#create_with_override' do
+    let(:params) do
+      {
+        external_customer_id: factory_subscription.external_customer_id,
+        external_id: factory_subscription.external_id,
+        billing_time: factory_subscription.billing_time,
+        plan: {
+          amount_cents: 1055,
+          amount_currency: 'EUR',
+          trial_period: 1,
+          charges: [
+            {
+              id: 'charge-id',
+              charge_model: 'standard',
+              properties: {
+                amount: '111'
+              }
+            }
+          ]
+        }
+      }
+    end
+    let(:body) do
+      {
+        'subscription' => params
+      }
+    end
+
+    context 'when subscription is successfully created' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions/override')
+          .with(body: body)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns subscription' do
+        subscription = resource.create_with_override(params)
+
+        expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)
+        expect(subscription.plan_code).to eq(factory_subscription.plan_code)
+        expect(subscription.status).to eq(factory_subscription.status)
+        expect(subscription.external_id).to eq(factory_subscription.external_id)
+        expect(subscription.billing_time).to eq(factory_subscription.billing_time)
+      end
+    end
+
+    context 'when subscription is NOT successfully created' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions/override')
+          .with(body: body)
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.create_with_override(params) }.to raise_error Lago::Api::HttpError
+      end
+    end
+  end
+
   describe '#delete' do
     context 'when subscription is successfully terminated' do
       before do
