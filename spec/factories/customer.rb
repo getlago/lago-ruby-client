@@ -21,5 +21,6 @@ FactoryBot.define do
         provider_customer_id: 'cus_123456',
       }
     end
+    currency { 'EUR' }
   end
 end
