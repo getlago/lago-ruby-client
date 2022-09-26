@@ -24,6 +24,7 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
             'lago_coupon_id' => 'b7ab2926-1de8-4428-9bcd-779314ac129b',
             'external_customer_id' => factory_applied_coupon.external_customer_id,
             'lago_customer_id' => '99a6094e-199b-4101-896a-54e927ce7bd7',
+            'frequency' => factory_applied_coupon.frequency,
             'amount_cents' => 123,
             'amount_currency' => 'EUR',
             'expiration_date' => '2022-04-29',

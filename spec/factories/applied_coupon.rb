@@ -4,5 +4,6 @@ FactoryBot.define do
     coupon_code { '123' }
     amount_cents { 123 }
     amount_currency { 'EUR'}
+    frequency { 'once' }
   end
 end

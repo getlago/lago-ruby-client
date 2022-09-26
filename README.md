@@ -136,7 +136,8 @@ applied_coupon = {
   external_customer_id: "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba",
   coupon_code: "code",
   amount_cents: 123,
-  amount_currency: "EUR"
+  amount_currency: "EUR",
+  frequency: "once"
 }
 
 client.applied_coupons.create(applied_coupon)
@@ -216,7 +217,9 @@ coupon = {
   name: 'coupon name',
   code: 'code',
   expiration: 'no_expiration',
-  expiration_duration: 10,
+  expiration_date: "2022-08-08",
+  coupon_type: "fixed_amount",
+  frequency: "once",
   amount_cents: 100,
   amount_currency: 'EUR',
 }
