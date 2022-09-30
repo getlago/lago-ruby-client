@@ -35,7 +35,8 @@ module Lago
             state: params[:state],
             url: params[:url],
             vat_rate: params[:vat_rate],
-            zipcode: params[:zipcode]
+            zipcode: params[:zipcode],
+            currency: params[:currency]
           }
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
