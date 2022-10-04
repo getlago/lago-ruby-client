@@ -2,8 +2,8 @@
 
 module Lago
   module Api
-    BASE_URL = 'https://api.getlago.com/'.freeze
-    API_PATH = 'api/v1/'.freeze
+    BASE_URL = 'https://api.getlago.com/'
+    API_PATH = 'api/v1/'
 
     class Client
       attr_reader :api_key, :api_url
@@ -49,6 +49,10 @@ module Lago
 
       def billable_metrics
         Lago::Api::Resources::BillableMetric.new(self)
+      end
+
+      def credit_notes
+        Lago::Api::Resources::CreditNote.new(self)
       end
 
       def plans
