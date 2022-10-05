@@ -7,6 +7,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
 
   let(:client) { Lago::Api::Client.new }
   let(:factory_billable_metric) { FactoryBot.build(:billable_metric) }
+
   let(:response) do
     {
       'billable_metric' => {
@@ -16,23 +17,34 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
         'description' => factory_billable_metric.description,
         'aggregation_type' => factory_billable_metric.aggregation_type,
         'field_name' => factory_billable_metric.field_name,
-        'created_at' => '2022-04-29T08:59:51Z'
-      }
+        'created_at' => '2022-04-29T08:59:51Z',
+        'group' => {
+          'key' => 'region',
+          'values' => %w[france italy spain],
+        },
+      },
     }.to_json
   end
   let(:error_response) do
     {
       'status' => 422,
       'error' => 'Unprocessable Entity',
-      'message' => 'Validation error on the record'
+      'message' => 'Validation error on the record',
     }.to_json
   end
 
   describe '#create' do
-    let(:params) { factory_billable_metric.to_h }
+    let(:group) do
+      {
+        key: 'region',
+        values: %w[france italy spain],
+      }
+    end
+
+    let(:params) { factory_billable_metric.to_h.merge(group: group) }
     let(:body) do
       {
-        'billable_metric' => factory_billable_metric.to_h
+        'billable_metric' => params,
       }
     end
 
@@ -48,6 +60,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
 
         expect(billable_metric.lago_id).to eq('this-is-lago-id')
         expect(billable_metric.name).to eq(factory_billable_metric.name)
+        expect(billable_metric.group.to_h).to eq(group)
       end
     end
 
@@ -68,7 +81,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
     let(:params) { factory_billable_metric.to_h }
     let(:body) do
       {
-        'billable_metric' => factory_billable_metric.to_h
+        'billable_metric' => factory_billable_metric.to_h,
       }
     end
 
@@ -165,7 +178,8 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
             'description' => factory_billable_metric.description,
             'aggregation_type' => factory_billable_metric.aggregation_type,
             'field_name' => factory_billable_metric.field_name,
-            'created_at' => '2022-04-29T08:59:51Z'
+            'created_at' => '2022-04-29T08:59:51Z',
+            'group' => {},
           }
         ],
         'meta': {
@@ -173,7 +187,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
           'next_page' => 2,
           'prev_page' => nil,
           'total_pages' => 7,
-          'total_count' => 63
+          'total_count' => 63,
         }
       }.to_json
     end
