@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'debug'
 require 'factory_bot'
 require 'lago/api/client'
 require 'lago/api/connection'
