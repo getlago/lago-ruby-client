@@ -19,8 +19,9 @@ module Lago
               code: params[:code],
               description: params[:description],
               aggregation_type: params[:aggregation_type],
-              field_name: params[:field_name]
-            }.compact
+              field_name: params[:field_name],
+              group: params[:group],
+            }.compact,
           }
         end
       end
