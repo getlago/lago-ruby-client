@@ -25,6 +25,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         external_customer_id: factory_subscription.external_customer_id,
         plan_code: factory_subscription.plan_code,
         external_id: factory_subscription.external_id,
+        subscription_date: factory_subscription.subscription_date,
         billing_time: factory_subscription.billing_time
       }
     end
@@ -48,6 +49,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
         expect(subscription.external_id).to eq(factory_subscription.external_id)
+        expect(subscription.subscription_date).to eq(factory_subscription.subscription_date)
         expect(subscription.billing_time).to eq(factory_subscription.billing_time)
       end
     end
