@@ -22,7 +22,7 @@ module Lago
             amount_currency: params[:amount_currency],
             trial_period: params[:trial_period],
             pay_in_advance: params[:pay_in_advance],
-            bill_charges_monthly: params[:bill_charges_monthly]
+            bill_charges_monthly: params[:bill_charges_monthly],
           }.compact
 
           whitelist_charges(params[:charges]).tap do |charges|
@@ -36,7 +36,7 @@ module Lago
           processed_charges = []
 
           charges.each do |c|
-            result = (c || {}).slice(:id, :billable_metric_id, :charge_model, :properties)
+            result = (c || {}).slice(:id, :billable_metric_id, :charge_model, :properties, :group_properties)
 
             processed_charges << result unless result.empty?
           end
