@@ -35,6 +35,10 @@ module Lago
         Lago::Api::Resources::Event.new(self)
       end
 
+      def groups
+        Lago::Api::Resources::Group.new(self)
+      end
+
       def applied_coupons
         Lago::Api::Resources::AppliedCoupon.new(self)
       end
