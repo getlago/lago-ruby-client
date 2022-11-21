@@ -2,10 +2,9 @@ FactoryBot.define do
   factory :customer, class: OpenStruct do
     external_customer_id { '5eb02857-a71e-4ea2-bcf9-57d8885436ba' }
     name { 'Gavin Belson' }
-    vat_rate { nil }
     country { 'US' }
     address_line1 { '5230 Penfield Ave' }
-    address_line2 {'fzufuzfuz' }
+    address_line2 { 'fzufuzfuz' }
     state { 'CA' }
     zipcode { '91364' }
     email { 'dinesh@piedpiper.test' }
@@ -19,6 +18,7 @@ FactoryBot.define do
       {
         payment_provider: 'stripe',
         provider_customer_id: 'cus_123456',
+        vat_rate: nil,
       }
     end
     currency { 'EUR' }

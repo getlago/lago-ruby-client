@@ -13,22 +13,31 @@ module Lago
         end
 
         def whitelist_params(params)
-          {
-            root_name => {
-              webhook_url: params[:webhook_url],
-              vat_rate: params[:vat_rate],
-              country: params[:country],
-              address_line1: params[:address_line1],
-              address_line2: params[:address_line2],
-              state: params[:state],
-              zipcode: params[:zipcode],
-              email: params[:email],
-              city: params[:city],
-              legal_name: params[:legal_name],
-              legal_number: params[:legal_number],
-              invoice_footer: params[:invoice_footer]
-            }.compact
-          }
+          result_hash = {
+            webhook_url: params[:webhook_url],
+            country: params[:country],
+            address_line1: params[:address_line1],
+            address_line2: params[:address_line2],
+            state: params[:state],
+            zipcode: params[:zipcode],
+            email: params[:email],
+            city: params[:city],
+            legal_name: params[:legal_name],
+            legal_number: params[:legal_number],
+          }.compact
+
+          whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
+            result_hash[:billing_configuration] = config unless config.empty?
+          end
+
+          { root_name => result_hash }
+        end
+
+        def whitelist_billing_configuration(billing_params)
+          (billing_params || {}).slice(
+            :invoice_footer,
+            :vat_rate,
+          )
         end
       end
     end
