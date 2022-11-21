@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lago-ruby-client (0.7.0)
+    lago-ruby-client (0.15.1.pre.alpha)
 
 GEM
   remote: https://rubygems.org/
