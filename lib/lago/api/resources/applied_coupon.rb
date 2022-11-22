@@ -18,8 +18,11 @@ module Lago
               external_customer_id: params[:external_customer_id],
               coupon_code: params[:coupon_code],
               amount_cents: params[:amount_cents],
+              percentage_rate: params[:percentage_rate],
+              frequency: params[:frequency],
+              frequency_duration: params[:frequency_duration],
               amount_currency: params[:amount_currency]
-            }
+            }.compact
           }
         end
       end

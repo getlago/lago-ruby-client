@@ -19,8 +19,12 @@ module Lago
               code: params[:code],
               amount_cents: params[:amount_cents],
               amount_currency: params[:amount_currency],
+              percentage_rate: params[:percentage_rate],
+              coupon_type: params[:coupon_type],
+              frequency: params[:frequency],
+              frequency_duration: params[:frequency_duration],
               expiration: params[:expiration],
-              expiration_duration: params[:expiration_duration]
+              expiration_date: params[:expiration_date]
             }.compact
           }
         end

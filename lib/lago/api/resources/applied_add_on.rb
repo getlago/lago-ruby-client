@@ -19,7 +19,7 @@ module Lago
               add_on_code: params[:add_on_code],
               amount_cents: params[:amount_cents],
               amount_currency: params[:amount_currency]
-            }
+            }.compact
           }
         end
       end
