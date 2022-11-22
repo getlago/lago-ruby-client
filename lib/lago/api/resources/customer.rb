@@ -50,6 +50,7 @@ module Lago
             :payment_provider,
             :provider_customer_id,
             :sync,
+            :sync_with_provider,
             :vat_rate,
           )
         end

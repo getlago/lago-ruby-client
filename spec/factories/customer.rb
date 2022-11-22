@@ -19,6 +19,7 @@ FactoryBot.define do
         payment_provider: 'stripe',
         provider_customer_id: 'cus_123456',
         vat_rate: nil,
+        sync_with_provider: true,
       }
     end
     currency { 'EUR' }
