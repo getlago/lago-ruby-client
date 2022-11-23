@@ -16,7 +16,9 @@ RSpec.describe Lago::Api::Resources::Coupon do
         'amount_cents' => factory_coupon.amount_cents,
         'amount_currency' => factory_coupon.amount_currency,
         'expiration' => factory_coupon.expiration,
-        'expiration_duration' => factory_coupon.expiration_duration,
+        'expiration_date' => factory_coupon.expiration_date,
+        'coupon_type' => factory_coupon.coupon_type,
+        'frequency' => factory_coupon.frequency,
         'created_at' => '2022-04-29T08:59:51Z'
       }
     }.to_json
