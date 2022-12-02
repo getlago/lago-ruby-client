@@ -22,8 +22,8 @@ module Lago
         def whitelist_params(params)
           {
             root_name => {
-              status: params[:status]
-            }
+              payment_status: params[:payment_status],
+            },
           }
         end
       end

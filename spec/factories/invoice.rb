@@ -2,11 +2,11 @@ FactoryBot.define do
   factory :invoice, class: OpenStruct do
     lago_id { 'this_is_lago_internal_id' }
     sequential_id { 16 }
-    from_date { "2022-06-02" }
-    to_date { "2022-06-02" }
-    issuing_date { "2022-06-02" }
+    from_date { '2022-06-02' }
+    to_date { '2022-06-02' }
+    issuing_date { '2022-06-02' }
     invoice_type { 'type1' }
-    status { 'succeeded' }
+    payment_status { 'succeeded' }
     amount_cents { 100 }
     amount_currency { 'EUR' }
     vat_amount_cents { 20 }

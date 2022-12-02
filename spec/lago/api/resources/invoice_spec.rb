@@ -22,19 +22,16 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
   describe '#update' do
     let(:params) do
-      {
-        status: 'succeeded'
-      }
+      { payment_status: 'succeeded' }
     end
+
     let(:request_body) do
       {
-        'invoice' => {
-          'status' => factory_invoice.status
-        }
+        'invoice' => { 'payment_status' => factory_invoice.payment_status },
       }
     end
 
-    context 'when invoice status is successfully updated' do
+    context 'when payment status is successfully updated' do
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{lago_id}")
           .with(body: request_body)
@@ -45,7 +42,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
         invoice = resource.update(params, lago_id)
 
         expect(invoice.lago_id).to eq(factory_invoice.lago_id)
-        expect(invoice.status).to eq(factory_invoice.status)
+        expect(invoice.payment_status).to eq(factory_invoice.payment_status)
       end
     end
 
@@ -73,7 +70,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
         invoice = resource.get(lago_id)
 
         expect(invoice.lago_id).to eq(factory_invoice.lago_id)
-        expect(invoice.status).to eq(factory_invoice.status)
+        expect(invoice.payment_status).to eq(factory_invoice.payment_status)
       end
     end
 
@@ -93,15 +90,15 @@ RSpec.describe Lago::Api::Resources::Invoice do
     let(:response) do
       {
         'invoices' => [
-          factory_invoice.to_h
+          factory_invoice.to_h,
         ],
         'meta': {
           'current_page' => 1,
           'next_page' => 2,
           'prev_page' => nil,
           'total_pages' => 7,
-          'total_count' => 63
-        }
+          'total_count' => 63,
+        },
       }.to_json
     end
 
@@ -115,7 +112,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
         response = resource.get_all
 
         expect(response['invoices'].first['lago_id']).to eq(factory_invoice.lago_id)
-        expect(response['invoices'].first['status']).to eq(factory_invoice.status)
+        expect(response['invoices'].first['payment_status']).to eq(factory_invoice.payment_status)
         expect(response['meta']['current_page']).to eq(1)
       end
     end
@@ -130,7 +127,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
         response = resource.get_all({ per_page: 2, page: 1 })
 
         expect(response['invoices'].first['lago_id']).to eq(factory_invoice.lago_id)
-        expect(response['invoices'].first['status']).to eq(factory_invoice.status)
+        expect(response['invoices'].first['payment_status']).to eq(factory_invoice.payment_status)
         expect(response['meta']['current_page']).to eq(1)
       end
     end
@@ -150,7 +147,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
   describe '#download' do
     let(:response_body) do
       {
-        'invoice' => factory_invoice.to_h
+        'invoice' => factory_invoice.to_h,
       }
     end
 
