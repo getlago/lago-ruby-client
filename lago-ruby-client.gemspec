@@ -23,6 +23,9 @@ Gem::Specification.new do |spec|
   spec.files = `git ls-files lib`.split("\n")
   spec.require_paths = ['lib']
 
+  spec.add_dependency('jwt')
+  spec.add_dependency('openssl')
+
   spec.add_development_dependency 'debug', '>= 1.0.0'
   spec.add_development_dependency 'factory_bot'
   spec.add_development_dependency 'rake', '~> 13.0'

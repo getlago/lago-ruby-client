@@ -20,6 +20,7 @@ require 'lago/api/resources/event'
 require 'lago/api/resources/subscription'
 require 'lago/api/resources/wallet'
 require 'lago/api/resources/wallet_transaction'
+require 'lago/api/resources/webhook'
 require 'webmock/rspec'
 
 RSpec.configure do |config|
