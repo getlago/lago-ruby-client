@@ -16,19 +16,19 @@ RSpec.describe Lago::Api::Resources::Coupon do
         'amount_cents' => factory_coupon.amount_cents,
         'amount_currency' => factory_coupon.amount_currency,
         'expiration' => factory_coupon.expiration,
-        'expiration_date' => factory_coupon.expiration_date,
+        'expiration_at' => factory_coupon.expiration_at,
         'coupon_type' => factory_coupon.coupon_type,
         'frequency' => factory_coupon.frequency,
         'reusable' => factory_coupon.reusable,
-        'created_at' => '2022-04-29T08:59:51Z'
-      }
+        'created_at' => '2022-04-29T08:59:51Z',
+      },
     }.to_json
   end
   let(:error_response) do
     {
       'status' => 422,
       'error' => 'Unprocessable Entity',
-      'message' => 'Validation error on the record'
+      'message' => 'Validation error on the record',
     }.to_json
   end
 
@@ -36,7 +36,7 @@ RSpec.describe Lago::Api::Resources::Coupon do
     let(:params) { factory_coupon.to_h }
     let(:body) do
       {
-        'coupon' => factory_coupon.to_h
+        'coupon' => factory_coupon.to_h,
       }
     end
 
@@ -72,7 +72,7 @@ RSpec.describe Lago::Api::Resources::Coupon do
     let(:params) { factory_coupon.to_h }
     let(:body) do
       {
-        'coupon' => factory_coupon.to_h
+        'coupon' => factory_coupon.to_h,
       }
     end
 
@@ -169,7 +169,7 @@ RSpec.describe Lago::Api::Resources::Coupon do
             'description' => factory_coupon.description,
             'aggregation_type' => factory_coupon.aggregation_type,
             'field_name' => factory_coupon.field_name,
-            'created_at' => '2022-04-29T08:59:51Z'
+            'created_at' => '2022-04-29T08:59:51Z',
           }
         ],
         'meta': {
@@ -177,7 +177,7 @@ RSpec.describe Lago::Api::Resources::Coupon do
           'next_page' => 2,
           'prev_page' => nil,
           'total_pages' => 7,
-          'total_count' => 63
+          'total_count' => 63,
         }
       }.to_json
     end

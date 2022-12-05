@@ -25,8 +25,8 @@ module Lago
               frequency: params[:frequency],
               frequency_duration: params[:frequency_duration],
               expiration: params[:expiration],
-              expiration_date: params[:expiration_date]
-            }.compact
+              expiration_at: params[:expiration_at],
+            }.compact,
           }
         end
       end

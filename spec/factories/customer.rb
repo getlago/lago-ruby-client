@@ -23,5 +23,6 @@ FactoryBot.define do
       }
     end
     currency { 'EUR' }
+    timezone { 'Europe/Paris' }
   end
 end

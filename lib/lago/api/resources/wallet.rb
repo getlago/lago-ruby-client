@@ -20,8 +20,8 @@ module Lago
               name: params[:name],
               paid_credits: params[:paid_credits],
               granted_credits: params[:granted_credits],
-              expiration_date: params[:expiration_date]
-            }.compact
+              expiration_at: params[:expiration_at],
+            }.compact,
           }
         end
       end

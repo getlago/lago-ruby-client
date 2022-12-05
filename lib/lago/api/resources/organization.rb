@@ -24,6 +24,7 @@ module Lago
             city: params[:city],
             legal_name: params[:legal_name],
             legal_number: params[:legal_number],
+            timezone: params[:timezone],
           }.compact
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|

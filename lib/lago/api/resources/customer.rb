@@ -36,6 +36,7 @@ module Lago
             url: params[:url],
             zipcode: params[:zipcode],
             currency: params[:currency],
+            timezone: params[:timezone],
           }
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
