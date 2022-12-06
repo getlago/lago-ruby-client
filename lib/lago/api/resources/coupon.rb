@@ -21,6 +21,7 @@ module Lago
               amount_currency: params[:amount_currency],
               percentage_rate: params[:percentage_rate],
               coupon_type: params[:coupon_type],
+              reusable: params[:reusable],
               frequency: params[:frequency],
               frequency_duration: params[:frequency_duration],
               expiration: params[:expiration],
