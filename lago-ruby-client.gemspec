@@ -14,9 +14,9 @@ Gem::Specification.new do |spec|
   spec.homepage = 'https://github.com/getlago/lago-ruby-client'
   spec.license = 'AGPL-3.0'
 
-  spec.metadata["homepage_uri"] = 'https://www.getlago.com/'
-  spec.metadata["source_code_uri"] = spec.homepage
-  spec.metadata["documentation_uri"] = 'https://doc.getlago.com'
+  spec.metadata['homepage_uri'] = 'https://www.getlago.com/'
+  spec.metadata['source_code_uri'] = spec.homepage
+  spec.metadata['documentation_uri'] = 'https://doc.getlago.com'
 
   spec.bindir = 'exe'
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
