@@ -3,6 +3,8 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'openssl'
+require 'jwt'
 
 require 'lago/version'
 require 'lago/api/client'
@@ -24,3 +26,4 @@ require 'lago/api/resources/add_on'
 require 'lago/api/resources/organization'
 require 'lago/api/resources/wallet'
 require 'lago/api/resources/wallet_transaction'
+require 'lago/api/resources/webhook'

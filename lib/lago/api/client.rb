@@ -74,6 +74,10 @@ module Lago
       def wallet_transactions
         Lago::Api::Resources::WalletTransaction.new(self)
       end
+
+      def webhooks
+        Lago::Api::Resources::Webhook.new(self)
+      end
     end
   end
 end

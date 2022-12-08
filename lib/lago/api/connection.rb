@@ -86,6 +86,8 @@ module Lago
         raise_error(response) unless RESPONSE_SUCCESS_CODES.include?(response.code.to_i)
 
         response.body.empty? ? true : JSON.parse(response.body)
+      rescue JSON::ParserError
+        response.body
       end
 
       def http_client
