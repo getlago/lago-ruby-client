@@ -8,5 +8,6 @@ FactoryBot.define do
     amount_currency { 'EUR' }
     coupon_type { 'fixed_amount' }
     frequency { 'once' }
+    reusable { false }
   end
 end
