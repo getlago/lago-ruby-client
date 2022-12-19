@@ -16,5 +16,6 @@ FactoryBot.define do
         vat_rate: 20,
       }
     end
+    timezone { 'America/New_York' }
   end
 end

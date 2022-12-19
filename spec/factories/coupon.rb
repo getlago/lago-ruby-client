@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :coupon, class: OpenStruct do
     name { 'coupon_name' }
     code { 'coupon_code' }
-    expiration_date { '2022-08-08' }
+    expiration_at { '2022-08-08T23:59:59Z' }
     expiration { 'no_expiration' }
     amount_cents { 200 }
     amount_currency { 'EUR' }

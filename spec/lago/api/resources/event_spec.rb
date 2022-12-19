@@ -77,7 +77,7 @@ RSpec.describe Lago::Api::Resources::Event do
       end
 
       it 'raises an error' do
-        expect { resource.get('DOESNOTEXIST') }.to raise_error
+        expect { resource.get('DOESNOTEXIST') }.to raise_error Lago::Api::HttpError
       end
     end
   end

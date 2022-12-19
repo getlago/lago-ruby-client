@@ -13,10 +13,10 @@ RSpec.describe Lago::Api::Resources::Wallet do
         'lago_id' => 'this-is-lago-id',
         'lago_customer_id' => factory_wallet.id,
         'name' => factory_wallet.name,
-        'expiration_date' => factory_wallet.expiration_date,
+        'expiration_at' => factory_wallet.expiration_at,
         'balance' => 100,
         'rate_amount' => factory_wallet.rate_amount,
-        'created_at' => '2022-04-29T08:59:51Z'
+        'created_at' => '2022-04-29T08:59:51Z',
       }
     }.to_json
   end
@@ -24,7 +24,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
     {
       'status' => 422,
       'error' => 'Unprocessable Entity',
-      'message' => 'Validation error on the record'
+      'message' => 'Validation error on the record',
     }.to_json
   end
 
@@ -32,7 +32,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
     let(:params) { factory_wallet.to_h }
     let(:body) do
       {
-        'wallet' => factory_wallet.to_h
+        'wallet' => factory_wallet.to_h,
       }
     end
 
@@ -69,7 +69,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
     let(:id) { 'id' }
     let(:body) do
       {
-        'wallet' => { name: 'new-name' }
+        'wallet' => { name: 'new-name' },
       }
     end
 
@@ -167,11 +167,11 @@ RSpec.describe Lago::Api::Resources::Wallet do
             'lago_id' => 'this-is-lago-id',
             'external_customer_id' => factory_wallet.external_customer_id,
             'name' => factory_wallet.name,
-            'expiration_date' => factory_wallet.expiration_date,
+            'expiration_at' => factory_wallet.expiration_at,
             'paid_credits' => factory_wallet.paid_credits,
             'granted_credits' => factory_wallet.granted_credits,
             'rate_amount' => factory_wallet.rate_amount,
-            'created_at' => '2022-04-29T08:59:51Z'
+            'created_at' => '2022-04-29T08:59:51Z',
           }
         ],
         'meta': {
@@ -179,7 +179,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
           'next_page' => 2,
           'prev_page' => nil,
           'total_pages' => 7,
-          'total_count' => 63
+          'total_count' => 63,
         }
       }.to_json
     end

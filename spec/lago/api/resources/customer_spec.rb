@@ -78,7 +78,7 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
 
       it 'raises an error' do
-        expect { resource.current_usage('DOESNOTEXIST', '123') }.to raise_error
+        expect { resource.current_usage('DOESNOTEXIST', '123') }.to raise_error Lago::Api::HttpError
       end
     end
 
