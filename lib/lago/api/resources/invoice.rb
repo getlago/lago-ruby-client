@@ -19,6 +19,13 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
+        def retry_payment(invoice_id)
+          path = "/api/v1/invoices/#{invoice_id}/retry_payment"
+          response = connection.post({}, path)
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def whitelist_params(params)
           {
             root_name => {
