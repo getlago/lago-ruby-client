@@ -14,12 +14,17 @@ RSpec.describe Lago::Api::Resources::Webhook do
 
   let(:private_key) { OpenSSL::PKey::RSA.new(private_key_string) }
   let(:public_key) { private_key.public_key }
-
-  let(:public_key_response) { Base64.encode64(public_key.to_s) }
+  let(:response) do
+    {
+      'webhook' => {
+        'public_key' => Base64.encode64(public_key.to_s),
+      },
+    }.to_json
+  end
 
   before do
     stub_request(:get, 'https://api.getlago.com/api/v1/webhooks/public_key')
-      .to_return(body: public_key_response, status: 200)
+      .to_return(body: response, status: 200)
   end
 
   describe 'public_key' do
