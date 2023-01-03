@@ -13,7 +13,7 @@ module Lago
         end
 
         def public_key
-          path = '/api/v1/webhooks/public_key'
+          path = '/api/v1/webhooks/json_public_key'
 
           response = connection.get(path, identifier: nil)[root_name]
 

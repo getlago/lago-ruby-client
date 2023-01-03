@@ -23,7 +23,7 @@ RSpec.describe Lago::Api::Resources::Webhook do
   end
 
   before do
-    stub_request(:get, 'https://api.getlago.com/api/v1/webhooks/public_key')
+    stub_request(:get, 'https://api.getlago.com/api/v1/webhooks/json_public_key')
       .to_return(body: response, status: 200)
   end
 
