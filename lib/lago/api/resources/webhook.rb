@@ -15,15 +15,11 @@ module Lago
         def public_key
           path = '/api/v1/webhooks/public_key'
 
-          response = connection.get(path, identifier: nil)
+          response = connection.get(path, identifier: nil)[root_name]
 
-          # Adding fallback for text/plain Content-Type response in older versions
-          if response.is_a?(String)
-            OpenSSL::PKey::RSA.new(Base64.decode64(response))
-          else
-            webhook_details = JSON.parse(response[root_name].to_json, object_class: OpenStruct)
-            OpenSSL::PKey::RSA.new(Base64.decode64(webhook_details.public_key))
-          end
+          webhook_details = JSON.parse(response.to_json, object_class: OpenStruct)
+
+          OpenSSL::PKey::RSA.new(Base64.decode64(webhook_details.public_key))
         end
 
         def valid_signature?(signature, webhook_payload, cached_key = public_key)
