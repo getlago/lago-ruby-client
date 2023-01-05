@@ -21,7 +21,7 @@ module Lago
 
         def whitelist_params(params)
           result_hash = {
-            external_customer_id: params[:external_customer_id],
+            external_id: params[:external_id],
             address_line1: params[:address_line1],
             address_line2: params[:address_line2],
             city: params[:city],
