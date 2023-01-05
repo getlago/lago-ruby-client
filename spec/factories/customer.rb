@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :customer, class: OpenStruct do
-    external_customer_id { '5eb02857-a71e-4ea2-bcf9-57d8885436ba' }
+    external_id { '5eb02857-a71e-4ea2-bcf9-57d8885436ba' }
     name { 'Gavin Belson' }
     country { 'US' }
     address_line1 { '5230 Penfield Ave' }
