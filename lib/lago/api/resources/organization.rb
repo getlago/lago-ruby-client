@@ -37,6 +37,7 @@ module Lago
         def whitelist_billing_configuration(billing_params)
           (billing_params || {}).slice(
             :invoice_footer,
+            :invoice_grace_period,
             :vat_rate,
           )
         end

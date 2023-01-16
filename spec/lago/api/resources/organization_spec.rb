@@ -9,14 +9,14 @@ RSpec.describe Lago::Api::Resources::Organization do
   let(:factory_organization) { FactoryBot.build(:organization) }
   let(:response) do
     {
-      'organization' => factory_organization.to_h
+      'organization' => factory_organization.to_h,
     }.to_json
   end
   let(:error_response) do
     {
       'status' => 422,
       'error' => 'Unprocessable Entity',
-      'message' => 'Validation error on the record'
+      'message' => 'Validation error on the record',
     }.to_json
   end
 
@@ -24,13 +24,13 @@ RSpec.describe Lago::Api::Resources::Organization do
     let(:params) { factory_organization.to_h }
     let(:body) do
       {
-        'organization' => factory_organization.to_h
+        'organization' => factory_organization.to_h,
       }
     end
 
     context 'when organization is successfully updated' do
       before do
-        stub_request(:put, "https://api.getlago.com/api/v1/organizations")
+        stub_request(:put, 'https://api.getlago.com/api/v1/organizations')
           .with(body: body)
           .to_return(body: response, status: 200)
       end
@@ -39,6 +39,7 @@ RSpec.describe Lago::Api::Resources::Organization do
         organization = resource.update(params)
 
         expect(organization.webhook_url).to eq(factory_organization.webhook_url)
+        expect(organization.billing_configuration.invoice_grace_period).to eq(factory_organization.billing_configuration[:invoice_grace_period])
       end
     end
 
@@ -50,7 +51,7 @@ RSpec.describe Lago::Api::Resources::Organization do
       end
 
       it 'raises an error' do
-        expect { resource.update(params) }.to raise_error Lago::Api::HttpError
+        expect { resource.update(params) }.to raise_error(Lago::Api::HttpError)
       end
     end
   end
