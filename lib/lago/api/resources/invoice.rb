@@ -19,6 +19,13 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
+        def refresh(invoice_id)
+          path = "/api/v1/invoices/#{invoice_id}/refresh"
+          response = connection.put(path, identifier: nil, body: {})
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def whitelist_params(params)
           {
             root_name => {
