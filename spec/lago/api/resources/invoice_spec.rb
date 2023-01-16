@@ -169,18 +169,34 @@ RSpec.describe Lago::Api::Resources::Invoice do
       { 'invoice' => factory_invoice.to_h }
     end
 
-    context 'when payment status is successfully updated' do
-      before do
-        stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{lago_id}/refresh")
-          .with(body: {}).to_return(body: response_body.to_json, status: 200)
-      end
+    before do
+      stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{lago_id}/refresh")
+        .with(body: {}).to_return(body: response_body.to_json, status: 200)
+    end
 
-      it 'returns invoice' do
-        invoice = resource.refresh(lago_id)
+    it 'returns invoice' do
+      invoice = resource.refresh(lago_id)
 
-        expect(invoice.lago_id).to eq(factory_invoice.lago_id)
-        expect(invoice.status).to eq(factory_invoice.status)
-      end
+      expect(invoice.lago_id).to eq(factory_invoice.lago_id)
+      expect(invoice.status).to eq(factory_invoice.status)
+    end
+  end
+
+  describe '#finalize' do
+    let(:response_body) do
+      { 'invoice' => factory_invoice.to_h }
+    end
+
+    before do
+      stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{lago_id}/finalize")
+        .with(body: {}).to_return(body: response_body.to_json, status: 200)
+    end
+
+    it 'returns invoice' do
+      invoice = resource.finalize(lago_id)
+
+      expect(invoice.lago_id).to eq(factory_invoice.lago_id)
+      expect(invoice.status).to eq(factory_invoice.status)
     end
   end
 end

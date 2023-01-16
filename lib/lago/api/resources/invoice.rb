@@ -26,6 +26,13 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).invoice
         end
 
+        def finalize(invoice_id)
+          path = "/api/v1/invoices/#{invoice_id}/finalize"
+          response = connection.put(path, identifier: nil, body: {})
+
+          JSON.parse(response.to_json, object_class: OpenStruct).invoice
+        end
+
         def whitelist_params(params)
           {
             root_name => {
