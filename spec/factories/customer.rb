@@ -16,6 +16,7 @@ FactoryBot.define do
     legal_number { '49-008-2965' }
     billing_configuration do
       {
+        invoice_grace_period: 3,
         payment_provider: 'stripe',
         provider_customer_id: 'cus_123456',
         vat_rate: nil,
