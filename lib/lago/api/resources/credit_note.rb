@@ -40,7 +40,7 @@ module Lago
           path = "/api/v1/credit_notes/#{credit_note_id}/download"
           response = connection.post({}, path)
 
-          JSON.parse(response.to_json, object_class: OpenStruct)
+          JSON.parse(response.to_json, object_class: OpenStruct).credit_note
         end
 
         def void(credit_note_id)
@@ -51,7 +51,7 @@ module Lago
             body: {}
           )
 
-          JSON.parse(response.to_json, object_class: OpenStruct)
+          JSON.parse(response.to_json, object_class: OpenStruct).credit_note
         end
       end
     end

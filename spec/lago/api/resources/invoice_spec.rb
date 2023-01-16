@@ -160,7 +160,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
     it 'returns invoice' do
       invoice = resource.download('123456')
 
-      expect(invoice.lago_id).to eq(factory_invoice.id)
+      expect(invoice.lago_id).to eq(factory_invoice.lago_id)
     end
   end
 
@@ -176,7 +176,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
       end
 
       it 'returns invoice' do
-        invoice = resource.refresh(lago_id).invoice
+        invoice = resource.refresh(lago_id)
 
         expect(invoice.lago_id).to eq(factory_invoice.lago_id)
         expect(invoice.status).to eq(factory_invoice.status)

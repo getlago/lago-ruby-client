@@ -16,14 +16,14 @@ module Lago
           path = "/api/v1/invoices/#{invoice_id}/download"
           response = connection.post({}, path)
 
-          JSON.parse(response.to_json, object_class: OpenStruct)
+          JSON.parse(response.to_json, object_class: OpenStruct).invoice
         end
 
         def refresh(invoice_id)
           path = "/api/v1/invoices/#{invoice_id}/refresh"
           response = connection.put(path, identifier: nil, body: {})
 
-          JSON.parse(response.to_json, object_class: OpenStruct)
+          JSON.parse(response.to_json, object_class: OpenStruct).invoice
         end
 
         def whitelist_params(params)
