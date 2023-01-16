@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :invoice, class: OpenStruct do
     lago_id { 'this_is_lago_internal_id' }
@@ -6,6 +8,7 @@ FactoryBot.define do
     to_date { '2022-06-02' }
     issuing_date { '2022-06-02' }
     invoice_type { 'type1' }
+    status { 'finalized' }
     payment_status { 'succeeded' }
     amount_cents { 100 }
     amount_currency { 'EUR' }
