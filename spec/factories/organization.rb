@@ -13,6 +13,7 @@ FactoryBot.define do
     billing_configuration do
       {
         invoice_footer: 'footer',
+        invoice_grace_period: 2,
         vat_rate: 20,
       }
     end
