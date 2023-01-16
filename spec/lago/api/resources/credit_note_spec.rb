@@ -13,7 +13,7 @@ RSpec.describe Lago::Api::Resources::CreditNote do
     {
       'status' => 404,
       'error' => 'Not Found',
-      'code' => 'credit_note_not_found'
+      'code' => 'credit_note_not_found',
     }
   end
 
@@ -21,7 +21,7 @@ RSpec.describe Lago::Api::Resources::CreditNote do
     {
       'status' => 422,
       'error' => 'Unprocessable Entity',
-      'message' => 'Validation error on the record'
+      'message' => 'Validation error on the record',
     }.to_json
   end
 
@@ -34,21 +34,19 @@ RSpec.describe Lago::Api::Resources::CreditNote do
           {
             fee_id: 'some-lago-fee-id-1',
             credit_amount_cents: 10,
-            refund_amount_cents: 5
+            refund_amount_cents: 5,
           },
           {
             fee_id: 'some-lago-fee-id-2',
             credit_amount_cents: 5,
-            refund_amount_cents: 10
-          }
-        ]
+            refund_amount_cents: 10,
+          },
+        ],
       }
     end
 
     let(:response_body) do
-      {
-        'credit_note' => credit_note.to_h
-      }
+      { 'credit_note' => credit_note.to_h }
     end
 
     context 'when credit note is successfully created' do
@@ -80,16 +78,12 @@ RSpec.describe Lago::Api::Resources::CreditNote do
 
   describe '#update' do
     let(:params) do
-      {
-        refund_status: 'pending'
-      }
+      { refund_status: 'pending' }
     end
 
     let(:request_body) do
       {
-        'credit_note' => {
-          'refund_status' => credit_note.refund_status
-        }
+        'credit_note' => { 'refund_status' => credit_note.refund_status },
       }
     end
 
@@ -122,9 +116,7 @@ RSpec.describe Lago::Api::Resources::CreditNote do
 
   describe '#get' do
     let(:response_body) do
-      {
-        'credit_note' => credit_note.to_h
-      }
+      { 'credit_note' => credit_note.to_h }
     end
 
     context 'when credit note is successfully fetched' do
@@ -162,8 +154,8 @@ RSpec.describe Lago::Api::Resources::CreditNote do
           'next_page' => nil,
           'prev_page' => nil,
           'total_pages' => 1,
-          'total_count' => 1
-        }
+          'total_count' => 1,
+        },
       }
     end
 
@@ -182,9 +174,7 @@ RSpec.describe Lago::Api::Resources::CreditNote do
 
   describe '#download' do
     let(:response_body) do
-      {
-        'credit_note' => credit_note.to_h
-      }
+      { 'credit_note' => credit_note.to_h }
     end
 
     before do
@@ -196,15 +186,13 @@ RSpec.describe Lago::Api::Resources::CreditNote do
     it 'returns a credit_note' do
       response = resource.download('123456')
 
-      expect(response.lago_id).to eq(credit_note.id)
+      expect(response.lago_id).to eq(credit_note.lago_id)
     end
   end
 
   describe '#void' do
     let(:response_body) do
-      {
-        'credit_note' => credit_note.to_h
-      }
+      { 'credit_note' => credit_note.to_h }
     end
 
     before do
@@ -216,7 +204,7 @@ RSpec.describe Lago::Api::Resources::CreditNote do
     it 'returns a credit_note' do
       response = resource.void('123456')
 
-      expect(response.lago_id).to eq(credit_note.id)
+      expect(response.lago_id).to eq(credit_note.lago_id)
     end
   end
 end
