@@ -4,6 +4,7 @@ require 'spec_helper'
 
 RSpec.describe Lago::Api::Resources::Customer do
   subject(:resource) { described_class.new(client) }
+
   let(:client) { Lago::Api::Client.new }
   let(:factory_customer) { FactoryBot.build(:customer) }
 
@@ -11,7 +12,7 @@ RSpec.describe Lago::Api::Resources::Customer do
     let(:params) { factory_customer.to_h }
     let(:body) do
       {
-        'customer' => factory_customer.to_h
+        'customer' => factory_customer.to_h,
       }
     end
 
@@ -28,6 +29,7 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect(customer.external_id).to eq(factory_customer.external_id)
         expect(customer.name).to eq(factory_customer.name)
         expect(customer.currency).to eq(factory_customer.currency)
+        expect(customer.billing_configuration.invoice_grace_period).to eq(factory_customer.billing_configuration[:invoice_grace_period])
         expect(customer.billing_configuration.provider_customer_id).to eq(factory_customer.billing_configuration[:provider_customer_id])
       end
     end
@@ -37,7 +39,7 @@ RSpec.describe Lago::Api::Resources::Customer do
         {
           'status' => 422,
           'error' => 'Unprocessable Entity',
-          'message' => 'Validation error on the record'
+          'message' => 'Validation error on the record',
         }.to_json
       end
 
@@ -48,7 +50,7 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
 
       it 'raises an error' do
-        expect { resource.create(params) }.to raise_error Lago::Api::HttpError
+        expect { resource.create(params) }.to raise_error(Lago::Api::HttpError)
       end
     end
   end
