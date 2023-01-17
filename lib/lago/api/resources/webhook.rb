@@ -8,11 +8,18 @@ module Lago
           'webhooks'
         end
 
-        def public_key
-          path = '/api/v1/webhooks/public_key'
+        def root_name
+          'webhook'
+        end
 
-          webhooks_public_key = connection.get(path, identifier: nil)
-          OpenSSL::PKey::RSA.new(Base64.decode64(webhooks_public_key))
+        def public_key
+          path = '/api/v1/webhooks/json_public_key'
+
+          response = connection.get(path, identifier: nil)[root_name]
+
+          webhook_details = JSON.parse(response.to_json, object_class: OpenStruct)
+
+          OpenSSL::PKey::RSA.new(Base64.decode64(webhook_details.public_key))
         end
 
         def valid_signature?(signature, webhook_payload, cached_key = public_key)
