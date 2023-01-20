@@ -23,7 +23,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
           'values' => %w[france italy spain],
         },
         'active_subscriptions_count' => 0,
-        'draft_invoice_count' => 0,
+        'draft_invoices_count' => 0,
       },
     }.to_json
   end
