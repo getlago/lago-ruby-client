@@ -12,6 +12,13 @@ module Lago
           'wallet_transactions'
         end
 
+        def get_all(wallet_id, options = {})
+          path = "/api/v1/wallets/#{wallet_id}/wallet_transactions"
+          response = connection.get_all(options, path)
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def whitelist_params(params)
           {
             'wallet_transaction' => {

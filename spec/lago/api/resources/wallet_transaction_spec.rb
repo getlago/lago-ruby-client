@@ -31,7 +31,7 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
           'created_at' => '2022-04-29T08:59:51Z'
         }
       ]
-    }.to_json
+    }
   end
   let(:error_response) do
     {
@@ -53,7 +53,7 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/wallet_transactions')
           .with(body: body)
-          .to_return(body: response, status: 200)
+          .to_return(body: response.to_json, status: 200)
       end
 
       it 'returns an wallet_transactions' do
@@ -74,6 +74,28 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
       it 'raises an error' do
         expect { resource.create(params) }.to raise_error Lago::Api::HttpError
       end
+    end
+  end
+
+  describe '#get_all' do
+    before do
+      response['meta'] = {
+        'current_page' => 1,
+        'next_page' => 2,
+        'prev_page' => nil,
+        'total_pages' => 7,
+        'total_count' => 63,
+      }
+
+      stub_request(:get, "https://api.getlago.com/api/v1/wallets/555/wallet_transactions")
+        .to_return(body: response.to_json, status: 200)
+    end
+
+    it 'returns a list of wallet transactions' do
+      response = resource.get_all('555')
+
+      expect(response['wallet_transactions'].first['lago_id']).to eq('this-is-lago-id')
+      expect(response['meta']['current_page']).to eq(1)
     end
   end
 end
