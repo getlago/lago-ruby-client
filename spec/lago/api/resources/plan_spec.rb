@@ -21,6 +21,8 @@ RSpec.describe Lago::Api::Resources::Plan do
         'trial_period' => 2,
         'pay_in_advance' => false,
         'bill_charges_monthly' => false,
+        'active_subscriptions_count' => 0,
+        'draft_invoices_count' => 0,
         'charges' => [
           {
             'lago_id' => 'id1',
@@ -37,7 +39,7 @@ RSpec.describe Lago::Api::Resources::Plan do
     {
       'status' => 422,
       'error' => 'Unprocessable Entity',
-      'message' => 'Validation error on the record'
+      'message' => 'Validation error on the record',
     }.to_json
   end
 
@@ -45,7 +47,7 @@ RSpec.describe Lago::Api::Resources::Plan do
     let(:params) { factory_plan.to_h }
     let(:body) do
       {
-        'plan' => factory_plan.to_h
+        'plan' => factory_plan.to_h,
       }
     end
 
@@ -81,7 +83,7 @@ RSpec.describe Lago::Api::Resources::Plan do
     let(:params) { factory_plan.to_h }
     let(:body) do
       {
-        'plan' => factory_plan.to_h
+        'plan' => factory_plan.to_h,
       }
     end
 
@@ -183,6 +185,8 @@ RSpec.describe Lago::Api::Resources::Plan do
             'trial_period' => 2,
             'pay_in_advance' => false,
             'bill_charges_monthly' => false,
+            'active_subscriptions_count' => 0,
+            'draft_invoices_count' => 0,
             'charges' => [
               {
                 'lago_id' => 'id',
@@ -200,7 +204,7 @@ RSpec.describe Lago::Api::Resources::Plan do
           'next_page' => 2,
           'prev_page' => nil,
           'total_pages' => 7,
-          'total_count' => 63
+          'total_count' => 63,
         }
       }.to_json
     end
