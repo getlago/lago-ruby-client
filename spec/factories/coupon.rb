@@ -9,5 +9,10 @@ FactoryBot.define do
     coupon_type { 'fixed_amount' }
     frequency { 'once' }
     reusable { false }
+    applies_to do
+      {
+        plan_codes: %w[plan1],
+      }
+    end
   end
 end
