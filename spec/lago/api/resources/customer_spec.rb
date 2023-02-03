@@ -128,7 +128,7 @@ RSpec.describe Lago::Api::Resources::Customer do
   end
 
   describe '#destroy' do
-    context 'when customer is succefully destroyed' do
+    context 'when customer is successfully destroyed' do
       before do
         stub_request(:delete, "https://api.getlago.com/api/v1/customers/#{factory_customer.external_id}")
           .to_return(body: response, status: 200)
