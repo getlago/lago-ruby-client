@@ -8,6 +8,37 @@ RSpec.describe Lago::Api::Resources::Customer do
   let(:client) { Lago::Api::Client.new }
   let(:factory_customer) { FactoryBot.build(:customer) }
 
+  let(:response) do
+    {
+      'customer' => {
+        'external_id' => factory_customer.external_id,
+        'name' => factory_customer.name,
+        'country' => factory_customer.country,
+        'address_line1' => factory_customer.address_line1,
+        'address_line2' => factory_customer.address_line2,
+        'state' => factory_customer.state,
+        'zipcode' => factory_customer.zipcode,
+        'email' => factory_customer.email,
+        'city' => factory_customer.city,
+        'url' => factory_customer.url,
+        'phone' => factory_customer.phone,
+        'logo_url' => factory_customer.logo_url,
+        'legal_name' => factory_customer.legal_name,
+        'legal_number' => factory_customer.legal_number,
+        'currency' => factory_customer.currency,
+        'timezone' => factory_customer.timezone,
+      },
+    }.to_json
+  end
+
+  let(:error_response) do
+    {
+      'status' => 422,
+      'error' => 'Unprocessable Entity',
+      'message' => 'Validation error on the record',
+    }.to_json
+  end
+
   describe '#create' do
     let(:params) { factory_customer.to_h }
     let(:body) do
@@ -92,6 +123,33 @@ RSpec.describe Lago::Api::Resources::Customer do
 
       it 'raises an error' do
         expect { resource.current_usage('DOESNOTEXIST', '123') }.to raise_error
+      end
+    end
+  end
+
+  describe '#destroy' do
+    context 'when customer is successfully destroyed' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/customers/#{factory_customer.external_id}")
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns a customer' do
+        customer = resource.destroy(factory_customer.external_id)
+
+        expect(customer.external_id).to eq(factory_customer.external_id)
+        expect(customer.name).to eq(factory_customer.name)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/customers/#{factory_customer.external_id}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.destroy(factory_customer.external_id) }.to raise_error Lago::Api::HttpError
       end
     end
   end
