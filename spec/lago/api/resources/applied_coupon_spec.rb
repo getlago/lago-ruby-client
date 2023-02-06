@@ -139,4 +139,53 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
       end
     end
   end
+
+  describe '#destroy' do
+    let(:response) do
+      {
+        'applied_coupon' => {
+          'lago_id' => 'b7ab2926-1de8-4428-9bcd-779314ac129b',
+          'lago_coupon_id' => 'b7ab2926-1de8-4428-9bcd-779314ac129b',
+          'external_customer_id' => factory_applied_coupon.external_customer_id,
+          'lago_customer_id' => '99a6094e-199b-4101-896a-54e927ce7bd7',
+          'frequency' => factory_applied_coupon.frequency,
+          'amount_cents' => 123,
+          'amount_currency' => 'EUR',
+          'expiration_date' => '2022-04-29',
+          'created_at' => '2022-04-29T08:59:51Z',
+          'terminated_at' => '2022-04-29T08:59:51Z'
+        }
+      }.to_json
+    end
+
+    context 'when applied coupon is successfully destroyed' do
+      before do
+        stub_request(
+          :delete,
+          "https://api.getlago.com/api/v1/customers/#{factory_applied_coupon.external_customer_id}/coupons/#{factory_applied_coupon.coupon_code}",
+        ).to_return(body: response, status: 200)
+      end
+
+      it 'returns an applied coupon' do
+        applied_coupon = resource.destroy(factory_applied_coupon.external_customer_id, factory_applied_coupon.coupon_code)
+
+        expect(applied_coupon.external_customer_id).to eq(factory_applied_coupon.external_customer_id)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(
+          :delete,
+          "https://api.getlago.com/api/v1/customers/#{factory_applied_coupon.external_customer_id}/coupons/#{factory_applied_coupon.coupon_code}",
+        ).to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect {
+          resource.destroy(factory_applied_coupon.external_customer_id, factory_applied_coupon.coupon_code)
+        }.to raise_error Lago::Api::HttpError
+      end
+    end
+  end
 end
