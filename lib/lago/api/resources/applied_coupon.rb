@@ -12,6 +12,13 @@ module Lago
           'applied_coupon'
         end
 
+        def destroy(external_customer_id, coupon_code)
+          path = "/api/v1/customers/#{external_customer_id}/coupons"
+          response = connection.destroy(path, identifier: coupon_code)[root_name]
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def whitelist_params(params)
           {
             root_name => {
@@ -21,8 +28,8 @@ module Lago
               percentage_rate: params[:percentage_rate],
               frequency: params[:frequency],
               frequency_duration: params[:frequency_duration],
-              amount_currency: params[:amount_currency]
-            }.compact
+              amount_currency: params[:amount_currency],
+            }.compact,
           }
         end
       end
