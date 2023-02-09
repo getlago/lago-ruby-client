@@ -54,6 +54,7 @@ module Lago
             :sync,
             :sync_with_provider,
             :vat_rate,
+            :document_locale,
           )
         end
       end

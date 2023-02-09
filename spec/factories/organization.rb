@@ -15,6 +15,7 @@ FactoryBot.define do
         invoice_footer: 'footer',
         invoice_grace_period: 2,
         vat_rate: 20,
+        document_locale: 'fr',
       }
     end
     timezone { 'America/New_York' }
