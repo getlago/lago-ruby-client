@@ -141,10 +141,11 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
   end
 
   describe '#destroy' do
+    let(:lago_id) { 'b7ab2926-1de8-4428-9bcd-779314ac129b' }
     let(:response) do
       {
         'applied_coupon' => {
-          'lago_id' => 'b7ab2926-1de8-4428-9bcd-779314ac129b',
+          'lago_id' => lago_id,
           'lago_coupon_id' => 'b7ab2926-1de8-4428-9bcd-779314ac129b',
           'external_customer_id' => factory_applied_coupon.external_customer_id,
           'lago_customer_id' => '99a6094e-199b-4101-896a-54e927ce7bd7',
@@ -162,12 +163,12 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
       before do
         stub_request(
           :delete,
-          "https://api.getlago.com/api/v1/customers/#{factory_applied_coupon.external_customer_id}/coupons/#{factory_applied_coupon.coupon_code}",
+          "https://api.getlago.com/api/v1/customers/#{factory_applied_coupon.external_customer_id}/applied_coupons/#{lago_id}",
         ).to_return(body: response, status: 200)
       end
 
       it 'returns an applied coupon' do
-        applied_coupon = resource.destroy(factory_applied_coupon.external_customer_id, factory_applied_coupon.coupon_code)
+        applied_coupon = resource.destroy(factory_applied_coupon.external_customer_id, lago_id)
 
         expect(applied_coupon.external_customer_id).to eq(factory_applied_coupon.external_customer_id)
       end
@@ -177,13 +178,13 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
       before do
         stub_request(
           :delete,
-          "https://api.getlago.com/api/v1/customers/#{factory_applied_coupon.external_customer_id}/coupons/#{factory_applied_coupon.coupon_code}",
+          "https://api.getlago.com/api/v1/customers/#{factory_applied_coupon.external_customer_id}/applied_coupons/#{lago_id}",
         ).to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
         expect {
-          resource.destroy(factory_applied_coupon.external_customer_id, factory_applied_coupon.coupon_code)
+          resource.destroy(factory_applied_coupon.external_customer_id, lago_id)
         }.to raise_error Lago::Api::HttpError
       end
     end
