@@ -12,9 +12,9 @@ module Lago
           'applied_coupon'
         end
 
-        def destroy(external_customer_id, coupon_code)
-          path = "/api/v1/customers/#{external_customer_id}/coupons"
-          response = connection.destroy(path, identifier: coupon_code)[root_name]
+        def destroy(external_customer_id, applied_coupon_id)
+          path = "/api/v1/customers/#{external_customer_id}/applied_coupons"
+          response = connection.destroy(path, identifier: applied_coupon_id)[root_name]
 
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
