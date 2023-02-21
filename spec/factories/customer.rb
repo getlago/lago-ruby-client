@@ -21,6 +21,7 @@ FactoryBot.define do
         provider_customer_id: 'cus_123456',
         vat_rate: nil,
         sync_with_provider: true,
+        document_locale: 'fr',
       }
     end
     currency { 'EUR' }
