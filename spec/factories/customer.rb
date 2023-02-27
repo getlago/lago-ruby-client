@@ -24,6 +24,15 @@ FactoryBot.define do
         document_locale: 'fr',
       }
     end
+    metadata do
+      [
+        {
+          key: 'hello',
+          value: 'standard',
+          display_in_invoice: true,
+        },
+      ]
+    end
     currency { 'EUR' }
     timezone { 'Europe/Paris' }
   end

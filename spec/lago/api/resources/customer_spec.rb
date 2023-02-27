@@ -62,6 +62,8 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect(customer.currency).to eq(factory_customer.currency)
         expect(customer.billing_configuration.invoice_grace_period).to eq(factory_customer.billing_configuration[:invoice_grace_period])
         expect(customer.billing_configuration.provider_customer_id).to eq(factory_customer.billing_configuration[:provider_customer_id])
+        expect(customer.metadata.first.key).to eq(factory_customer.metadata.first[:key])
+        expect(customer.metadata.first.value).to eq(factory_customer.metadata.first[:value])
       end
     end
 
