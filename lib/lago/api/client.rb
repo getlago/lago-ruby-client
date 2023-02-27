@@ -35,6 +35,10 @@ module Lago
         Lago::Api::Resources::Event.new(self)
       end
 
+      def fees
+        Lago::Api::Resources::Fee.new(self)
+      end
+
       def groups
         Lago::Api::Resources::Group.new(self)
       end
