@@ -43,9 +43,8 @@ module Lago
             result_hash[:billing_configuration] = config unless config.empty?
           end
 
-          whitelist_metadata(params[:metadata]).tap do |metadata|
-            result_hash[:metadata] = metadata unless metadata.empty?
-          end
+          metadata = whitelist_metadata(params[:metadata])
+          result_hash[:metadata] = metadata unless metadata.empty?
 
           { root_name => result_hash }
         end
