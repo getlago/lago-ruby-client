@@ -36,7 +36,7 @@ module Lago
           processed_charges = []
 
           charges.each do |c|
-            result = (c || {}).slice(:id, :billable_metric_id, :charge_model, :properties, :group_properties)
+            result = (c || {}).slice(:id, :billable_metric_id, :charge_model, :instant, :properties, :group_properties)
 
             processed_charges << result unless result.empty?
           end

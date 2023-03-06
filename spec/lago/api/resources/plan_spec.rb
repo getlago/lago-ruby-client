@@ -30,6 +30,7 @@ RSpec.describe Lago::Api::Resources::Plan do
             'billable_metric_code' => 'bm_code',
             'created_at' => '2022-04-29T08:59:51Z',
             'charge_model' => factory_plan.charges.first[:charge_model],
+            'instant' => false,
             'properties' => factory_plan.charges.first[:properties],
           },
         ]
@@ -195,6 +196,7 @@ RSpec.describe Lago::Api::Resources::Plan do
                 'billable_metric_code' => 'bm_code',
                 'created_at' => '2022-04-29T08:59:51Z',
                 'charge_model' => factory_plan.charges.first[:charge_model],
+                'instant' => false,
                 'properties' => factory_plan.charges.first[:properties],
                 'group_properties' => [],
               }
