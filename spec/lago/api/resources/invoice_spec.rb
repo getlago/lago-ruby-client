@@ -22,16 +22,19 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
   describe '#update' do
     let(:params) do
-      { payment_status: 'succeeded' }
+      { payment_status: 'succeeded', metadata: factory_invoice.metadata  }
     end
 
     let(:request_body) do
       {
-        'invoice' => { 'payment_status' => factory_invoice.payment_status },
+        'invoice' => {
+          'payment_status' => factory_invoice.payment_status,
+          'metadata' => factory_invoice.metadata,
+        },
       }
     end
 
-    context 'when payment status is successfully updated' do
+    context 'when invoice is successfully updated' do
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{lago_id}")
           .with(body: request_body)
@@ -43,6 +46,8 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
         expect(invoice.lago_id).to eq(factory_invoice.lago_id)
         expect(invoice.payment_status).to eq(factory_invoice.payment_status)
+        expect(invoice.metadata.first.key).to eq(factory_invoice.metadata.first[:key])
+        expect(invoice.metadata.first.value).to eq(factory_invoice.metadata.first[:value])
       end
     end
 
