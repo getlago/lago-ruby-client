@@ -43,6 +43,9 @@ module Lago
             result_hash[:billing_configuration] = config unless config.empty?
           end
 
+          metadata = whitelist_metadata(params[:metadata])
+          result_hash[:metadata] = metadata unless metadata.empty?
+
           { root_name => result_hash }
         end
 
@@ -56,6 +59,18 @@ module Lago
             :vat_rate,
             :document_locale,
           )
+        end
+
+        def whitelist_metadata(metadata)
+          processed_metadata = []
+
+          metadata.each do |m|
+            result = (m || {}).slice(:id, :key, :value, :display_in_invoice)
+
+            processed_metadata << result unless result.empty?
+          end
+
+          processed_metadata
         end
       end
     end
