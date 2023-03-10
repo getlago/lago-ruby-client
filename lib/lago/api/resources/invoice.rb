@@ -41,11 +41,26 @@ module Lago
         end
 
         def whitelist_params(params)
-          {
-            root_name => {
-              payment_status: params[:payment_status],
-            },
+          result = {
+            payment_status: params[:payment_status],
           }
+
+          metadata = whitelist_metadata(params[:metadata])
+          result[:metadata] = metadata unless metadata.empty?
+
+          { root_name => result }
+        end
+
+        def whitelist_metadata(metadata)
+          processed_metadata = []
+
+          metadata.each do |m|
+            result = (m || {}).slice(:id, :key, :value)
+
+            processed_metadata << result unless result.empty?
+          end
+
+          processed_metadata
         end
       end
     end

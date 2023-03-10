@@ -17,5 +17,13 @@ FactoryBot.define do
     total_amount_cents { 120 }
     total_amount_currency { 'EUR' }
     file_url { 'http://file.url' }
+    metadata do
+      [
+        {
+          key: 'hello',
+          value: 'standard',
+        },
+      ]
+    end
   end
 end
