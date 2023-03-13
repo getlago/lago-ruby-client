@@ -24,6 +24,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
         },
         'active_subscriptions_count' => 0,
         'draft_invoices_count' => 0,
+        'plans_count' => 0,
       },
     }.to_json
   end
