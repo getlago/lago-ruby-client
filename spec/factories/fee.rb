@@ -8,6 +8,8 @@ FactoryBot.define do
     amount_currency { 'EUR' }
     vat_amount_cents { 20 }
     vat_amount_currency { 'EUR' }
+    total_amount_cents { 140 }
+    total_amount_currency { 'EUR' }
     units { '10.0' }
     events_count { 10 }
 
