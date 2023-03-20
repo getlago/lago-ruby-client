@@ -24,6 +24,13 @@ module Lago
           connection.post(payload, uri)
         end
 
+        def estimate_fees(params)
+          uri = URI("#{client.base_api_url}#{api_resource}/estimate_fees")
+
+          payload = whitelist_estimate_params(params)
+          connection.post(payload, uri)
+        end
+
         def whitelist_params(params)
           {
             root_name => {
@@ -32,8 +39,8 @@ module Lago
               code: params[:code],
               timestamp: params[:timestamp],
               external_subscription_id: params[:external_subscription_id],
-              properties: params[:properties]
-            }.compact
+              properties: params[:properties],
+            }.compact,
           }
         end
 
@@ -45,8 +52,19 @@ module Lago
               code: params[:code],
               timestamp: params[:timestamp],
               external_subscription_ids: params[:external_subscription_ids],
-              properties: params[:properties]
-            }.compact
+              properties: params[:properties],
+            }.compact,
+          }
+        end
+
+        def whitelist_estimate_params(params)
+          {
+            root_name => {
+              code: params[:code],
+              external_customer_id: params[:external_customer_id],
+              external_subscription_id: params[:external_subscription_id],
+              properties: params[:properties],
+            }.compact,
           }
         end
       end
