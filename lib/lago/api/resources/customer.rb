@@ -19,6 +19,16 @@ module Lago
           connection.get(uri, identifier: nil)
         end
 
+        def portal_url(external_customer_id)
+          uri = URI(
+            "#{client.base_api_url}#{api_resource}/#{external_customer_id}/portal_url"
+          )
+
+          response = connection.get(uri, identifier: nil)[root_name]
+
+          JSON.parse(response.to_json, object_class: OpenStruct).portal_url
+        end
+
         def whitelist_params(params)
           result_hash = {
             external_id: params[:external_id],
