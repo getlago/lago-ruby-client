@@ -25,6 +25,7 @@ module Lago
             legal_name: params[:legal_name],
             legal_number: params[:legal_number],
             timezone: params[:timezone],
+            email_settings: params[:email_settings],
           }.compact
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
