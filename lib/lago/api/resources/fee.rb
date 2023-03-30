@@ -11,6 +11,14 @@ module Lago
         def root_name
           'fee'
         end
+
+        def whitelist_params(params)
+          {
+            root_name => {
+              payment_status: params[:payment_status],
+            },
+          }
+        end
       end
     end
   end
