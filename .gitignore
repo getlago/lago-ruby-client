@@ -12,3 +12,4 @@
 
 *.gem
 .idea/*
+.ruby-version
