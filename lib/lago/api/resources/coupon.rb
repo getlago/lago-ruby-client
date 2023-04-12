@@ -35,7 +35,7 @@ module Lago
         end
 
         def whitelist_limitations(limitation_params)
-          (limitation_params || {}).slice(:plan_codes)
+          (limitation_params || {}).slice(:plan_codes, :billable_metric_codes)
         end
       end
     end

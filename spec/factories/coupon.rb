@@ -12,6 +12,7 @@ FactoryBot.define do
     applies_to do
       {
         plan_codes: %w[plan1],
+        billable_metric_codes: %w[bm1],
       }
     end
   end

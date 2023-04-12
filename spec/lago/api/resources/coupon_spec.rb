@@ -21,6 +21,7 @@ RSpec.describe Lago::Api::Resources::Coupon do
         'frequency' => factory_coupon.frequency,
         'reusable' => factory_coupon.reusable,
         'plan_codes' => factory_coupon.applies_to[:plan_codes],
+        'billable_metric_codes' => factory_coupon.applies_to[:billable_metric_codes],
         'created_at' => '2022-04-29T08:59:51Z',
       },
     }.to_json
@@ -54,6 +55,7 @@ RSpec.describe Lago::Api::Resources::Coupon do
         expect(coupon.lago_id).to eq('this-is-lago-id')
         expect(coupon.name).to eq(factory_coupon.name)
         expect(coupon.plan_codes).to eq(factory_coupon.applies_to[:plan_codes])
+        expect(coupon.billable_metric_codes).to eq(factory_coupon.applies_to[:billable_metric_codes])
       end
     end
 
