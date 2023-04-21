@@ -74,7 +74,7 @@ module Lago
         def whitelist_metadata(metadata)
           processed_metadata = []
 
-          metadata.each do |m|
+          (metadata || []).each do |m|
             result = (m || {}).slice(:id, :key, :value, :display_in_invoice)
 
             processed_metadata << result unless result.empty?
