@@ -5,6 +5,7 @@ FactoryBot.define do
     lago_id { 'b82f64f2-3360-4a1a-a800-6d3489e73c04' }
     lago_group_id { 'b82f64f2-3360-4a1a-a800-6d3489e73c04' }
     lago_invoice_id { 'b82f64f2-3360-4a1a-a800-6d3489e73c04' }
+    lago_true_up_fee_id { 'b82f64f2-3360-4a1a-a800-6d3489e73c04' }
     external_subscription_id { 'external-id' }
     amount_cents { 120 }
     amount_currency { 'EUR' }
