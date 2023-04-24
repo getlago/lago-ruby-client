@@ -17,6 +17,7 @@ FactoryBot.define do
           billable_metric_id: 'id',
           charge_model: 'standard',
           instant: false,
+          min_amount_cents: 0,
           properties: { amount: '0.22' },
         },
       ]
