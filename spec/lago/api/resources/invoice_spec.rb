@@ -20,6 +20,58 @@ RSpec.describe Lago::Api::Resources::Invoice do
     }
   end
 
+  describe '#create' do
+    let(:factory_invoice) { FactoryBot.build(:invoice) }
+    let(:params) do
+      {
+        external_customer_id: '_ID_',
+        currency: 'EUR',
+        fees: [
+          {
+            add_on_code: '123',
+            description: 'desc',
+          }
+        ],
+      }
+    end
+
+    let(:request_body) do
+      {
+        'invoice' => params,
+      }
+    end
+
+    before { factory_invoice.invoice_type = 'one_off' }
+
+    context 'when one-off invoice is successfully created' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices')
+          .with(body: request_body)
+          .to_return(body: response_body.to_json, status: 200)
+      end
+
+      it 'returns invoice' do
+        invoice = resource.create(params)
+
+        expect(invoice.lago_id).to eq(factory_invoice.lago_id)
+        expect(invoice.payment_status).to eq(factory_invoice.payment_status)
+        expect(invoice.invoice_type).to eq('one_off')
+      end
+    end
+
+    context 'when invoice is NOT successfully created' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices')
+          .with(body: request_body)
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.create(params) }.to raise_error Lago::Api::HttpError
+      end
+    end
+  end
+
   describe '#update' do
     let(:params) do
       { payment_status: 'succeeded', metadata: factory_invoice.metadata  }
