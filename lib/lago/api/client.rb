@@ -75,6 +75,10 @@ module Lago
         Lago::Api::Resources::Organization.new(self)
       end
 
+      def tax_rates
+        Lago::Api::Resources::TaxRate.new(self)
+      end
+
       def wallets
         Lago::Api::Resources::Wallet.new(self)
       end
