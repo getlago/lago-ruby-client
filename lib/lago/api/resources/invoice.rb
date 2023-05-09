@@ -12,6 +12,13 @@ module Lago
           'invoice'
         end
 
+        def create(params)
+          payload = one_off_params(params)
+          response = connection.post(payload)[root_name]
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def download(invoice_id)
           path = "/api/v1/invoices/#{invoice_id}/download"
           response = connection.post({}, path)
@@ -61,6 +68,30 @@ module Lago
           end
 
           processed_metadata
+        end
+
+        def one_off_params(params)
+          result = {
+            external_customer_id: params[:external_customer_id],
+            currency: params[:currency],
+          }
+
+          fees = whitelist_fees(params[:fees])
+          result[:fees] = fees unless fees.empty?
+
+          { root_name => result }
+        end
+
+        def whitelist_fees(fees)
+          processed_fees = []
+
+          fees.each do |f|
+            result = (f || {}).slice(:add_on_code, :unit_amount_cents, :units, :description)
+
+            processed_fees << result unless result.empty?
+          end
+
+          processed_fees
         end
       end
     end
