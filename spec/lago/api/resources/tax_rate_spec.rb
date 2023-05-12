@@ -16,6 +16,7 @@ RSpec.describe Lago::Api::Resources::TaxRate do
         'value' => tax_rate.value,
         'description' => tax_rate.description,
         'customers_count' => tax_rate.customers_count,
+        'applied_by_default' => tax_rate.applied_by_default,
         'created_at' => '2022-04-29T08:59:51Z',
       }
     }.to_json
@@ -161,6 +162,7 @@ RSpec.describe Lago::Api::Resources::TaxRate do
             'value' => tax_rate.value,
             'description' => tax_rate.description,
             'customers_count' => tax_rate.customers_count,
+            'applied_by_default' => tax_rate.applied_by_default,
             'created_at' => '2022-04-29T08:59:51Z',
           }
         ],
