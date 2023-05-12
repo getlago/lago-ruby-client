@@ -51,6 +51,10 @@ module Lago
         Lago::Api::Resources::AppliedAddOn.new(self)
       end
 
+      def applied_tax_rates
+        Lago::Api::Resources::AppliedTaxRate.new(self)
+      end
+
       def billable_metrics
         Lago::Api::Resources::BillableMetric.new(self)
       end
