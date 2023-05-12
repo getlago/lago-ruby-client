@@ -19,6 +19,7 @@ module Lago
               code: params[:code],
               value: params[:value],
               description: params[:description],
+              applied_by_default: params[:applied_by_default],
             }.compact
           }
         end
