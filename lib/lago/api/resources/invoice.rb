@@ -23,6 +23,8 @@ module Lago
           path = "/api/v1/invoices/#{invoice_id}/download"
           response = connection.post({}, path)
 
+          return response unless response.is_a?(Hash)
+
           JSON.parse(response.to_json, object_class: OpenStruct).invoice
         end
 

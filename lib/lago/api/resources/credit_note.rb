@@ -40,6 +40,8 @@ module Lago
           path = "/api/v1/credit_notes/#{credit_note_id}/download"
           response = connection.post({}, path)
 
+          return response unless response.is_a?(Hash)
+
           JSON.parse(response.to_json, object_class: OpenStruct).credit_note
         end
 

@@ -219,6 +219,20 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
       expect(invoice.lago_id).to eq(factory_invoice.lago_id)
     end
+
+    context 'when invoice has not been generated yet' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices/123456/download')
+          .with(body: {})
+          .to_return(body: '', status: 200)
+      end
+
+      it 'returns true' do
+        result = resource.download('123456')
+
+        expect(result).to eq(true)
+      end
+    end
   end
 
   describe '#refresh' do
