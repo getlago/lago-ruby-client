@@ -20,7 +20,8 @@ module Lago
               name: params[:name],
               external_id: params[:external_id],
               billing_time: params[:billing_time],
-              subscription_date: params[:subscription_date],
+              subscription_at: params[:subscription_at],
+              subscription_date: params[:subscription_date], # Deprecated
             }.compact
           }
         end
