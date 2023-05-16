@@ -20,6 +20,7 @@ module Lago
               name: params[:name],
               paid_credits: params[:paid_credits],
               granted_credits: params[:granted_credits],
+              currency: params[:currency],
               expiration_at: params[:expiration_at],
             }.compact,
           }
