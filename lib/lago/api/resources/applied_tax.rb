@@ -5,7 +5,7 @@ module Lago
     module Resources
       class AppliedTax < Base
         def api_resource
-          'appliedes'
+          'applied_tax'
         end
 
         def root_name
