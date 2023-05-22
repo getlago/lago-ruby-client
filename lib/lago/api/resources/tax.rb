@@ -3,13 +3,13 @@
 module Lago
   module Api
     module Resources
-      class TaxRate < Base
+      class Tax < Base
         def api_resource
-          'tax_rates'
+          'taxes'
         end
 
         def root_name
-          'tax_rate'
+          'tax'
         end
 
         def whitelist_params(params)
@@ -17,10 +17,10 @@ module Lago
             root_name => {
               name: params[:name],
               code: params[:code],
-              value: params[:value],
+              rate: params[:rate],
               description: params[:description],
-              applied_by_default: params[:applied_by_default],
-            }.compact
+              applied_to_organization: params[:applied_to_organization],
+            }.compact,
           }
         end
       end
