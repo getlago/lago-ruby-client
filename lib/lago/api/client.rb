@@ -51,8 +51,8 @@ module Lago
         Lago::Api::Resources::AppliedAddOn.new(self)
       end
 
-      def applied_tax_rates
-        Lago::Api::Resources::AppliedTaxRate.new(self)
+      def applied_taxes
+        Lago::Api::Resources::AppliedTax.new(self)
       end
 
       def billable_metrics
@@ -79,8 +79,8 @@ module Lago
         Lago::Api::Resources::Organization.new(self)
       end
 
-      def tax_rates
-        Lago::Api::Resources::TaxRate.new(self)
+      def taxes
+        Lago::Api::Resources::Tax.new(self)
       end
 
       def wallets
