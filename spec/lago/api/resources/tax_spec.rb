@@ -131,7 +131,7 @@ RSpec.describe Lago::Api::Resources::Tax do
           .to_return(body: response, status: 200)
       end
 
-      it 'returns an tax' do
+      it 'returns a tax' do
         response = resource.destroy(tax.code)
 
         expect(response.lago_id).to eq('this-is-lago-id')
