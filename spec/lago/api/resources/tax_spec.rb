@@ -76,7 +76,7 @@ RSpec.describe Lago::Api::Resources::Tax do
           .to_return(body: response, status: 200)
       end
 
-      it 'returns an tax rate' do
+      it 'returns a tax' do
         response = resource.update(params, tax.code)
 
         expect(response.lago_id).to eq('this-is-lago-id')
