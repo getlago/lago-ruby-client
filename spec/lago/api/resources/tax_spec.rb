@@ -69,7 +69,7 @@ RSpec.describe Lago::Api::Resources::Tax do
       { 'tax' => tax.to_h }
     end
 
-    context 'when tax rate is successfully updated' do
+    context 'when tax is successfully updated' do
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/taxes/#{tax.code}")
           .with(body: body)
