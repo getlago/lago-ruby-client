@@ -40,7 +40,7 @@ module Lago
               :id,
               :billable_metric_id,
               :charge_model,
-              :instant,
+              :pay_in_advance,
               :min_amount_cents,
               :properties,
               :group_properties,
