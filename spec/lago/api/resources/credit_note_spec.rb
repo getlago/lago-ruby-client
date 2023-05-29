@@ -33,13 +33,11 @@ RSpec.describe Lago::Api::Resources::CreditNote do
         items: [
           {
             fee_id: 'some-lago-fee-id-1',
-            credit_amount_cents: 10,
-            refund_amount_cents: 5,
+            amount_cents: 10,
           },
           {
             fee_id: 'some-lago-fee-id-2',
-            credit_amount_cents: 5,
-            refund_amount_cents: 10,
+            amount_cents: 5,
           },
         ],
       }

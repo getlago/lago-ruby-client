@@ -29,7 +29,7 @@ module Lago
         def whitelist_items(items)
           items.each_with_object([]) do |item, result|
             filtered_item = (item || {}).slice(
-              :fee_id, :credit_amount_cents, :refund_amount_cents
+              :fee_id, :amount_cents
             )
 
             result << filtered_item unless filtered_item.empty?
