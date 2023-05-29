@@ -16,7 +16,9 @@ module Lago
           result_hash = {
             invoice_id: params[:invoice_id],
             reason: params[:reason],
-            refund_status: params[:refund_status]
+            refund_status: params[:refund_status],
+            credit_amount_cents: params[:credit_amount_cents],
+            refund_amount_cents: params[:refund_amount_cents],
           }.compact
 
           whitelist_items(params[:items] || []).tap do |items|
