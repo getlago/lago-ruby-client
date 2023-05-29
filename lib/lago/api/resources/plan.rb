@@ -41,6 +41,7 @@ module Lago
               :billable_metric_id,
               :charge_model,
               :pay_in_advance,
+              :invoiceable,
               :min_amount_cents,
               :properties,
               :group_properties,

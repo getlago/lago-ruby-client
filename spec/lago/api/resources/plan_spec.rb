@@ -31,6 +31,7 @@ RSpec.describe Lago::Api::Resources::Plan do
             'created_at' => '2022-04-29T08:59:51Z',
             'charge_model' => factory_plan.charges.first[:charge_model],
             'pay_in_advance' => false,
+            'invoiceable' => true,
             'min_amount_cents' => 0,
             'properties' => factory_plan.charges.first[:properties],
           },
