@@ -14,6 +14,7 @@ FactoryBot.define do
     logo_url { 'http://hooli.com/logo.png' }
     legal_name { 'Coleman-Blair' }
     legal_number { '49-008-2965' }
+    tax_identification_number { 'EU123456789' }
     billing_configuration do
       {
         invoice_grace_period: 3,
