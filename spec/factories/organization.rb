@@ -10,6 +10,7 @@ FactoryBot.define do
     city { 'city' }
     legal_name { 'legal1' }
     legal_number { 'legal2' }
+    tax_identification_number { 'EU123456789' }
     billing_configuration do
       {
         invoice_footer: 'footer',

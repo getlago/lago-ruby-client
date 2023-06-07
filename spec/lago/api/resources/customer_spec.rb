@@ -25,6 +25,7 @@ RSpec.describe Lago::Api::Resources::Customer do
         'logo_url' => factory_customer.logo_url,
         'legal_name' => factory_customer.legal_name,
         'legal_number' => factory_customer.legal_number,
+        'tax_identification_number' => factory_customer.tax_identification_number,
         'currency' => factory_customer.currency,
         'timezone' => factory_customer.timezone,
       },
@@ -60,6 +61,7 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect(customer.external_id).to eq(factory_customer.external_id)
         expect(customer.name).to eq(factory_customer.name)
         expect(customer.currency).to eq(factory_customer.currency)
+        expect(customer.tax_identification_number).to eq(factory_customer.tax_identification_number)
         expect(customer.billing_configuration.invoice_grace_period).to eq(factory_customer.billing_configuration[:invoice_grace_period])
         expect(customer.billing_configuration.provider_customer_id).to eq(factory_customer.billing_configuration[:provider_customer_id])
         expect(customer.metadata.first.key).to eq(factory_customer.metadata.first[:key])
