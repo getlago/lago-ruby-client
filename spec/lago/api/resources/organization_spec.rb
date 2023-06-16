@@ -6,12 +6,9 @@ RSpec.describe Lago::Api::Resources::Organization do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_organization) { FactoryBot.build(:organization) }
-  let(:response) do
-    {
-      'organization' => factory_organization.to_h,
-    }.to_json
-  end
+
+  let(:organization_response) { load_fixture(:organization) }
+
   let(:error_response) do
     {
       'status' => 422,
@@ -21,33 +18,28 @@ RSpec.describe Lago::Api::Resources::Organization do
   end
 
   describe '#update' do
-    let(:params) { factory_organization.to_h }
-    let(:body) do
-      {
-        'organization' => factory_organization.to_h,
-      }
-    end
+    let(:params) { create(:update_organization).to_h }
 
     context 'when organization is successfully updated' do
       before do
         stub_request(:put, 'https://api.getlago.com/api/v1/organizations')
-          .with(body: body)
-          .to_return(body: response, status: 200)
+          .with(body: { organization: params })
+          .to_return(body: organization_response, status: 200)
       end
 
       it 'returns an organization' do
         organization = resource.update(params)
 
-        expect(organization.webhook_url).to eq(factory_organization.webhook_url)
-        expect(organization.tax_identification_number).to eq(factory_organization.tax_identification_number)
-        expect(organization.billing_configuration.invoice_grace_period).to eq(factory_organization.billing_configuration[:invoice_grace_period])
+        expect(organization.webhook_url).to eq('https://test-example.example')
+        expect(organization.tax_identification_number).to eq('EU123456789')
+        expect(organization.billing_configuration.invoice_grace_period).to eq(3)
       end
     end
 
     context 'when organization failed to update' do
       before do
-        stub_request(:put, "https://api.getlago.com/api/v1/organizations")
-          .with(body: body)
+        stub_request(:put, 'https://api.getlago.com/api/v1/organizations')
+          .with(body: { organization: params })
           .to_return(body: error_response, status: 422)
       end
 

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lago-ruby-client (0.35.0.pre.beta)
+    lago-ruby-client (0.36.0.pre.beta)
       jwt
       openssl
 
@@ -31,9 +31,9 @@ GEM
     io-console (0.6.0)
     irb (1.6.3)
       reline (>= 0.3.0)
-    jwt (2.4.1)
+    jwt (2.7.0)
     minitest (5.18.0)
-    openssl (3.0.1)
+    openssl (3.1.0)
     parallel (1.22.1)
     parser (3.1.2.0)
       ast (~> 2.4.1)

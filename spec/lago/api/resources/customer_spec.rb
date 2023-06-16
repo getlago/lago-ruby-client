@@ -6,31 +6,9 @@ RSpec.describe Lago::Api::Resources::Customer do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_customer) { FactoryBot.build(:customer) }
 
-  let(:response) do
-    {
-      'customer' => {
-        'external_id' => factory_customer.external_id,
-        'name' => factory_customer.name,
-        'country' => factory_customer.country,
-        'address_line1' => factory_customer.address_line1,
-        'address_line2' => factory_customer.address_line2,
-        'state' => factory_customer.state,
-        'zipcode' => factory_customer.zipcode,
-        'email' => factory_customer.email,
-        'city' => factory_customer.city,
-        'url' => factory_customer.url,
-        'phone' => factory_customer.phone,
-        'logo_url' => factory_customer.logo_url,
-        'legal_name' => factory_customer.legal_name,
-        'legal_number' => factory_customer.legal_number,
-        'tax_identification_number' => factory_customer.tax_identification_number,
-        'currency' => factory_customer.currency,
-        'timezone' => factory_customer.timezone,
-      },
-    }.to_json
-  end
+  let(:customer_external_id) { JSON.parse(customer_response)['customer']['external_id'] }
+  let(:customer_response) { load_fixture(:customer) }
 
   let(:error_response) do
     {
@@ -41,31 +19,26 @@ RSpec.describe Lago::Api::Resources::Customer do
   end
 
   describe '#create' do
-    let(:params) { factory_customer.to_h }
-    let(:body) do
-      {
-        'customer' => factory_customer.to_h,
-      }
-    end
+    let(:params) { create(:create_customer).to_h }
 
     context 'when customer is successfully created or found' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/customers')
-          .with(body: body)
-          .to_return(body: body.to_json, status: 200)
+          .with(body: { customer: params })
+          .to_return(body: customer_response, status: 200)
       end
 
       it 'returns customer' do
         customer = resource.create(params)
 
-        expect(customer.external_id).to eq(factory_customer.external_id)
-        expect(customer.name).to eq(factory_customer.name)
-        expect(customer.currency).to eq(factory_customer.currency)
-        expect(customer.tax_identification_number).to eq(factory_customer.tax_identification_number)
-        expect(customer.billing_configuration.invoice_grace_period).to eq(factory_customer.billing_configuration[:invoice_grace_period])
-        expect(customer.billing_configuration.provider_customer_id).to eq(factory_customer.billing_configuration[:provider_customer_id])
-        expect(customer.metadata.first.key).to eq(factory_customer.metadata.first[:key])
-        expect(customer.metadata.first.value).to eq(factory_customer.metadata.first[:value])
+        expect(customer.external_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(customer.name).to eq('Gavin Belson')
+        expect(customer.currency).to eq('EUR')
+        expect(customer.tax_identification_number).to eq('EU123456789')
+        expect(customer.billing_configuration.invoice_grace_period).to eq(3)
+        expect(customer.billing_configuration.provider_customer_id).to eq('cus_12345')
+        expect(customer.metadata.first.key).to eq('key')
+        expect(customer.metadata.first.value).to eq('value')
       end
     end
 
@@ -80,7 +53,7 @@ RSpec.describe Lago::Api::Resources::Customer do
 
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/customers')
-          .with(body: body)
+          .with(body: { customer: params })
           .to_return(body: response, status: 422)
       end
 
@@ -91,42 +64,47 @@ RSpec.describe Lago::Api::Resources::Customer do
   end
 
   describe '#current_usage' do
-    let(:factory_customer_usage) { FactoryBot.build(:customer_usage) }
+    let(:customer_usage_response) { load_fixture('customer_usage') }
+    let(:subscription_external_id) { '123' }
 
     context 'when the customer exists' do
       before do
-        usage_json = JSON.generate('customer_usage' => factory_customer_usage.to_h)
-
-        stub_request(:get, 'https://api.getlago.com/api/v1/customers/external_customer_id/current_usage?external_subscription_id=123')
-          .to_return(body: usage_json, status: 200)
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/current_usage?external_subscription_id=#{subscription_external_id}")
+          .to_return(body: customer_usage_response, status: 200)
       end
 
       it 'returns the usage of the customer' do
-        response = resource.current_usage('external_customer_id', '123')
+        response = resource.current_usage(customer_external_id, subscription_external_id)
 
-        expect(response['customer_usage']['from_date']).to eq(factory_customer_usage.from_date)
+        expect(response['customer_usage']['from_datetime']).to eq('2022-07-01T00:00:00Z')
       end
     end
 
     context 'when the customer does not exists' do
+      let(:customer_external_id) { 'DOESNOTEXIST' }
+
       before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/customers/DOESNOTEXIST/current_usage?external_subscription_id=123')
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/current_usage?external_subscription_id=#{subscription_external_id}")
           .to_return(body: JSON.generate(status: 404, error: 'Not Found'), status: 404)
       end
 
       it 'raises an error' do
-        expect { resource.current_usage('DOESNOTEXIST', '123') }.to raise_error Lago::Api::HttpError
+        expect do
+          resource.current_usage(customer_external_id, subscription_external_id)
+        end.to raise_error(Lago::Api::HttpError)
       end
     end
 
     context 'when the customer does not have a subscription' do
       before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/customers/NOSUBSCRIPTION/current_usage?external_subscription_id=123')
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/current_usage?external_subscription_id=#{subscription_external_id}")
           .to_return(body: JSON.generate(status: 422, error: 'no_active_subscription'), status: 422)
       end
 
       it 'raises an error' do
-        expect { resource.current_usage('DOESNOTEXIST', '123') }.to raise_error
+        expect do
+          resource.current_usage(customer_external_id, subscription_external_id)
+        end.to raise_error(Lago::Api::HttpError)
       end
     end
   end
@@ -139,7 +117,7 @@ RSpec.describe Lago::Api::Resources::Customer do
             'portal_url' =>
               'https://app.lago.dev/customer-portal/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaEpJaWt3WkdGbE1qWmx'\
               'ZUzFqWlRnekxUUTJZell0T1dRNFl5MHdabVF4TURabFlqY3dNVElHT2daRlZBPT0iLCJleHAiOiIyMDIzLTAzLTIzVDIzOjAzOjAwL'\
-              'jM2NloiLCJwdXIiOm51bGx9fQ==--7128c6e541adc7b4c14249b1b18509f92e652d17'
+              'jM2NloiLCJwdXIiOm51bGx9fQ==--7128c6e541adc7b4c14249b1b18509f92e652d17',
           }
         )
 
@@ -169,26 +147,26 @@ RSpec.describe Lago::Api::Resources::Customer do
   describe '#destroy' do
     context 'when customer is successfully destroyed' do
       before do
-        stub_request(:delete, "https://api.getlago.com/api/v1/customers/#{factory_customer.external_id}")
-          .to_return(body: response, status: 200)
+        stub_request(:delete, "https://api.getlago.com/api/v1/customers/#{customer_external_id}")
+          .to_return(body: customer_response, status: 200)
       end
 
       it 'returns a customer' do
-        customer = resource.destroy(factory_customer.external_id)
+        customer = resource.destroy(customer_external_id)
 
-        expect(customer.external_id).to eq(factory_customer.external_id)
-        expect(customer.name).to eq(factory_customer.name)
+        expect(customer.external_id).to eq(customer_external_id)
+        expect(customer.name).to eq('Gavin Belson')
       end
     end
 
     context 'when there is an issue' do
       before do
-        stub_request(:delete, "https://api.getlago.com/api/v1/customers/#{factory_customer.external_id}")
+        stub_request(:delete, "https://api.getlago.com/api/v1/customers/#{customer_external_id}")
           .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
-        expect { resource.destroy(factory_customer.external_id) }.to raise_error Lago::Api::HttpError
+        expect { resource.destroy(customer_external_id) }.to raise_error Lago::Api::HttpError
       end
     end
   end

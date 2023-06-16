@@ -27,10 +27,14 @@ require 'lago/api/resources/tax'
 require 'lago/api/resources/wallet'
 require 'lago/api/resources/wallet_transaction'
 require 'lago/api/resources/webhook'
+
 require 'webmock/rspec'
+
+require_relative 'support/fixture_helper'
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
+  config.include FixtureHelper
 
   config.before(:suite) do
     FactoryBot.find_definitions
