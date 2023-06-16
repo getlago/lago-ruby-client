@@ -67,7 +67,6 @@ module Lago
             :provider_customer_id,
             :sync,
             :sync_with_provider,
-            :vat_rate,
             :document_locale,
           )
         end

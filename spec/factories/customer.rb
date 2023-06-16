@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
-  factory :customer, class: OpenStruct do
-    external_id { '5eb02857-a71e-4ea2-bcf9-57d8885436ba' }
+  factory :create_customer, class: OpenStruct do
+    external_id { '1a901a90-1a90-1a90-1a90-1a901a901a90' }
     name { 'Gavin Belson' }
     country { 'US' }
     address_line1 { '5230 Penfield Ave' }
@@ -20,7 +22,6 @@ FactoryBot.define do
         invoice_grace_period: 3,
         payment_provider: 'stripe',
         provider_customer_id: 'cus_123456',
-        vat_rate: nil,
         sync_with_provider: true,
         document_locale: 'fr',
       }
