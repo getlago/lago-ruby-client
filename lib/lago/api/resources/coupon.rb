@@ -16,6 +16,7 @@ module Lago
           result_hash = {
             name: params[:name],
             code: params[:code],
+            description: params[:description],
             amount_cents: params[:amount_cents],
             amount_currency: params[:amount_currency],
             percentage_rate: params[:percentage_rate],
