@@ -13,6 +13,7 @@ RSpec.describe Lago::Api::Resources::Coupon do
         'lago_id' => 'this-is-lago-id',
         'name' => factory_coupon.name,
         'code' => factory_coupon.code,
+        'description' => factory_coupon.description,
         'amount_cents' => factory_coupon.amount_cents,
         'amount_currency' => factory_coupon.amount_currency,
         'expiration' => factory_coupon.expiration,
@@ -54,6 +55,7 @@ RSpec.describe Lago::Api::Resources::Coupon do
 
         expect(coupon.lago_id).to eq('this-is-lago-id')
         expect(coupon.name).to eq(factory_coupon.name)
+        expect(coupon.description).to eq(factory_coupon.description)
         expect(coupon.plan_codes).to eq(factory_coupon.applies_to[:plan_codes])
         expect(coupon.billable_metric_codes).to eq(factory_coupon.applies_to[:billable_metric_codes])
       end
