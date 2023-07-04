@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :organization, class: OpenStruct do
     webhook_url { 'http://example.com/webhooks/' }
+    webhook_urls { ['http://example.com/webhooks/', 'http://example2.com/webhooks/'] }
     country { 'country' }
     address_line1 { 'line1' }
     address_line2 { 'line2' }
