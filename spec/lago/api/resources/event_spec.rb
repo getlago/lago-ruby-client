@@ -86,15 +86,13 @@ RSpec.describe Lago::Api::Resources::Event do
     let(:factory_event) { FactoryBot.build(:estimate_fees_event) }
     let(:event_body) { { 'event' => factory_event.to_h } }
 
-    let(:response_body) do
-      { 'fees' => [FactoryBot.build(:fee)] }
-    end
+    let(:fees_response) { { fees: [JSON.parse(load_fixture('fee'))['fee']] }.to_json }
 
     context 'when event is successfully processed' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/events/estimate_fees')
           .with(body: event_body)
-          .to_return(body: response_body.to_json, status: 200)
+          .to_return(body: fees_response, status: 200)
       end
 
       it 'returns a list of fees' do

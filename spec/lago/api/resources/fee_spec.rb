@@ -6,12 +6,9 @@ RSpec.describe Lago::Api::Resources::Fee do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_fee) { FactoryBot.build(:fee) }
-  let(:lago_id) { 'this_is_lago_internal_id' }
 
-  let(:response_body) do
-    { 'fee' => factory_fee.to_h }
-  end
+  let(:fee_response) { load_fixture('fee') }
+  let(:fee_id) { JSON.parse(fee_response)['fee']['lago_id'] }
 
   let(:error_response) do
     {
@@ -24,35 +21,33 @@ RSpec.describe Lago::Api::Resources::Fee do
   describe '#get' do
     context 'when fee is successfully fetched' do
       before do
-        stub_request(:get, "https://api.getlago.com/api/v1/fees/#{lago_id}")
-          .to_return(body: response_body.to_json, status: 200)
+        stub_request(:get, "https://api.getlago.com/api/v1/fees/#{fee_id}")
+          .to_return(body: fee_response, status: 200)
       end
 
       it 'returns a fee' do
-        fee = resource.get(lago_id)
+        fee = resource.get(fee_id)
 
-        expect(fee.lago_id).to eq(factory_fee.lago_id)
+        expect(fee.lago_id).to eq(fee_id)
       end
     end
 
     context 'when fee is not found' do
       before do
-        stub_request(:get, "https://api.getlago.com/api/v1/fees/#{lago_id}")
+        stub_request(:get, "https://api.getlago.com/api/v1/fees/#{fee_id}")
           .to_return(body: error_response, status: 404)
       end
 
       it 'raises an error' do
-        expect { resource.get(lago_id) }.to raise_error(Lago::Api::HttpError)
+        expect { resource.get(fee_id) }.to raise_error(Lago::Api::HttpError)
       end
     end
   end
 
   describe '#get_all' do
-    let(:response) do
+    let(:fees_response) do
       {
-        'fees' => [
-          factory_fee.to_h,
-        ],
+        'fees' => [JSON.parse(fee_response)['fee']],
         'meta' => {
           'current_page' => 1,
           'next_page' => 2,
@@ -66,25 +61,25 @@ RSpec.describe Lago::Api::Resources::Fee do
     context 'without filters' do
       before do
         stub_request(:get, 'https://api.getlago.com/api/v1/fees')
-          .to_return(body: response, status: 200)
+          .to_return(body: fees_response, status: 200)
       end
 
       it 'returns fees of the first page' do
         response = resource.get_all
 
-        expect(response['fees'].first['lago_id']).to eq(factory_fee.lago_id)
+        expect(response['fees'].first['lago_id']).to eq(fee_id)
       end
 
       context 'when filters are present' do
         before do
           stub_request(:get, 'https://api.getlago.com/api/v1/fees?per_page=2&page=1')
-            .to_return(body: response, status: 200)
+            .to_return(body: fees_response, status: 200)
         end
 
         it 'returns fees on selected page' do
           response = resource.get_all(per_page: 2, page: 1)
 
-          expect(response['fees'].first['lago_id']).to eq(factory_fee.lago_id)
+          expect(response['fees'].first['lago_id']).to eq(fee_id)
           expect(response['meta']['current_page']).to eq(1)
         end
       end
@@ -103,37 +98,31 @@ RSpec.describe Lago::Api::Resources::Fee do
   end
 
   describe '#update' do
-    let(:params) do
-      { payment_status: 'succeeded' }
-    end
-
-    let(:request_body) do
-      { 'fee' => { 'payment_status' => factory_fee.payment_status } }
-    end
+    let(:params) { create(:update_fee).to_h }
 
     context 'when fee is successfully updated' do
       before do
-        stub_request(:put, "https://api.getlago.com/api/v1/fees/#{lago_id}")
-          .with(body: request_body)
-          .to_return(body: response_body.to_json, status: 200)
+        stub_request(:put, "https://api.getlago.com/api/v1/fees/#{fee_id}")
+          .with(body: { fee: params })
+          .to_return(body: fee_response, status: 200)
       end
 
       it 'returns a fee' do
-        fee = resource.update(params, lago_id)
+        fee = resource.update(params, fee_id)
 
-        expect(fee.lago_id).to eq(factory_fee.lago_id)
+        expect(fee.lago_id).to eq(fee_id)
       end
     end
 
     context 'when invoice is not successfully updated' do
       before do
-        stub_request(:put, "https://api.getlago.com/api/v1/fees/#{lago_id}")
-          .with(body: request_body)
+        stub_request(:put, "https://api.getlago.com/api/v1/fees/#{fee_id}")
+          .with(body: { fee: params })
           .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
-        expect { resource.update(params, lago_id) }.to raise_error(Lago::Api::HttpError)
+        expect { resource.update(params, fee_id) }.to raise_error(Lago::Api::HttpError)
       end
     end
   end

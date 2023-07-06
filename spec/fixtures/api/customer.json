@@ -1,0 +1,50 @@
+{
+  "customer": {
+    "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+    "external_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+    "address_line1": "5230 Penfield Ave",
+    "address_line2": null,
+    "city": "Woodland Hills",
+    "country": "US",
+    "created_at": "2022-04-29T08:59:51Z",
+    "email": "dinesh@piedpiper.test",
+    "legal_name": "Coleman-Blair",
+    "legal_number": "49-008-2965",
+    "tax_identification_number": "EU123456789",
+    "logo_url": "http://hooli.com/logo.png",
+    "name": "Gavin Belson",
+    "phone": "1-171-883-3711 x245",
+    "state": "CA",
+    "url": "http://hooli.com",
+    "zipcode": "91364",
+    "currency": "EUR",
+    "timezone": "Europe/Paris",
+    "applicable_timezone": "Europe/Paris",
+    "billing_configuration": {
+      "invoice_grace_period": 3,
+      "payment_provider": "stripe",
+      "provider_customer_id": "cus_12345",
+      "sync_with_provider": true,
+      "document_locale": "fr"
+    },
+    "metadata": [
+      {
+        "key": "key",
+        "value": "value",
+        "display_in_invoice": true
+      }
+    ],
+    "taxes": [
+      {
+        "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+        "name": "tax_name",
+        "code": "tax_code",
+        "rate": 15.0,
+        "description": "tax_desc",
+        "customers_count": 0,
+        "applied_to_organization": false,
+        "created_at": "2022-04-29T08:59:51Z"
+      }
+    ]
+  }
+}

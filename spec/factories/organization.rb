@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
-  factory :organization, class: OpenStruct do
+  factory :update_organization, class: OpenStruct do
     webhook_url { 'http://example.com/webhooks/' }
     webhook_urls { ['http://example.com/webhooks/', 'http://example2.com/webhooks/'] }
     country { 'country' }
@@ -16,7 +18,6 @@ FactoryBot.define do
       {
         invoice_footer: 'footer',
         invoice_grace_period: 2,
-        vat_rate: 20,
         document_locale: 'fr',
       }
     end
