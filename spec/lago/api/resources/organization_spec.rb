@@ -31,7 +31,7 @@ RSpec.describe Lago::Api::Resources::Organization do
         organization = resource.update(params)
 
         expect(organization.webhook_url).to eq('https://test-example.example')
-        expect(organization.webhook_urls).to eq(factory_organization.webhook_urls)
+        expect(organization.webhook_urls).to eq(['https://test-example.example'])
         expect(organization.tax_identification_number).to eq('EU123456789')
         expect(organization.billing_configuration.invoice_grace_period).to eq(3)
       end
