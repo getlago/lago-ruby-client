@@ -28,7 +28,7 @@ RSpec.describe Lago::Api::Resources::Tax do
           .to_return(body: tax_response, status: 200)
       end
 
-      it 'returns an tax' do
+      it 'returns a tax' do
         tax = resource.create(params)
 
         expect(tax.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')

@@ -45,6 +45,7 @@ module Lago
               :min_amount_cents,
               :properties,
               :group_properties,
+              :tax_codes,
             )
 
             processed_charges << result unless result.empty?
