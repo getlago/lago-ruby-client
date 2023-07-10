@@ -63,6 +63,10 @@ module Lago
         Lago::Api::Resources::CreditNote.new(self)
       end
 
+      def plan_applied_taxes
+        Lago::Api::Resources::PlanAppliedTax.new(self)
+      end
+
       def plans
         Lago::Api::Resources::Plan.new(self)
       end
