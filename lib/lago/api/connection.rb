@@ -45,8 +45,10 @@ module Lago
         handle_response(response)
       end
 
-      def destroy(path = uri.path, identifier:)
-        uri_path = "#{path}/#{identifier}"
+      def destroy(path = uri.path, identifier:, options: nil)
+        uri_path = path
+        uri_path += "/#{identifier}" if identifier
+        uri_path += "?#{URI.encode_www_form(options)}" unless options.nil?
         response = http_client.send_request(
           'DELETE',
           uri_path,

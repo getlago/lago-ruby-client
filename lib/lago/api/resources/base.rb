@@ -42,8 +42,8 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def destroy(identifier)
-          response = connection.destroy(identifier: identifier)[root_name]
+        def destroy(identifier, options: nil)
+          response = connection.destroy(identifier: identifier, options: options)[root_name]
 
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
