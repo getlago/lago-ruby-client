@@ -18,6 +18,12 @@ RSpec.describe Lago::Api::Resources::Subscription do
       'subscription' => factory_subscription.to_h
     }.to_json
   end
+  let(:pending_subscription) { create(:subscription, id: '456', status: 'pending') }
+  let(:response_with_pending) do
+    {
+      'subscription' => pending_subscription.to_h
+    }.to_json
+  end
 
   describe '#create' do
     let(:params) do
@@ -80,6 +86,21 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
+      end
+    end
+
+    context 'when subscription is pending' do
+      before do
+        stub_request(:delete, 'https://api.getlago.com/api/v1/subscriptions/456?status=pending')
+        .to_return(body: response_with_pending, status: 200)
+      end
+      
+      it 'returns subscription' do  
+        subscription = resource.destroy('456', options: { status: 'pending' })
+
+        expect(subscription.external_customer_id).to eq(pending_subscription.external_customer_id)
+        expect(subscription.plan_code).to eq(pending_subscription.plan_code)
+        expect(subscription.status).to eq(pending_subscription.status)
       end
     end
 
@@ -160,6 +181,21 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
         expect(response['subscriptions'].first['lago_id']).to eq(factory_subscription.lago_id)
         expect(response['subscriptions'].first['external_id']).to eq(factory_subscription.external_id)
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when status is given' do
+      before do
+        stub_request(:get, 'https://api.getlago.com/api/v1/subscriptions?external_customer_id=123&status%5B%5D=pending')
+          .to_return(body: response, status: 200)
+
+        create(:subscription, status: 'pending')
+      end
+
+      it 'returns subscriptions with that given status' do
+        response = resource.get_all({ external_customer_id: '123', 'status[]': 'pending' })
+        expect(response['subscriptions'].count).to eq(1)
         expect(response['meta']['current_page']).to eq(1)
       end
     end
