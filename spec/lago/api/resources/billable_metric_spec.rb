@@ -15,6 +15,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
         'name' => factory_billable_metric.name,
         'code' => factory_billable_metric.code,
         'description' => factory_billable_metric.description,
+        'recurring' => factory_billable_metric.recurring,
         'aggregation_type' => factory_billable_metric.aggregation_type,
         'field_name' => factory_billable_metric.field_name,
         'created_at' => '2022-04-29T08:59:51Z',
