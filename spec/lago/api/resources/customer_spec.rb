@@ -39,6 +39,7 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect(customer.billing_configuration.provider_customer_id).to eq('cus_12345')
         expect(customer.metadata.first.key).to eq('key')
         expect(customer.metadata.first.value).to eq('value')
+        expect(customer.taxes.map(&:code)).to eq(['tax_code'])
       end
     end
 
