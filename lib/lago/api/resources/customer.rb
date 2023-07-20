@@ -47,6 +47,7 @@ module Lago
             url: params[:url],
             zipcode: params[:zipcode],
             currency: params[:currency],
+            tax_codes: params[:tax_codes],
             timezone: params[:timezone],
           }
 

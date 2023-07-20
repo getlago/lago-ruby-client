@@ -35,7 +35,8 @@ RSpec.describe Lago::Api::Resources::Plan do
             'min_amount_cents' => 0,
             'properties' => factory_plan.charges.first[:properties],
           },
-        ]
+        ],
+        'taxes' => [{ 'code' => 'tax_code' }],
       }
     }.to_json
   end
@@ -48,11 +49,10 @@ RSpec.describe Lago::Api::Resources::Plan do
   end
 
   describe '#create' do
-    let(:params) { factory_plan.to_h }
+    let(:tax_codes) { ['tax_code'] }
+    let(:params) { factory_plan.to_h.merge(tax_codes:) }
     let(:body) do
-      {
-        'plan' => factory_plan.to_h,
-      }
+      { 'plan' => params }
     end
 
     context 'when plan is successfully created' do
@@ -67,6 +67,7 @@ RSpec.describe Lago::Api::Resources::Plan do
 
         expect(plan.lago_id).to eq('this-is-lago-id')
         expect(plan.name).to eq(factory_plan.name)
+        expect(plan.taxes.map(&:code)).to eq(tax_codes)
       end
     end
 

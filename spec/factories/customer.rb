@@ -36,6 +36,7 @@ FactoryBot.define do
       ]
     end
     currency { 'EUR' }
+    tax_codes { ['tax_code'] }
     timezone { 'Europe/Paris' }
   end
 end

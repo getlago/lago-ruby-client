@@ -51,20 +51,12 @@ module Lago
         Lago::Api::Resources::AppliedAddOn.new(self)
       end
 
-      def applied_taxes
-        Lago::Api::Resources::AppliedTax.new(self)
-      end
-
       def billable_metrics
         Lago::Api::Resources::BillableMetric.new(self)
       end
 
       def credit_notes
         Lago::Api::Resources::CreditNote.new(self)
-      end
-
-      def plan_applied_taxes
-        Lago::Api::Resources::PlanAppliedTax.new(self)
       end
 
       def plans
