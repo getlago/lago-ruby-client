@@ -5,8 +5,8 @@ require 'spec_helper'
 RSpec.describe Lago::Api::Resources::Event do
   subject(:resource) { described_class.new(client) }
   let(:client) { Lago::Api::Client.new }
-  let(:factory_event) { FactoryBot.build(:event) }
-  let(:factory_batch_event) { FactoryBot.build(:batch_event) }
+  let(:factory_event) { build(:event) }
+  let(:factory_batch_event) { build(:batch_event) }
 
   describe '#create' do
     let(:params) { factory_event.to_h }
@@ -83,7 +83,7 @@ RSpec.describe Lago::Api::Resources::Event do
   end
 
   describe '#estimate_fees' do
-    let(:factory_event) { FactoryBot.build(:estimate_fees_event) }
+    let(:factory_event) { build(:estimate_fees_event) }
     let(:event_body) { { 'event' => factory_event.to_h } }
 
     let(:fees_response) { { fees: [JSON.parse(load_fixture('fee'))['fee']] }.to_json }

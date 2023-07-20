@@ -6,7 +6,7 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_applied_coupon) { FactoryBot.build(:applied_coupon) }
+  let(:factory_applied_coupon) { build(:applied_coupon) }
   let(:error_response) do
     {
       'status' => 422,

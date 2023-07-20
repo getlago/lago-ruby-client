@@ -6,7 +6,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_wallet) { FactoryBot.build(:wallet) }
+  let(:factory_wallet) { build(:wallet) }
   let(:response) do
     {
       'wallet' => {

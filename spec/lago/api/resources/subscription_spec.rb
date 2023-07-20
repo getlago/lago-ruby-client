@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe Lago::Api::Resources::Subscription do
   subject(:resource) { described_class.new(client) }
   let(:client) { Lago::Api::Client.new }
-  let(:factory_subscription) { FactoryBot.build(:subscription) }
+  let(:factory_subscription) { build(:subscription) }
   let(:error_response) do
     {
       'status' => 422,
