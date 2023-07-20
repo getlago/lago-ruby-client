@@ -6,7 +6,7 @@ RSpec.describe Lago::Api::Resources::Coupon do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_coupon) { FactoryBot.build(:coupon) }
+  let(:factory_coupon) { build(:coupon) }
   let(:response) do
     {
       'coupon' => {

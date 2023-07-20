@@ -6,7 +6,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_billable_metric) { FactoryBot.build(:billable_metric) }
+  let(:factory_billable_metric) { build(:billable_metric) }
 
   let(:response) do
     {

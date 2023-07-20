@@ -6,7 +6,7 @@ RSpec.describe Lago::Api::Resources::Plan do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_plan) { FactoryBot.build(:plan) }
+  let(:factory_plan) { build(:plan) }
   let(:response) do
     {
       'plan' => {

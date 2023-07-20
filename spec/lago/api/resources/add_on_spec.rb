@@ -6,7 +6,7 @@ RSpec.describe Lago::Api::Resources::AddOn do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_add_on) { FactoryBot.build(:add_on) }
+  let(:factory_add_on) { build(:add_on) }
   let(:response) do
     {
       'add_on' => {

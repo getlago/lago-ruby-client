@@ -6,7 +6,7 @@ RSpec.describe Lago::Api::Resources::AppliedTax do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:applied_tax) { FactoryBot.build(:applied_tax) }
+  let(:applied_tax) { build(:applied_tax) }
   let(:response) do
     {
       'applied_tax' => {
