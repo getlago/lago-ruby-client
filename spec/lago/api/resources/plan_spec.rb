@@ -50,7 +50,7 @@ RSpec.describe Lago::Api::Resources::Plan do
 
   describe '#create' do
     let(:tax_codes) { ['tax_code'] }
-    let(:params) { factory_plan.to_h.merge(tax_codes:) }
+    let(:params) { factory_plan.to_h.merge(tax_codes: tax_codes) }
     let(:body) do
       { 'plan' => params }
     end
