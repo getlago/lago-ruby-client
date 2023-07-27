@@ -35,7 +35,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
     context 'when wallet is successfully created' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/webhook_endpoints')
-          .with(body:)
+          .with(body: body)
           .to_return(body: response, status: 200)
       end
 
@@ -50,7 +50,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
     context 'when webhook_endpoint failed to create' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/webhook_endpoints')
-          .with(body:)
+          .with(body: body)
           .to_return(body: error_response, status: 422)
       end
 
@@ -72,7 +72,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
     context 'when webhook_endpoint is successfully updated' do
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/webhook_endpoints/#{id}")
-          .with(body:)
+          .with(body: body)
           .to_return(body: response, status: 200)
       end
 
@@ -87,7 +87,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
     context 'when webhook_endpoint failed to update' do
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/webhook_endpoints/#{id}")
-          .with(body:)
+          .with(body: body)
           .to_return(body: error_response, status: 422)
       end
 
