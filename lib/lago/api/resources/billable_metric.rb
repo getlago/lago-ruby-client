@@ -18,6 +18,7 @@ module Lago
               name: params[:name],
               code: params[:code],
               description: params[:description],
+              recurring: params[:recurring],
               aggregation_type: params[:aggregation_type],
               field_name: params[:field_name],
               group: params[:group],
