@@ -52,6 +52,7 @@ module Lago
         def whitelist_params(params)
           result = {
             payment_status: params[:payment_status],
+            net_payment_term: params[:net_payment_term],
           }
 
           metadata = whitelist_metadata(params[:metadata])
@@ -76,6 +77,7 @@ module Lago
           result = {
             external_customer_id: params[:external_customer_id],
             currency: params[:currency],
+            net_payment_term: params[:net_payment_term],
           }
 
           fees = whitelist_fees(params[:fees])

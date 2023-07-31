@@ -34,6 +34,7 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect(customer.external_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
         expect(customer.name).to eq('Gavin Belson')
         expect(customer.currency).to eq('EUR')
+        expect(customer.net_payment_term).to eq(nil)
         expect(customer.tax_identification_number).to eq('EU123456789')
         expect(customer.billing_configuration.invoice_grace_period).to eq(3)
         expect(customer.billing_configuration.provider_customer_id).to eq('cus_12345')

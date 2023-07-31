@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :create_invoice, class: OpenStruct do
     external_customer_id { '_ID_' }
     currency { 'EUR' }
+    net_payment_term { 0 }
     fees do
       [
         {
@@ -16,6 +17,7 @@ FactoryBot.define do
 
   factory :update_invoice, class: OpenStruct do
     payment_status { 'succeeded' }
+    net_payment_term { 0 }
     metadata do
       [
         {

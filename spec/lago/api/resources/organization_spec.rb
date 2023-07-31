@@ -32,6 +32,7 @@ RSpec.describe Lago::Api::Resources::Organization do
 
         expect(organization.webhook_url).to eq('https://test-example.example')
         expect(organization.webhook_urls).to eq(['https://test-example.example'])
+        expect(organization.net_payment_term).to eq(0)
         expect(organization.tax_identification_number).to eq('EU123456789')
         expect(organization.billing_configuration.invoice_grace_period).to eq(3)
       end
