@@ -16,7 +16,21 @@ RSpec.describe Lago::Api::Resources::AddOn do
         'amount_cents' => factory_add_on.amount_cents,
         'amount_currency' => factory_add_on.amount_currency,
         'description' => factory_add_on.description,
-        'created_at' => '2022-04-29T08:59:51Z'
+        'created_at' => '2022-04-29T08:59:51Z',
+        'taxes' => [
+          {
+            'lago_id' => '1a901a90-1a90-1a90-1a90-1a901a901a90',
+            'name' => 'tax_name',
+            'code' => 'tax_code',
+            'rate' => 15.0,
+            'description' => 'tax_desc',
+            'customers_count' => 0,
+            'plans_count' => 0,
+            'charges_count' => 0,
+            'applied_to_organization' => false,
+            'created_at' => '2022-04-29T08:59:51Z'
+          }
+        ]
       }
     }.to_json
   end
@@ -48,6 +62,7 @@ RSpec.describe Lago::Api::Resources::AddOn do
 
         expect(add_on.lago_id).to eq('this-is-lago-id')
         expect(add_on.name).to eq(factory_add_on.name)
+        expect(add_on.taxes.map(&:code)).to eq(['tax_code'])
       end
     end
 

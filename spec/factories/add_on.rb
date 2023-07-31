@@ -5,5 +5,6 @@ FactoryBot.define do
     description { 'test description' }
     amount_cents { 200 }
     amount_currency { 'EUR' }
+    tax_codes { ['tax_code'] }
   end
 end
