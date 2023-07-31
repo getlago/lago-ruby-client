@@ -25,6 +25,7 @@ module Lago
             city: params[:city],
             legal_name: params[:legal_name],
             legal_number: params[:legal_number],
+            net_payment_term: params[:net_payment_term],
             tax_identification_number: params[:tax_identification_number],
             timezone: params[:timezone],
             email_settings: params[:email_settings],

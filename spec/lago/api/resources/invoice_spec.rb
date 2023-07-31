@@ -23,6 +23,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
       {
         external_customer_id: '_ID_',
         currency: 'EUR',
+        net_payment_term: 0,
         fees: [
           {
             add_on_code: '123',
@@ -43,6 +44,8 @@ RSpec.describe Lago::Api::Resources::Invoice do
         invoice = resource.create(params)
 
         expect(invoice.lago_id).to eq(invoice_id)
+        expect(invoice.net_payment_term).to eq(0)
+        expect(invoice.payment_due_date).to eq('2022-06-02')
         expect(invoice.payment_status).to eq('succeeded')
         expect(invoice.invoice_type).to eq('one_off')
       end
@@ -76,6 +79,8 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
         expect(invoice.lago_id).to eq(invoice_id)
         expect(invoice.payment_status).to eq('succeeded')
+        expect(invoice.net_payment_term).to eq(0)
+        expect(invoice.payment_due_date).to eq('2022-06-02')
         expect(invoice.metadata.first.key).to eq('key')
         expect(invoice.metadata.first.value).to eq('value')
       end
@@ -105,6 +110,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
         invoice = resource.get(invoice_id)
 
         expect(invoice.lago_id).to eq(invoice_id)
+        expect(invoice.net_payment_term).to eq(0)
         expect(invoice.payment_status).to eq('succeeded')
       end
     end

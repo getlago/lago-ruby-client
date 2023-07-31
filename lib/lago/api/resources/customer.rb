@@ -39,6 +39,7 @@ module Lago
             email: params[:email],
             legal_name: params[:legal_name],
             legal_number: params[:legal_number],
+            net_payment_term: params[:net_payment_term],
             tax_identification_number: params[:tax_identification_number],
             logo_url: params[:logo_url],
             name: params[:name],
