@@ -63,14 +63,21 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
   end
 
   describe '#update' do
-    let(:params) { { webhook_url: 'https://foo.bar' } }
     let(:id) { 'id' }
+
     let(:body) do
       {
         'webhook_endpoint' => {
           webhook_url: 'https://foo.bar',
           signature_algo: 'hmac',
         },
+      }
+    end
+
+    let(:params) do
+      {
+        webhook_url: 'https://foo.bar',
+        signature_algo: 'hmac',
       }
     end
 
