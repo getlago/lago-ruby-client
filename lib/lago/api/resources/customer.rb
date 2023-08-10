@@ -70,6 +70,7 @@ module Lago
             :sync,
             :sync_with_provider,
             :document_locale,
+            :provider_payment_methods,
           )
         end
 
