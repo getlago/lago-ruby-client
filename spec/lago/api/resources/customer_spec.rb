@@ -38,6 +38,7 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect(customer.tax_identification_number).to eq('EU123456789')
         expect(customer.billing_configuration.invoice_grace_period).to eq(3)
         expect(customer.billing_configuration.provider_customer_id).to eq('cus_12345')
+        expect(customer.billing_configuration.provider_payment_methods).to eq(['card'])
         expect(customer.metadata.first.key).to eq('key')
         expect(customer.metadata.first.value).to eq('value')
         expect(customer.taxes.map(&:code)).to eq(['tax_code'])
