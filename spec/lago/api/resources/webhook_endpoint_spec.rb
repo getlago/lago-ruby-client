@@ -12,6 +12,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
       'webhook_endpoint' => {
         'lago_id' => 'this-is-lago-id',
         'webhook_url' => 'https://foo.bar',
+        'signature_algo' => 'hmac',
         'created_at' => '2022-04-29T08:59:51Z',
       }
     }.to_json
@@ -44,6 +45,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
 
         expect(webhook_endpoint.lago_id).to eq('this-is-lago-id')
         expect(webhook_endpoint.webhook_url).to eq(factory_webhook_endpoint.webhook_url)
+        expect(webhook_endpoint.signature_algo).to eq(factory_webhook_endpoint.signature_algo)
       end
     end
 
@@ -61,11 +63,21 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
   end
 
   describe '#update' do
-    let(:params) { { webhook_url: 'https://foo.bar' } }
     let(:id) { 'id' }
+
     let(:body) do
       {
-        'webhook_endpoint' => { webhook_url: 'https://foo.bar' },
+        'webhook_endpoint' => {
+          webhook_url: 'https://foo.bar',
+          signature_algo: 'hmac',
+        },
+      }
+    end
+
+    let(:params) do
+      {
+        webhook_url: 'https://foo.bar',
+        signature_algo: 'hmac',
       }
     end
 
@@ -81,6 +93,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
 
         expect(webhook_endpoint.lago_id).to eq('this-is-lago-id')
         expect(webhook_endpoint.webhook_url).to eq(factory_webhook_endpoint.webhook_url)
+        expect(webhook_endpoint.signature_algo).to eq(factory_webhook_endpoint.signature_algo)
       end
     end
 
@@ -111,6 +124,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
 
         expect(webhook_endpoint.lago_id).to eq('this-is-lago-id')
         expect(webhook_endpoint.webhook_url).to eq(factory_webhook_endpoint.webhook_url)
+        expect(webhook_endpoint.signature_algo).to eq(factory_webhook_endpoint.signature_algo)
       end
     end
 
@@ -140,6 +154,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
 
         expect(webhook_endpoint.lago_id).to eq('this-is-lago-id')
         expect(webhook_endpoint.webhook_url).to eq(factory_webhook_endpoint.webhook_url)
+        expect(webhook_endpoint.signature_algo).to eq(factory_webhook_endpoint.signature_algo)
       end
     end
 
@@ -162,6 +177,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
           {
             'lago_id' => 'this-is-lago-id',
             'webhook_url' => factory_webhook_endpoint.webhook_url,
+            'signature_algo' => factory_webhook_endpoint.signature_algo,
             'created_at' => '2022-04-29T08:59:51Z',
           }
         ],
@@ -186,6 +202,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
 
         expect(response['webhook_endpoints'].first['lago_id']).to eq('this-is-lago-id')
         expect(response['webhook_endpoints'].first['webhook_url']).to eq(factory_webhook_endpoint.webhook_url)
+        expect(response['webhook_endpoints'].first['signature_algo']).to eq(factory_webhook_endpoint.signature_algo)
         expect(response['meta']['current_page']).to eq(1)
       end
     end

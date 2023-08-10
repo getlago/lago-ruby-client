@@ -16,6 +16,7 @@ module Lago
           {
             root_name => {
               webhook_url: params[:webhook_url],
+              signature_algo: params[:signature_algo],
             }.compact,
           }
         end
