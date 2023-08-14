@@ -9,6 +9,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
   let(:invoice_response) { load_fixture('invoice') }
   let(:invoice_id) { JSON.parse(invoice_response)['invoice']['lago_id'] }
+  let(:tax) { create(:create_tax) }
 
   let(:error_response) do
     {
@@ -28,6 +29,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
           {
             add_on_code: '123',
             description: 'desc',
+            tax_codes: [tax.code],
           }
         ],
       }
@@ -43,11 +45,14 @@ RSpec.describe Lago::Api::Resources::Invoice do
       it 'returns invoice' do
         invoice = resource.create(params)
 
-        expect(invoice.lago_id).to eq(invoice_id)
-        expect(invoice.net_payment_term).to eq(0)
-        expect(invoice.payment_due_date).to eq('2022-06-02')
-        expect(invoice.payment_status).to eq('succeeded')
-        expect(invoice.invoice_type).to eq('one_off')
+        expect(invoice).to have_attributes(
+          lago_id: invoice_id,
+          net_payment_term: 0,
+          payment_due_date: '2022-06-02',
+          payment_status: 'succeeded',
+          invoice_type: 'one_off'
+        )
+        expect(invoice.applied_taxes.first.tax_code).to eq('tax_code')
       end
     end
 

@@ -19,7 +19,8 @@ module Lago
               code: params[:code],
               description: params[:description],
               amount_cents: params[:amount_cents],
-              amount_currency: params[:amount_currency]
+              amount_currency: params[:amount_currency],
+              tax_codes: params[:tax_codes],
             }.compact
           }
         end
