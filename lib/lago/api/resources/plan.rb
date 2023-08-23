@@ -36,7 +36,7 @@ module Lago
         def whitelist_charges(charges)
           processed_charges = []
 
-          charges.each do |c|
+          charges&.each do |c|
             result = (c || {}).slice(
               :id,
               :billable_metric_id,
