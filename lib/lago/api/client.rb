@@ -47,10 +47,6 @@ module Lago
         Lago::Api::Resources::AppliedCoupon.new(self)
       end
 
-      def applied_add_ons
-        Lago::Api::Resources::AppliedAddOn.new(self)
-      end
-
       def billable_metrics
         Lago::Api::Resources::BillableMetric.new(self)
       end
