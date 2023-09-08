@@ -6,29 +6,9 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_billable_metric) { build(:billable_metric) }
 
-  let(:response) do
-    {
-      'billable_metric' => {
-        'lago_id' => 'this-is-lago-id',
-        'name' => factory_billable_metric.name,
-        'code' => factory_billable_metric.code,
-        'description' => factory_billable_metric.description,
-        'recurring' => factory_billable_metric.recurring,
-        'aggregation_type' => factory_billable_metric.aggregation_type,
-        'field_name' => factory_billable_metric.field_name,
-        'created_at' => '2022-04-29T08:59:51Z',
-        'group' => {
-          'key' => 'region',
-          'values' => %w[france italy spain],
-        },
-        'active_subscriptions_count' => 0,
-        'draft_invoices_count' => 0,
-        'plans_count' => 0,
-      },
-    }.to_json
-  end
+  let(:billable_metric_response) { load_fixture('billable_metric') }
+  let(:billable_metric_code) { 'bm_code' }
 
   let(:error_response) do
     {
@@ -41,38 +21,34 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
   describe '#create' do
     let(:group) do
       {
-        key: 'region',
+        key: 'country',
         values: %w[france italy spain],
       }
     end
 
-    let(:params) { factory_billable_metric.to_h.merge(group: group) }
-    let(:body) do
-      {
-        'billable_metric' => params,
-      }
-    end
+    let(:params) { create(:create_billable_metric).to_h.merge(group: group) }
 
     context 'when billable metric is successfully created' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/billable_metrics')
-          .with(body: body)
-          .to_return(body: response, status: 200)
+          .with(body: { billable_metric: params })
+          .to_return(body: billable_metric_response, status: 200)
       end
 
       it 'returns an billable metric' do
         billable_metric = resource.create(params)
 
-        expect(billable_metric.lago_id).to eq('this-is-lago-id')
-        expect(billable_metric.name).to eq(factory_billable_metric.name)
+        expect(billable_metric.lago_id).to eq('b7ab2926-1de8-4428-9bcd-779314ac129b')
+        expect(billable_metric.name).to eq('bm_name')
         expect(billable_metric.group.to_h).to eq(group)
+        expect(billable_metric.weighted_interval).to be_nil
       end
     end
 
     context 'when billable_metric failed to create' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/billable_metrics')
-          .with(body: body)
+          .with(body: { billable_metric: params })
           .to_return(body: error_response, status: 422)
       end
 
@@ -83,37 +59,32 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
   end
 
   describe '#update' do
-    let(:params) { factory_billable_metric.to_h }
-    let(:body) do
-      {
-        'billable_metric' => factory_billable_metric.to_h,
-      }
-    end
+    let(:params) { create(:update_billable_metric).to_h }
 
     context 'when billable metric is successfully updated' do
       before do
-        stub_request(:put, "https://api.getlago.com/api/v1/billable_metrics/#{factory_billable_metric.code}")
-          .with(body: body)
-          .to_return(body: response, status: 200)
+        stub_request(:put, "https://api.getlago.com/api/v1/billable_metrics/#{billable_metric_code}")
+          .with(body: { billable_metric: params })
+          .to_return(body: billable_metric_response, status: 200)
       end
 
       it 'returns an billable metric' do
-        billable_metric = resource.update(params, factory_billable_metric.code)
+        billable_metric = resource.update(params, billable_metric_code)
 
-        expect(billable_metric.lago_id).to eq('this-is-lago-id')
-        expect(billable_metric.name).to eq(factory_billable_metric.name)
+        expect(billable_metric.lago_id).to eq('b7ab2926-1de8-4428-9bcd-779314ac129b')
+        expect(billable_metric.name).to eq('bm_name')
       end
     end
 
     context 'when billable_metric failed to update' do
       before do
-        stub_request(:put, "https://api.getlago.com/api/v1/billable_metrics/#{factory_billable_metric.code}")
-          .with(body: body)
+        stub_request(:put, "https://api.getlago.com/api/v1/billable_metrics/#{billable_metric_code}")
+          .with(body: { billable_metric: params })
           .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
-        expect { resource.update(params, factory_billable_metric.code) }.to raise_error Lago::Api::HttpError
+        expect { resource.update(params, billable_metric_code) }.to raise_error Lago::Api::HttpError
       end
     end
   end
@@ -121,26 +92,26 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
   describe '#get' do
     context 'when billable metric is successfully fetched' do
       before do
-        stub_request(:get, "https://api.getlago.com/api/v1/billable_metrics/#{factory_billable_metric.code}")
-          .to_return(body: response, status: 200)
+        stub_request(:get, "https://api.getlago.com/api/v1/billable_metrics/#{billable_metric_code}")
+          .to_return(body: billable_metric_response, status: 200)
       end
 
       it 'returns an billable metric' do
-        billable_metric = resource.get(factory_billable_metric.code)
+        billable_metric = resource.get(billable_metric_code)
 
-        expect(billable_metric.lago_id).to eq('this-is-lago-id')
-        expect(billable_metric.name).to eq(factory_billable_metric.name)
+        expect(billable_metric.lago_id).to eq('b7ab2926-1de8-4428-9bcd-779314ac129b')
+        expect(billable_metric.name).to eq('bm_name')
       end
     end
 
     context 'when there is an issue' do
       before do
-        stub_request(:get, "https://api.getlago.com/api/v1/billable_metrics/#{factory_billable_metric.code}")
+        stub_request(:get, "https://api.getlago.com/api/v1/billable_metrics/#{billable_metric_code}")
           .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
-        expect { resource.get(factory_billable_metric.code) }.to raise_error Lago::Api::HttpError
+        expect { resource.get(billable_metric_code) }.to raise_error Lago::Api::HttpError
       end
     end
   end
@@ -148,66 +119,44 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
   describe '#destroy' do
     context 'when billable metric is successfully destroyed' do
       before do
-        stub_request(:delete, "https://api.getlago.com/api/v1/billable_metrics/#{factory_billable_metric.code}")
-          .to_return(body: response, status: 200)
+        stub_request(:delete, "https://api.getlago.com/api/v1/billable_metrics/#{billable_metric_code}")
+          .to_return(body: billable_metric_response, status: 200)
       end
 
       it 'returns an billable metric' do
-        billable_metric = resource.destroy(factory_billable_metric.code)
+        billable_metric = resource.destroy(billable_metric_code)
 
-        expect(billable_metric.lago_id).to eq('this-is-lago-id')
-        expect(billable_metric.name).to eq(factory_billable_metric.name)
+        expect(billable_metric.lago_id).to eq('b7ab2926-1de8-4428-9bcd-779314ac129b')
+        expect(billable_metric.name).to eq('bm_name')
       end
     end
 
     context 'when there is an issue' do
       before do
-        stub_request(:delete, "https://api.getlago.com/api/v1/billable_metrics/#{factory_billable_metric.code}")
+        stub_request(:delete, "https://api.getlago.com/api/v1/billable_metrics/#{billable_metric_code}")
           .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
-        expect { resource.destroy(factory_billable_metric.code) }.to raise_error Lago::Api::HttpError
+        expect { resource.destroy(billable_metric_code) }.to raise_error Lago::Api::HttpError
       end
     end
   end
 
   describe '#get_all' do
-    let(:response) do
-      {
-        'billable_metrics' => [
-          {
-            'lago_id' => 'this-is-lago-id',
-            'name' => factory_billable_metric.name,
-            'code' => factory_billable_metric.code,
-            'description' => factory_billable_metric.description,
-            'aggregation_type' => factory_billable_metric.aggregation_type,
-            'field_name' => factory_billable_metric.field_name,
-            'created_at' => '2022-04-29T08:59:51Z',
-            'group' => {},
-          }
-        ],
-        'meta': {
-          'current_page' => 1,
-          'next_page' => 2,
-          'prev_page' => nil,
-          'total_pages' => 7,
-          'total_count' => 63,
-        }
-      }.to_json
-    end
+    let(:billable_metrics_response) { load_fixture('billable_metric_index') }
 
     context 'when there is no options' do
       before do
         stub_request(:get, 'https://api.getlago.com/api/v1/billable_metrics')
-          .to_return(body: response, status: 200)
+          .to_return(body: billable_metrics_response, status: 200)
       end
 
       it 'returns billable metrics on the first page' do
         response = resource.get_all
 
-        expect(response['billable_metrics'].first['lago_id']).to eq('this-is-lago-id')
-        expect(response['billable_metrics'].first['name']).to eq(factory_billable_metric.name)
+        expect(response['billable_metrics'].first['lago_id']).to eq('b7ab2926-1de8-4428-9bcd-779314ac1000')
+        expect(response['billable_metrics'].first['name']).to eq('bm_name')
         expect(response['meta']['current_page']).to eq(1)
       end
     end
@@ -215,14 +164,14 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
     context 'when options are present' do
       before do
         stub_request(:get, 'https://api.getlago.com/api/v1/billable_metrics?per_page=2&page=1')
-          .to_return(body: response, status: 200)
+          .to_return(body: billable_metrics_response, status: 200)
       end
 
       it 'returns billable metrics on selected page' do
         response = resource.get_all({ per_page: 2, page: 1 })
 
-        expect(response['billable_metrics'].first['lago_id']).to eq('this-is-lago-id')
-        expect(response['billable_metrics'].first['name']).to eq(factory_billable_metric.name)
+        expect(response['billable_metrics'].first['lago_id']).to eq('b7ab2926-1de8-4428-9bcd-779314ac1000')
+        expect(response['billable_metrics'].first['name']).to eq('bm_name')
         expect(response['meta']['current_page']).to eq(1)
       end
     end
