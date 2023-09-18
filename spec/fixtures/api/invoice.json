@@ -105,7 +105,8 @@
         "item": {
           "type": "charge",
           "code": "seats",
-          "name": "User Seats"
+          "name": "User Seats",
+          "invoice_display_name": "User Seats on Invoice"
         },
         "amount_cents": 100,
         "amount_currency": "EUR",

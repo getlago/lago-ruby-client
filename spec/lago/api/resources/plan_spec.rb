@@ -12,6 +12,7 @@ RSpec.describe Lago::Api::Resources::Plan do
       'plan' => {
         'lago_id' => 'this-is-lago-id',
         'name' => factory_plan.name,
+        'invoice_display_name' => factory_plan.invoice_display_name,
         'created_at' => '2022-04-29T08:59:51Z',
         'code' => factory_plan.code,
         'interval' => factory_plan.amount_cents,
@@ -67,6 +68,7 @@ RSpec.describe Lago::Api::Resources::Plan do
 
         expect(plan.lago_id).to eq('this-is-lago-id')
         expect(plan.name).to eq(factory_plan.name)
+        expect(plan.invoice_display_name).to eq(factory_plan.invoice_display_name)
         expect(plan.taxes.map(&:code)).to eq(tax_codes)
       end
     end
@@ -104,6 +106,7 @@ RSpec.describe Lago::Api::Resources::Plan do
 
         expect(plan.lago_id).to eq('this-is-lago-id')
         expect(plan.name).to eq(factory_plan.name)
+        expect(plan.invoice_display_name).to eq(factory_plan.invoice_display_name)
       end
     end
 
@@ -132,6 +135,7 @@ RSpec.describe Lago::Api::Resources::Plan do
 
         expect(plan.lago_id).to eq('this-is-lago-id')
         expect(plan.name).to eq(factory_plan.name)
+        expect(plan.invoice_display_name).to eq(factory_plan.invoice_display_name)
       end
     end
 
@@ -159,6 +163,7 @@ RSpec.describe Lago::Api::Resources::Plan do
 
         expect(plan.lago_id).to eq('this-is-lago-id')
         expect(plan.name).to eq(factory_plan.name)
+        expect(plan.invoice_display_name).to eq(factory_plan.invoice_display_name)
       end
     end
 
@@ -181,6 +186,7 @@ RSpec.describe Lago::Api::Resources::Plan do
           {
             'lago_id' => 'this-is-lago-id',
             'name' => factory_plan.name,
+            'invoice_display_name' => factory_plan.invoice_display_name,
             'created_at' => '2022-04-29T08:59:51Z',
             'code' => factory_plan.code,
             'interval' => factory_plan.amount_cents,
@@ -199,6 +205,7 @@ RSpec.describe Lago::Api::Resources::Plan do
                 'billable_metric_code' => 'bm_code',
                 'created_at' => '2022-04-29T08:59:51Z',
                 'charge_model' => factory_plan.charges.first[:charge_model],
+                'invoice_display_name' => factory_plan.charges.first[:invoice_display_name],
                 'pay_in_advance' => false,
                 'min_amount_cents' => 0,
                 'properties' => factory_plan.charges.first[:properties],
@@ -228,6 +235,8 @@ RSpec.describe Lago::Api::Resources::Plan do
 
         expect(response['plans'].first['lago_id']).to eq('this-is-lago-id')
         expect(response['plans'].first['name']).to eq(factory_plan.name)
+        expect(response['plans'].first['invoice_display_name']).to eq(factory_plan.invoice_display_name)
+        expect(response['plans'].first['charges'].first['invoice_display_name']).to eq(factory_plan.charges.first[:invoice_display_name])
         expect(response['meta']['current_page']).to eq(1)
       end
     end
@@ -243,6 +252,7 @@ RSpec.describe Lago::Api::Resources::Plan do
 
         expect(response['plans'].first['lago_id']).to eq('this-is-lago-id')
         expect(response['plans'].first['name']).to eq(factory_plan.name)
+        expect(response['plans'].first['invoice_display_name']).to eq(factory_plan.invoice_display_name)
         expect(response['meta']['current_page']).to eq(1)
       end
     end

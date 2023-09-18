@@ -15,6 +15,7 @@ module Lago
         def whitelist_params(params)
           result_hash = {
             name: params[:name],
+            invoice_display_name: params[:invoice_display_name],
             code: params[:code],
             interval: params[:interval],
             description: params[:description],
@@ -43,6 +44,7 @@ module Lago
               :charge_model,
               :pay_in_advance,
               :invoiceable,
+              :invoice_display_name,
               :min_amount_cents,
               :properties,
               :group_properties,
