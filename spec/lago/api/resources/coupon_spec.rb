@@ -6,27 +6,11 @@ RSpec.describe Lago::Api::Resources::Coupon do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
-  let(:factory_coupon) { build(:coupon) }
-  let(:response) do
-    {
-      'coupon' => {
-        'lago_id' => 'this-is-lago-id',
-        'name' => factory_coupon.name,
-        'code' => factory_coupon.code,
-        'description' => factory_coupon.description,
-        'amount_cents' => factory_coupon.amount_cents,
-        'amount_currency' => factory_coupon.amount_currency,
-        'expiration' => factory_coupon.expiration,
-        'expiration_at' => factory_coupon.expiration_at,
-        'coupon_type' => factory_coupon.coupon_type,
-        'frequency' => factory_coupon.frequency,
-        'reusable' => factory_coupon.reusable,
-        'plan_codes' => factory_coupon.applies_to[:plan_codes],
-        'billable_metric_codes' => factory_coupon.applies_to[:billable_metric_codes],
-        'created_at' => '2022-04-29T08:59:51Z',
-      },
-    }.to_json
-  end
+
+  let(:coupon_response) { load_fixture('coupon') }
+  let(:coupon_code) { JSON.parse(coupon_response)['coupon']['code'] }
+  let(:coupon_id) { JSON.parse(coupon_response)['coupon']['lago_id'] }
+
   let(:error_response) do
     {
       'status' => 422,
@@ -36,35 +20,30 @@ RSpec.describe Lago::Api::Resources::Coupon do
   end
 
   describe '#create' do
-    let(:params) { factory_coupon.to_h }
-    let(:body) do
-      {
-        'coupon' => factory_coupon.to_h,
-      }
-    end
+    let(:params) { create(:coupon).to_h }
 
     context 'when coupon is successfully created' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/coupons')
-          .with(body: body)
-          .to_return(body: response, status: 200)
+          .with(body: { coupon: params })
+          .to_return(body: coupon_response, status: 200)
       end
 
       it 'returns an coupon' do
         coupon = resource.create(params)
 
-        expect(coupon.lago_id).to eq('this-is-lago-id')
-        expect(coupon.name).to eq(factory_coupon.name)
-        expect(coupon.description).to eq(factory_coupon.description)
-        expect(coupon.plan_codes).to eq(factory_coupon.applies_to[:plan_codes])
-        expect(coupon.billable_metric_codes).to eq(factory_coupon.applies_to[:billable_metric_codes])
+        expect(coupon.lago_id).to eq(coupon_id)
+        expect(coupon.name).to eq('coupon_name')
+        expect(coupon.description).to eq('coupon_description')
+        expect(coupon.plan_codes).to eq(['plan1'])
+        expect(coupon.billable_metric_codes).to eq([])
       end
     end
 
     context 'when coupon failed to create' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/coupons')
-          .with(body: body)
+          .with(body: { coupon: params })
           .to_return(body: error_response, status: 422)
       end
 
@@ -75,37 +54,32 @@ RSpec.describe Lago::Api::Resources::Coupon do
   end
 
   describe '#update' do
-    let(:params) { factory_coupon.to_h }
-    let(:body) do
-      {
-        'coupon' => factory_coupon.to_h,
-      }
-    end
+    let(:params) { create(:coupon).to_h }
 
     context 'when coupon is successfully updated' do
       before do
-        stub_request(:put, "https://api.getlago.com/api/v1/coupons/#{factory_coupon.code}")
-          .with(body: body)
-          .to_return(body: response, status: 200)
+        stub_request(:put, "https://api.getlago.com/api/v1/coupons/#{coupon_code}")
+          .with(body: { coupon: params })
+          .to_return(body: coupon_response, status: 200)
       end
 
       it 'returns an coupon' do
-        coupon = resource.update(params, factory_coupon.code)
+        coupon = resource.update(params, coupon_code)
 
-        expect(coupon.lago_id).to eq('this-is-lago-id')
-        expect(coupon.name).to eq(factory_coupon.name)
+        expect(coupon.lago_id).to eq(coupon_id)
+        expect(coupon.name).to eq('coupon_name')
       end
     end
 
     context 'when coupon failed to update' do
       before do
-        stub_request(:put, "https://api.getlago.com/api/v1/coupons/#{factory_coupon.code}")
-          .with(body: body)
+        stub_request(:put, "https://api.getlago.com/api/v1/coupons/#{coupon_code}")
+          .with(body: { coupon: params })
           .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
-        expect { resource.update(params, factory_coupon.code) }.to raise_error Lago::Api::HttpError
+        expect { resource.update(params, coupon_code) }.to raise_error Lago::Api::HttpError
       end
     end
   end
@@ -113,26 +87,26 @@ RSpec.describe Lago::Api::Resources::Coupon do
   describe '#get' do
     context 'when coupon is successfully fetched' do
       before do
-        stub_request(:get, "https://api.getlago.com/api/v1/coupons/#{factory_coupon.code}")
-          .to_return(body: response, status: 200)
+        stub_request(:get, "https://api.getlago.com/api/v1/coupons/#{coupon_code}")
+          .to_return(body: coupon_response, status: 200)
       end
 
       it 'returns an coupon' do
-        coupon = resource.get(factory_coupon.code)
+        coupon = resource.get(coupon_code)
 
-        expect(coupon.lago_id).to eq('this-is-lago-id')
-        expect(coupon.name).to eq(factory_coupon.name)
+        expect(coupon.lago_id).to eq(coupon_id)
+        expect(coupon.name).to eq('coupon_name')
       end
     end
 
     context 'when there is an issue' do
       before do
-        stub_request(:get, "https://api.getlago.com/api/v1/coupons/#{factory_coupon.code}")
+        stub_request(:get, "https://api.getlago.com/api/v1/coupons/#{coupon_code}")
           .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
-        expect { resource.get(factory_coupon.code) }.to raise_error Lago::Api::HttpError
+        expect { resource.get(coupon_code) }.to raise_error Lago::Api::HttpError
       end
     end
   end
@@ -140,26 +114,26 @@ RSpec.describe Lago::Api::Resources::Coupon do
   describe '#destroy' do
     context 'when coupon is successfully destroyed' do
       before do
-        stub_request(:delete, "https://api.getlago.com/api/v1/coupons/#{factory_coupon.code}")
-          .to_return(body: response, status: 200)
+        stub_request(:delete, "https://api.getlago.com/api/v1/coupons/#{coupon_code}")
+          .to_return(body: coupon_response, status: 200)
       end
 
       it 'returns an coupon' do
-        coupon = resource.destroy(factory_coupon.code)
+        coupon = resource.destroy(coupon_code)
 
-        expect(coupon.lago_id).to eq('this-is-lago-id')
-        expect(coupon.name).to eq(factory_coupon.name)
+        expect(coupon.lago_id).to eq(coupon_id)
+        expect(coupon.name).to eq('coupon_name')
       end
     end
 
     context 'when there is an issue' do
       before do
-        stub_request(:delete, "https://api.getlago.com/api/v1/coupons/#{factory_coupon.code}")
+        stub_request(:delete, "https://api.getlago.com/api/v1/coupons/#{coupon_code}")
           .to_return(body: error_response, status: 422)
       end
 
       it 'raises an error' do
-        expect { resource.destroy(factory_coupon.code) }.to raise_error Lago::Api::HttpError
+        expect { resource.destroy(coupon_code) }.to raise_error Lago::Api::HttpError
       end
     end
   end
@@ -167,17 +141,7 @@ RSpec.describe Lago::Api::Resources::Coupon do
   describe '#get_all' do
     let(:response) do
       {
-        'coupons' => [
-          {
-            'lago_id' => 'this-is-lago-id',
-            'name' => factory_coupon.name,
-            'code' => factory_coupon.code,
-            'description' => factory_coupon.description,
-            'aggregation_type' => factory_coupon.aggregation_type,
-            'field_name' => factory_coupon.field_name,
-            'created_at' => '2022-04-29T08:59:51Z',
-          }
-        ],
+        'coupons' => [JSON.parse(coupon_response)['coupon']],
         'meta': {
           'current_page' => 1,
           'next_page' => 2,
@@ -197,8 +161,8 @@ RSpec.describe Lago::Api::Resources::Coupon do
       it 'returns coupons on the first page' do
         response = resource.get_all
 
-        expect(response['coupons'].first['lago_id']).to eq('this-is-lago-id')
-        expect(response['coupons'].first['name']).to eq(factory_coupon.name)
+        expect(response['coupons'].first['lago_id']).to eq(coupon_id)
+        expect(response['coupons'].first['name']).to eq('coupon_name')
         expect(response['meta']['current_page']).to eq(1)
       end
     end
@@ -212,8 +176,8 @@ RSpec.describe Lago::Api::Resources::Coupon do
       it 'returns coupons on selected page' do
         response = resource.get_all({ per_page: 2, page: 1 })
 
-        expect(response['coupons'].first['lago_id']).to eq('this-is-lago-id')
-        expect(response['coupons'].first['name']).to eq(factory_coupon.name)
+        expect(response['coupons'].first['lago_id']).to eq(coupon_id)
+        expect(response['coupons'].first['name']).to eq('coupon_name')
         expect(response['meta']['current_page']).to eq(1)
       end
     end
