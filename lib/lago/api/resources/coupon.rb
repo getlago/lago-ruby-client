@@ -26,6 +26,7 @@ module Lago
             frequency_duration: params[:frequency_duration],
             expiration: params[:expiration],
             expiration_at: params[:expiration_at],
+            terminated_at: params[:terminated_at],
           }.compact
 
           whitelist_limitations(params[:applies_to]).tap do |limitations|
