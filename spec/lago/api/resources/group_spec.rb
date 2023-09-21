@@ -8,7 +8,7 @@ RSpec.describe Lago::Api::Resources::Group do
   let(:client) { Lago::Api::Client.new }
   let(:group) { build(:group) }
   let(:lago_id) { 'lago_internal_id' }
-  let(:metric) { build(:billable_metric) }
+  let(:metric) { build(:create_billable_metric) }
 
   let(:not_found_response) do
     {

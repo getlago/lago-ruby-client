@@ -20,6 +20,7 @@ module Lago
               description: params[:description],
               recurring: params[:recurring],
               aggregation_type: params[:aggregation_type],
+              weighted_interval: params[:weighted_interval],
               field_name: params[:field_name],
               group: params[:group],
             }.compact,
