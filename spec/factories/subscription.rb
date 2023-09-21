@@ -8,6 +8,7 @@ FactoryBot.define do
     status { 'active' }
     billing_time { 'calendar' }
     started_at { '2022-05-05T12:27:30Z' }
+    ending_at { '2022-08-05T00:00:00Z' }
     subscription_date { '2022-05-05' }
     terminated_at { nil }
     canceled_at { nil }
