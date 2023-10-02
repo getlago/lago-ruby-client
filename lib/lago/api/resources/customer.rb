@@ -14,14 +14,26 @@ module Lago
 
         def current_usage(external_customer_id, external_subscription_id)
           uri = URI(
-            "#{client.base_api_url}#{api_resource}/#{external_customer_id}/current_usage?external_subscription_id=#{external_subscription_id}"
+            "#{client.base_api_url}#{api_resource}/#{external_customer_id}" \
+              "/current_usage?external_subscription_id=#{external_subscription_id}",
           )
           connection.get(uri, identifier: nil)
         end
 
+        def past_usage(external_customer_id, external_subscription_id, options = {})
+          uri = URI(
+            "#{client.base_api_url}#{api_resource}/#{external_customer_id}/past_usage",
+          )
+
+          connection.get_all(
+            options.merge(external_subscription_id: external_subscription_id),
+            uri,
+          )
+        end
+
         def portal_url(external_customer_id)
           uri = URI(
-            "#{client.base_api_url}#{api_resource}/#{external_customer_id}/portal_url"
+            "#{client.base_api_url}#{api_resource}/#{external_customer_id}/portal_url",
           )
 
           response = connection.get(uri, identifier: nil)[root_name]
