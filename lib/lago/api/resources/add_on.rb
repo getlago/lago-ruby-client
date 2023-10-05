@@ -16,6 +16,7 @@ module Lago
           {
             root_name => {
               name: params[:name],
+              invoice_display_name: params[:invoice_display_name],
               code: params[:code],
               description: params[:description],
               amount_cents: params[:amount_cents],

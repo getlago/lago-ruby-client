@@ -12,6 +12,7 @@ RSpec.describe Lago::Api::Resources::AddOn do
       'add_on' => {
         'lago_id' => 'this-is-lago-id',
         'name' => factory_add_on.name,
+        'invoice_display_name' => factory_add_on.invoice_display_name,
         'code' => factory_add_on.code,
         'amount_cents' => factory_add_on.amount_cents,
         'amount_currency' => factory_add_on.amount_currency,
@@ -63,6 +64,7 @@ RSpec.describe Lago::Api::Resources::AddOn do
 
         expect(add_on.lago_id).to eq('this-is-lago-id')
         expect(add_on.name).to eq(factory_add_on.name)
+        expect(add_on.invoice_display_name).to eq(factory_add_on.invoice_display_name)
         expect(add_on.taxes.map(&:code)).to eq(['tax_code'])
       end
     end
@@ -100,6 +102,7 @@ RSpec.describe Lago::Api::Resources::AddOn do
 
         expect(add_on.lago_id).to eq('this-is-lago-id')
         expect(add_on.name).to eq(factory_add_on.name)
+        expect(add_on.invoice_display_name).to eq(factory_add_on.invoice_display_name)
       end
     end
 
@@ -128,6 +131,7 @@ RSpec.describe Lago::Api::Resources::AddOn do
 
         expect(add_on.lago_id).to eq('this-is-lago-id')
         expect(add_on.name).to eq(factory_add_on.name)
+        expect(add_on.invoice_display_name).to eq(factory_add_on.invoice_display_name)
       end
     end
 
@@ -155,6 +159,7 @@ RSpec.describe Lago::Api::Resources::AddOn do
 
         expect(add_on.lago_id).to eq('this-is-lago-id')
         expect(add_on.name).to eq(factory_add_on.name)
+        expect(add_on.invoice_display_name).to eq(factory_add_on.invoice_display_name)
       end
     end
 
@@ -177,6 +182,7 @@ RSpec.describe Lago::Api::Resources::AddOn do
           {
             'lago_id' => 'this-is-lago-id',
             'name' => factory_add_on.name,
+            'invoice_display_name' => factory_add_on.invoice_display_name,
             'code' => factory_add_on.code,
             'amount_cents' => factory_add_on.amount_cents,
             'amount_currency' => factory_add_on.amount_currency,
@@ -205,6 +211,7 @@ RSpec.describe Lago::Api::Resources::AddOn do
 
         expect(response['add_ons'].first['lago_id']).to eq('this-is-lago-id')
         expect(response['add_ons'].first['name']).to eq(factory_add_on.name)
+        expect(response['add_ons'].first['invoice_display_name']).to eq(factory_add_on.invoice_display_name)
         expect(response['meta']['current_page']).to eq(1)
       end
     end
@@ -220,6 +227,7 @@ RSpec.describe Lago::Api::Resources::AddOn do
 
         expect(response['add_ons'].first['lago_id']).to eq('this-is-lago-id')
         expect(response['add_ons'].first['name']).to eq(factory_add_on.name)
+        expect(response['add_ons'].first['invoice_display_name']).to eq(factory_add_on.invoice_display_name)
         expect(response['meta']['current_page']).to eq(1)
       end
     end

@@ -90,7 +90,14 @@ module Lago
           processed_fees = []
 
           fees.each do |f|
-            result = (f || {}).slice(:add_on_code, :unit_amount_cents, :units, :description, :tax_codes)
+            result = (f || {}).slice(
+              :add_on_code,
+              :unit_amount_cents,
+              :units,
+              :description,
+              :tax_codes,
+              :invoice_display_name,
+            )
 
             processed_fees << result unless result.empty?
           end

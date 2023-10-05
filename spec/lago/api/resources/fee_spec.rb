@@ -8,7 +8,9 @@ RSpec.describe Lago::Api::Resources::Fee do
   let(:client) { Lago::Api::Client.new }
 
   let(:fee_response) { load_fixture('fee') }
-  let(:fee_id) { JSON.parse(fee_response)['fee']['lago_id'] }
+  let(:fee_json) { JSON.parse(fee_response)['fee'] }
+  let(:fee_id) { fee_json['lago_id'] }
+  let(:fee_invoice_display_name) { fee_json['invoice_display_name'] }
 
   let(:error_response) do
     {
@@ -29,6 +31,7 @@ RSpec.describe Lago::Api::Resources::Fee do
         fee = resource.get(fee_id)
 
         expect(fee.lago_id).to eq(fee_id)
+        expect(fee.invoice_display_name).to eq(fee_invoice_display_name)
       end
     end
 
@@ -68,6 +71,7 @@ RSpec.describe Lago::Api::Resources::Fee do
         response = resource.get_all
 
         expect(response['fees'].first['lago_id']).to eq(fee_id)
+        expect(response['fees'].first['invoice_display_name']).to eq(fee_invoice_display_name)
       end
 
       context 'when filters are present' do

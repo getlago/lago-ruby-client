@@ -27,7 +27,8 @@
           "item": {
             "type": "charge",
             "code": "seats",
-            "name": "User Seats"
+            "name": "User Seats",
+            "invoice_display_name": "User Seats Invoice"
           },
           "credit_amount_cents": 100,
           "credit_amount_currency": "EUR",

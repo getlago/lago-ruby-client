@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :plan, class: OpenStruct do
     name { 'plan1' }
+    invoice_display_name { 'PLN1' }
     code { 'plan_code' }
     interval { 'monthly' }
     description { 'desc' }
@@ -18,6 +19,7 @@ FactoryBot.define do
           charge_model: 'standard',
           pay_in_advance: false,
           invoiceable: true,
+          invoice_display_name: 'Charge 1',
           min_amount_cents: 0,
           properties: { amount: '0.22' },
         },
