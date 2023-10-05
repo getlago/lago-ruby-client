@@ -156,6 +156,32 @@ RSpec.describe Lago::Api::Resources::Subscription do
     end
   end
 
+  describe '#get' do
+    context 'when subscription is successfully fetched' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{factory_subscription.external_id}")
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns a subscription' do
+        subscription = resource.get(factory_subscription.external_id)
+
+        expect(subscription.external_id).to eq(factory_subscription.external_id)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{factory_subscription.external_id}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get(factory_subscription.external_id) }.to raise_error Lago::Api::HttpError
+      end
+    end
+  end
+
   describe '#get_all' do
     let(:response) do
       {
