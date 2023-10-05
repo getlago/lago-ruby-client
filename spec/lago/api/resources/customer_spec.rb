@@ -112,6 +112,67 @@ RSpec.describe Lago::Api::Resources::Customer do
     end
   end
 
+  describe '#past_usage' do
+    let(:customer_usage_response) { load_fixture('customer_past_usage') }
+    let(:subscription_external_id) { '123' }
+
+    context 'when the customer exists' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/past_usage?external_subscription_id=#{subscription_external_id}")
+          .to_return(body: customer_usage_response, status: 200)
+      end
+
+      it 'returns the past usage of the customer' do
+        response = resource.past_usage(customer_external_id, subscription_external_id)
+
+        expect(response['usage_periods'].count).to eq(1)
+        expect(response['usage_periods'].first['from_datetime']).to eq('2022-07-01T00:00:00Z')
+      end
+    end
+
+    context 'with a filter on a billable metric code' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/past_usage?external_subscription_id=#{subscription_external_id}&billable_metric_code=bm_code")
+          .to_return(body: customer_usage_response, status: 200)
+      end
+
+      it 'returns the past usage of the customer' do
+        response = resource.past_usage(customer_external_id, subscription_external_id, billable_metric_code: 'bm_code')
+
+        expect(response['usage_periods'].count).to eq(1)
+        expect(response['usage_periods'].first['from_datetime']).to eq('2022-07-01T00:00:00Z')
+      end
+    end
+
+    context 'when the customer does not exists' do
+      let(:customer_external_id) { 'DOESNOTEXIST' }
+
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/past_usage?external_subscription_id=#{subscription_external_id}")
+          .to_return(body: JSON.generate(status: 404, error: 'Not Found'), status: 404)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.past_usage(customer_external_id, subscription_external_id)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+
+    context 'when the customer does not have a subscription' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/past_usage?external_subscription_id=#{subscription_external_id}")
+          .to_return(body: JSON.generate(status: 422, error: 'no_active_subscription'), status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.past_usage(customer_external_id, subscription_external_id)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
   describe '#plan_url' do
     context 'when the customer exists' do
       before do
