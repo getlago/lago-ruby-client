@@ -34,6 +34,9 @@ RSpec.describe Lago::Api::Resources::Subscription do
         subscription_date: factory_subscription.subscription_date,
         billing_time: factory_subscription.billing_time,
         ending_at: factory_subscription.ending_at,
+        plan_overrides: {
+          amount_cents: 1000,
+        }
       }
     end
     let(:body) do
