@@ -10,7 +10,8 @@
       "type": "charge",
       "code": "fee_code",
       "name": "Fee Code",
-      "invoice_display_name": "Fee C1"
+      "invoice_display_name": "Fee C1",
+      "group_invoice_display_name": "Transactions - ACH"
     },
     "amount_cents": 120,
     "amount_currency": "EUR",
