@@ -4,45 +4,36 @@ require 'spec_helper'
 
 RSpec.describe Lago::Api::Resources::Event do
   subject(:resource) { described_class.new(client) }
+
   let(:client) { Lago::Api::Client.new }
-  let(:factory_event) { build(:event) }
-  let(:factory_batch_event) { build(:batch_event) }
+
+  let(:event_response) { load_fixture('event') }
 
   describe '#create' do
-    let(:params) { factory_event.to_h }
-    let(:body) do
-      {
-        'event' => factory_event.to_h
-      }
-    end
+    let(:params) { create(:event).to_h }
 
     context 'when event is successfully processed' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/events')
-          .with(body: body)
-          .to_return(body: '', status: 200)
+          .with(body: { event: params })
+          .to_return(body: event_response, status: 200)
       end
 
       it 'returns true' do
-        response = resource.create(params)
+        event = resource.create(params)
 
-        expect(response).to be true
+        expect(event.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
       end
     end
   end
 
   describe '#batch_create' do
-    let(:params) { factory_batch_event.to_h }
-    let(:body) do
-      {
-        'event' => factory_batch_event.to_h
-      }
-    end
+    let(:params) { build(:batch_event).to_h }
 
     context 'when event is successfully processed' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/events/batch')
-          .with(body: body)
+          .with(body: { event: params })
           .to_return(body: '', status: 200)
       end
 
@@ -55,29 +46,31 @@ RSpec.describe Lago::Api::Resources::Event do
   end
 
   describe '#get' do
+    let(:event_id) { '1a901a90-1a90-1a90-1a90-1a901a901a90"' }
+
     context 'when the event exists' do
       before do
-        event_json = JSON.generate({ 'event' => factory_event.to_h })
-
-        stub_request(:get, 'https://api.getlago.com/api/v1/events/UNIQUE_ID')
-          .to_return(body: event_json, status: 200)
+        stub_request(:get, "https://api.getlago.com/api/v1/events/#{event_id}")
+          .to_return(body: event_response, status: 200)
       end
 
       it 'returns the matching event if it exists' do
-        response = resource.get(factory_event.transaction_id)
+        response = resource.get(event_id)
 
-        expect(response.transaction_id).to eq factory_event.transaction_id
+        expect(response.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
       end
     end
 
     context 'when the event does not exist' do
+      let(:event_id) { 'DOESNOTEXIST' }
+
       before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/events/DOESNOTEXIST')
+        stub_request(:get, "https://api.getlago.com/api/v1/events/#{event_id}")
           .to_return(body: JSON.generate({ status: 404, error: 'Not Found' }), status: 404)
       end
 
       it 'raises an error' do
-        expect { resource.get('DOESNOTEXIST') }.to raise_error Lago::Api::HttpError
+        expect { resource.get(event_id) }.to raise_error(Lago::Api::HttpError)
       end
     end
   end
