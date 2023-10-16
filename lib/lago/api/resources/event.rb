@@ -12,11 +12,6 @@ module Lago
           'event'
         end
 
-        def create(params)
-          payload = whitelist_params(params)
-          connection.post(payload)
-        end
-
         def batch_create(params)
           uri = URI("#{client.base_api_url}#{api_resource}/batch")
 
