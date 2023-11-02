@@ -167,4 +167,21 @@ RSpec.describe Lago::Api::Resources::CreditNote do
       expect(response.lago_id).to eq(credit_note_id)
     end
   end
+
+  describe '#estimate' do
+    let(:estimate_response) { load_fixture(:credit_note_estimated) }
+    let(:params) { create(:estimate_credit_note) }
+
+    before do
+      stub_request(:post, "https://api.getlago.com/api/v1/credit_notes/estimate")
+        .with(body: { credit_note: params.to_h })
+        .to_return(body: estimate_response, status: 200)
+    end
+
+    it 'returns an estimated credit_note' do
+      response = resource.estimate(params)
+
+      expect(response.sub_total_excluding_taxes_amount_cents).to eq(200)
+    end
+  end
 end

@@ -15,4 +15,9 @@ FactoryBot.define do
   factory :update_credit_note, class: OpenStruct do
     refund_status { 'pending' }
   end
+
+  factory :estimate_credit_note, class: OpenStruct do
+    invoice_id { '1a901a90-1a90-1a90-1a90-1a901a901a90' }
+    items { build_list(:create_credit_note_item, 2).map(&:to_h) }
+  end
 end

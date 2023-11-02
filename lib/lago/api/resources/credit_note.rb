@@ -57,6 +57,25 @@ module Lago
 
           JSON.parse(response.to_json, object_class: OpenStruct).credit_note
         end
+
+        def estimate(params)
+          uri = URI("#{client.base_api_url}#{api_resource}/estimate")
+
+          payload = whitelist_estimate_params(params)
+          response = connection.post(payload, uri)['estimated_credit_note']
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def whitelist_estimate_params(params)
+          result_hash = { invoice_id: params[:invoice_id] }.compact
+
+          whitelist_items(params[:items] || []).tap do |items|
+            result_hash[:items] = items unless items.empty?
+          end
+
+          { root_name => result_hash }
+        end
       end
     end
   end
