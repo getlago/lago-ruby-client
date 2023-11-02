@@ -20,6 +20,7 @@
     "total_amount_cents": 140,
     "total_amount_currency": "EUR",
     "units": "10.0",
+    "precise_unit_amount": "14.0",
     "events_count": 10,
     "applied_taxes": [
       {
