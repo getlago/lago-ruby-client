@@ -17,6 +17,7 @@ module Lago
             webhook_url: params[:webhook_url],
             webhook_urls: params[:webhook_urls],
             country: params[:country],
+            default_currency: params[:default_currency],
             address_line1: params[:address_line1],
             address_line2: params[:address_line2],
             state: params[:state],
