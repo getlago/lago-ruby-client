@@ -1,0 +1,16 @@
+{
+  "invoiced_usages": [
+    {
+      "month": "2023-11-01T00:00:00.000Z",
+      "amount_cents": 100,
+      "payment_status": "pending",
+      "currency": "EUR"
+    },
+    {
+      "month": "2023-12-01T00:00:00.000Z",
+      "amount_cents": 200,
+      "payment_status": "pending",
+      "currency": "USD"
+    }
+  ]
+}
