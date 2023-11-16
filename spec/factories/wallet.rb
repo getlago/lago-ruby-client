@@ -6,5 +6,15 @@ FactoryBot.define do
     rate_amount { '1' }
     paid_credits { '100' }
     granted_credits { '100' }
+    recurring_transaction_rules do
+      [
+        {
+          rule_type: 'interval',
+          interval: 'monthly',
+          paid_credits: '105',
+          granted_credits: '105',
+        },
+      ]
+    end
   end
 end

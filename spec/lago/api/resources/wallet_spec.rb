@@ -17,6 +17,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
         'balance_cents' => 10_000,
         'rate_amount' => factory_wallet.rate_amount,
         'created_at' => '2022-04-29T08:59:51Z',
+        'recurring_transaction_rules' => factory_wallet.recurring_transaction_rules,
       }
     }.to_json
   end
@@ -48,6 +49,8 @@ RSpec.describe Lago::Api::Resources::Wallet do
 
         expect(wallet.lago_id).to eq('this-is-lago-id')
         expect(wallet.name).to eq(factory_wallet.name)
+        expect(wallet.recurring_transaction_rules.first.rule_type).to eq('interval')
+        expect(wallet.recurring_transaction_rules.first.interval).to eq('monthly')
       end
     end
 
