@@ -41,6 +41,16 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).portal_url
         end
 
+        def checkout_url(external_customer_id)
+          uri = URI(
+            "#{client.base_api_url}#{api_resource}/#{external_customer_id}/checkout_url",
+          )
+
+          response = connection.post(uri, identifier: nil)[root_name]
+
+          JSON.parse(response.to_json, object_class: OpenStruct).checkout_url
+        end
+
         def whitelist_params(params)
           result_hash = {
             external_id: params[:external_id],
