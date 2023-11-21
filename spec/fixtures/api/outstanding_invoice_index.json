@@ -1,0 +1,18 @@
+{
+  "outstanding_invoices": [
+    {
+      "month": "2023-11-01T00:00:00.000Z",
+      "payment_status": "pending",
+      "invoices_count": 10,
+      "amount_cents": 100,
+      "currency": "EUR"
+    },
+    {
+      "month": "2023-12-01T00:00:00.000Z",
+      "payment_status": "pending",
+      "invoices_count": 7,
+      "amount_cents": 200,
+      "currency": "USD"
+    }
+  ]
+}
