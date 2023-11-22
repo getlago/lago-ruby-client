@@ -34,7 +34,7 @@ module Lago
       end
 
       def get(path = uri.path, identifier:)
-        uri_path = identifier.nil? ? path : "#{path}/#{identifier}"
+        uri_path = identifier.nil? ? path : "#{path}/#{URI.encode_www_form_component(identifier)}"
         response = http_client.send_request(
           'GET',
           uri_path,
