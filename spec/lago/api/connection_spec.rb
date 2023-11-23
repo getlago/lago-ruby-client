@@ -6,9 +6,11 @@ RSpec.describe Lago::Api::Connection do
   subject(:connection) do
     described_class.new(
       'fake-api-key',
-      URI('https://testapi.example.org/')
+      uri
     )
   end
+
+  let(:uri) { URI('https://testapi.example.org') }
 
   context 'when an unsuccessful request is made' do
     before do
@@ -21,6 +23,24 @@ RSpec.describe Lago::Api::Connection do
         expect(exception).to be_a(Lago::Api::HttpError)
         expect(exception.error_code).to eq 404
       }
+    end
+  end
+
+  describe '#get' do
+    let(:identifier) { 'gid://app/Customer/1234' }
+
+    before do
+      stub_request(:get, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F1234')
+
+      allow(URI).to receive(:encode_www_form_component)
+        .with(identifier)
+        .and_return('gid:%2F%2Fapp%2FCustomer%2F1234')
+
+      connection.get(identifier: identifier)
+    end
+
+    it 'encodes the identifier' do
+      expect(URI).to have_received(:encode_www_form_component).with(identifier)
     end
   end
 end
