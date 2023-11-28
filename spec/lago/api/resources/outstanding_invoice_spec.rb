@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Lago::Api::Resources::OutstandingInvoice do
+RSpec.describe Lago::Api::Resources::InvoiceCollection do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
@@ -16,39 +16,39 @@ RSpec.describe Lago::Api::Resources::OutstandingInvoice do
   end
 
   describe '#get_all' do
-    let(:outstanding_invoices_response) { load_fixture('outstanding_invoice_index') }
+    let(:invoice_collections_response) { load_fixture('invoice_collection_index') }
 
     context 'when there is no options' do
       before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/outstanding_invoices')
-          .to_return(body: outstanding_invoices_response, status: 200)
+        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoice_collection')
+          .to_return(body: invoice_collections_response, status: 200)
       end
 
       it 'returns gross revenue' do
         response = resource.get_all
 
-        expect(response['outstanding_invoices'].first['currency']).to eq('EUR')
-        expect(response['outstanding_invoices'].first['amount_cents']).to eq(100)
+        expect(response['invoice_collections'].first['currency']).to eq('EUR')
+        expect(response['invoice_collections'].first['amount_cents']).to eq(100)
       end
     end
 
     context 'when options are present' do
       before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/outstanding_invoices?currency=EUR')
-          .to_return(body: outstanding_invoices_response, status: 200)
+        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoice_collection?currency=EUR')
+          .to_return(body: invoice_collections_response, status: 200)
       end
 
-      it 'returns gross revenue' do
+      it 'returns invoice collection' do
         response = resource.get_all({ currency: 'EUR' })
 
-        expect(response['outstanding_invoices'].first['currency']).to eq('EUR')
-        expect(response['outstanding_invoices'].first['amount_cents']).to eq(100)
+        expect(response['invoice_collections'].first['currency']).to eq('EUR')
+        expect(response['invoice_collections'].first['amount_cents']).to eq(100)
       end
     end
 
     context 'when there is an issue' do
       before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/outstanding_invoices')
+        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoice_collection')
           .to_return(body: error_response, status: 422)
       end
 

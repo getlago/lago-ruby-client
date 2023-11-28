@@ -3,13 +3,13 @@
 module Lago
   module Api
     module Resources
-      class OutstandingInvoice < Base
+      class InvoiceCollection < Base
         def api_resource
-          'analytics/outstanding_invoices'
+          'analytics/invoice_collection'
         end
 
         def root_name
-          'outstanding_invoice'
+          'invoice_collection'
         end
       end
     end
