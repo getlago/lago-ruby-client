@@ -22,6 +22,7 @@
     "units": "10.0",
     "precise_unit_amount": "14.0",
     "events_count": 10,
+    "amount_details": {},
     "applied_taxes": [
       {
         "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
