@@ -17,7 +17,7 @@
     "net_payment_term": 0,
     "tax_identification_number": "EU123456789",
     "timezone": "America/New_York",
-    "document_numbering": 1,
+    "document_numbering": "per_customer",
     "document_number_prefix": "ORG-1234",
     "billing_configuration": {
       "invoice_footer": null,
