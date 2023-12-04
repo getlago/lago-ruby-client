@@ -16,6 +16,8 @@ FactoryBot.define do
     legal_number { 'legal2' }
     net_payment_term { 0 }
     tax_identification_number { 'EU123456789' }
+    document_numbering { 1 }
+    document_number_prefix { 'ORG-1234' }
     billing_configuration do
       {
         invoice_footer: 'footer',

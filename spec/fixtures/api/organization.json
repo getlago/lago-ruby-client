@@ -17,6 +17,8 @@
     "net_payment_term": 0,
     "tax_identification_number": "EU123456789",
     "timezone": "America/New_York",
+    "document_numbering": 1,
+    "document_number_prefix": "ORG-1234",
     "billing_configuration": {
       "invoice_footer": null,
       "invoice_grace_period": 3,
