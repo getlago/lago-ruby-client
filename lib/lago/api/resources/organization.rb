@@ -30,6 +30,8 @@ module Lago
             tax_identification_number: params[:tax_identification_number],
             timezone: params[:timezone],
             email_settings: params[:email_settings],
+            document_numbering: params[:document_numbering],
+            document_number_prefix: params[:document_number_prefix],
           }.compact
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
