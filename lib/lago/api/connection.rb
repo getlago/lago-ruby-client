@@ -22,7 +22,7 @@ module Lago
       end
 
       def put(path = uri.path, identifier:, body:)
-        uri_path = identifier.nil? ? path : "#{path}/#{identifier}"
+        uri_path = identifier.nil? ? path : "#{path}/#{URI.encode_www_form_component(identifier)}"
         response = http_client.send_request(
           'PUT',
           uri_path,
@@ -47,7 +47,7 @@ module Lago
 
       def destroy(path = uri.path, identifier:, options: nil)
         uri_path = path
-        uri_path += "/#{identifier}" if identifier
+        uri_path += "/#{URI.encode_www_form_component(identifier)}" if identifier
         uri_path += "?#{URI.encode_www_form(options)}" unless options.nil?
         response = http_client.send_request(
           'DELETE',
