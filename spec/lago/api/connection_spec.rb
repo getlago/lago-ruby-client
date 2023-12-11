@@ -43,4 +43,40 @@ RSpec.describe Lago::Api::Connection do
       expect(URI).to have_received(:encode_www_form_component).with(identifier)
     end
   end
+
+  describe '#put' do
+    let(:identifier) { 'gid://app/Customer/1234' }
+
+    before do
+      stub_request(:put, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F1234')
+
+      allow(URI).to receive(:encode_www_form_component)
+        .with(identifier)
+        .and_return('gid:%2F%2Fapp%2FCustomer%2F1234')
+
+      connection.put(identifier: identifier, body: nil)
+    end
+
+    it 'encodes the identifier' do
+      expect(URI).to have_received(:encode_www_form_component).with(identifier)
+    end
+  end
+
+  describe '#destroy' do
+    let(:identifier) { 'gid://app/Customer/1234' }
+
+    before do
+      stub_request(:delete, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F1234')
+
+      allow(URI).to receive(:encode_www_form_component)
+        .with(identifier)
+        .and_return('gid:%2F%2Fapp%2FCustomer%2F1234')
+
+      connection.destroy(identifier: identifier)
+    end
+
+    it 'encodes the identifier' do
+      expect(URI).to have_received(:encode_www_form_component).with(identifier)
+    end
+  end
 end
