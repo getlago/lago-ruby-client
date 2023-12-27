@@ -258,9 +258,12 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
 
       it 'returns the checkout URL' do
-        checkout_url_response = resource.checkout_url(customer_external_id)
+        response = resource.checkout_url(customer_external_id)
 
-        expect(checkout_url_response).to eq('https://checkout.stripe.com/c/pay/foobar')
+        expect(response.checkout_url).to eq('https://checkout.stripe.com/c/pay/foobar')
+        expect(response.lago_customer_id).to eq(customer_external_id)
+        expect(response.external_customer_id).to eq("1a901a90-1a90-1a90-1a90-1a901a901a90")
+        expect(response.payment_provider).to eq("stripe")
       end
     end
 
