@@ -234,4 +234,53 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
     end
   end
+  
+  describe '#checkout_url' do
+    let(:response_body) do
+      {
+        "customer": {
+          "lago_customer_id": customer_external_id,
+          "external_customer_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+          "payment_provider": "stripe",
+          "checkout_url": "https://checkout.stripe.com/c/pay/foobar"
+        }
+      }.to_json
+    end
+
+    context 'when the customer exists' do
+      before do
+        # NOTE: Api makes POST to /customers endpoint first
+        # stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/checkout_url")
+        #   .to_return(body: response_body, status: 200)
+
+        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
+          .to_return(body: response_body, status: 200)
+      end
+
+      it 'returns the checkout URL' do
+        checkout_url_response = resource.checkout_url(customer_external_id)
+
+        expect(checkout_url_response).to eq('https://checkout.stripe.com/c/pay/foobar')
+      end
+    end
+
+    context 'when the customer does not exists' do
+      let(:customer_external_id) { 'DOESNOTEXIST' }
+
+      before do
+        # NOTE: Api makes POST to /customers endpoint first
+        # stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/checkout_url")
+        #   .to_return(body: JSON.generate(status: 404, error: 'Not Found'), status: 404)
+
+        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
+          .to_return(body: JSON.generate(status: 404, error: 'Not Found'), status: 404)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.checkout_url(customer_external_id)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
 end
