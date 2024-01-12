@@ -41,14 +41,7 @@ module Lago
 
         def whitelist_batch_params(params)
           {
-            root_name => {
-              transaction_id: params[:transaction_id],
-              external_customer_id: params[:external_customer_id],
-              code: params[:code],
-              timestamp: params[:timestamp],
-              external_subscription_ids: params[:external_subscription_ids],
-              properties: params[:properties],
-            }.compact,
+            events: params[:events],
           }
         end
 
