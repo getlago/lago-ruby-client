@@ -33,7 +33,7 @@ RSpec.describe Lago::Api::Resources::Event do
     context 'when event is successfully processed' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/events/batch')
-          .with(body: { event: params })
+          .with(body: params)
           .to_return(body: '', status: 200)
       end
 
