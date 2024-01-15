@@ -88,6 +88,7 @@ module Lago
           (billing_params || {}).slice(
             :invoice_grace_period,
             :payment_provider,
+            :payment_provider_code,
             :provider_customer_id,
             :sync,
             :sync_with_provider,
