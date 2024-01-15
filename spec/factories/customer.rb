@@ -22,6 +22,7 @@ FactoryBot.define do
       {
         invoice_grace_period: 3,
         payment_provider: 'stripe',
+        payment_provider_code: 'stripe-eu-1',
         provider_customer_id: 'cus_123456',
         sync_with_provider: true,
         document_locale: 'fr',
