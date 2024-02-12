@@ -261,4 +261,26 @@ RSpec.describe Lago::Api::Resources::Invoice do
       expect(result).to eq(true)
     end
   end
+
+  describe '#payment_url' do
+    let(:url_response) do
+      {
+        'invoice_payment_details' => {
+          'payment_url' => 'https://example.com',
+        }
+      }.to_json
+    end
+
+    before do
+      stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/payment_url")
+        .with(body: {})
+        .to_return(body: url_response, status: 200)
+    end
+
+    it 'returns payment url' do
+      result = resource.payment_url(invoice_id)
+
+      expect(result.payment_url).to eq('https://example.com')
+    end
+  end
 end

@@ -49,6 +49,13 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
+        def payment_url(invoice_id)
+          path = "/api/v1/invoices/#{invoice_id}/payment_url"
+          response = connection.post({}, path)['invoice_payment_details']
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def whitelist_params(params)
           result = {
             payment_status: params[:payment_status],
