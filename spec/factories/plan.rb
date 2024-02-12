@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :plan, class: OpenStruct do
+  factory :create_plan, class: OpenStruct do
     name { 'plan1' }
     invoice_display_name { 'PLN1' }
     code { 'plan_code' }

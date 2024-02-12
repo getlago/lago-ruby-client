@@ -11,7 +11,10 @@
       "code": "fee_code",
       "name": "Fee Code",
       "invoice_display_name": "Fee C1",
-      "group_invoice_display_name": "Transactions - ACH"
+      "group_invoice_display_name": "Transactions - ACH",
+      "grouped_by": {
+        "agent_name": "aragorn"
+      }
     },
     "amount_cents": 120,
     "amount_currency": "EUR",
