@@ -12,6 +12,10 @@ module Lago
           'customer'
         end
 
+        def update(params, _identifier = nil)
+          create(params)
+        end
+
         def current_usage(external_customer_id, external_subscription_id)
           uri = URI(
             "#{client.base_api_url}#{api_resource}/#{external_customer_id}" \
