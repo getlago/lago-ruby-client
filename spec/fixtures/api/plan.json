@@ -32,6 +32,20 @@
         }
       }
     ],
+    "minimum_commitment": {
+      "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+      "plan_code": "plan_code",
+      "invoice_display_name": "Minimum commitment (C1)",
+      "amount_cents": 200,
+      "interval": "monthly",
+      "created_at": "2022-04-29T08:59:51Z",
+      "updated_at": "2022-04-29T08:59:51Z",
+      "taxes": [
+        {
+          "code": "tax_code"
+        }
+      ]
+    },
     "taxes": [
       {
         "code": "tax_code"

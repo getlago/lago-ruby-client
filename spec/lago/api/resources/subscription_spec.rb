@@ -36,6 +36,10 @@ RSpec.describe Lago::Api::Resources::Subscription do
         ending_at: factory_subscription.ending_at,
         plan_overrides: {
           amount_cents: 1000,
+          minimum_commitment: {
+            amount_cents: 2000,
+            invoice_display_name: 'Minimum commitment (C1)',
+          },
         }
       }
     end
@@ -99,8 +103,8 @@ RSpec.describe Lago::Api::Resources::Subscription do
         stub_request(:delete, 'https://api.getlago.com/api/v1/subscriptions/456?status=pending')
         .to_return(body: response_with_pending, status: 200)
       end
-      
-      it 'returns subscription' do  
+
+      it 'returns subscription' do
         subscription = resource.destroy('456', options: { status: 'pending' })
 
         expect(subscription.external_customer_id).to eq(pending_subscription.external_customer_id)

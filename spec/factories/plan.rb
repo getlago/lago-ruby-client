@@ -25,5 +25,11 @@ FactoryBot.define do
         },
       ]
     end
+    minimum_commitment do
+      {
+        invoice_display_name: 'Minimum commitment (C1)',
+        amount_cents: 100,
+      }
+    end
   end
 end
