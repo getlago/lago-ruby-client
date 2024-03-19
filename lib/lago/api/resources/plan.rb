@@ -31,7 +31,19 @@ module Lago
             result_hash[:charges] = charges unless charges.empty?
           end
 
+          whitelist_minimum_commitment(params[:minimum_commitment]).tap do |minimum_commitment|
+            result_hash[:minimum_commitment] = minimum_commitment
+          end
+
           { root_name => result_hash }
+        end
+
+        def whitelist_minimum_commitment(minimum_commitment)
+          minimum_commitment.slice(
+            :amount_cents,
+            :invoice_display_name,
+            :tax_codes,
+          )
         end
 
         def whitelist_charges(charges)
