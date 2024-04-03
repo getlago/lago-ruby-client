@@ -39,7 +39,7 @@ module Lago
         end
 
         def whitelist_minimum_commitment(minimum_commitment)
-          minimum_commitment.slice(
+          minimum_commitment&.slice(
             :amount_cents,
             :invoice_display_name,
             :tax_codes,
