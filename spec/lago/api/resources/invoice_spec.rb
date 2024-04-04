@@ -248,6 +248,24 @@ RSpec.describe Lago::Api::Resources::Invoice do
     end
   end
 
+  describe '#lose_dispute' do
+    let(:response_body) do
+      { 'invoice' => factory_invoice.to_h }
+    end
+
+    before do
+      stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/lose_dispute")
+        .with(body: {}).to_return(body: invoice_response, status: 200)
+    end
+
+    it 'returns invoice' do
+      invoice = resource.lose_dispute(invoice_id)
+
+      expect(invoice.lago_id).to eq(invoice_id)
+      expect(invoice.payment_dispute_lost_at).to eq('2022-04-29T08:59:51Z')
+    end
+  end
+
   describe '#retry_payment' do
     before do
       stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/retry_payment")

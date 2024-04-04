@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lago-ruby-client (1.0.0)
+    lago-ruby-client (1.1.0)
       jwt
       openssl
 
@@ -16,6 +16,7 @@ GEM
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
+    base64 (0.2.0)
     concurrent-ruby (1.2.2)
     crack (0.4.5)
       rexml
@@ -31,7 +32,8 @@ GEM
     io-console (0.6.0)
     irb (1.6.3)
       reline (>= 0.3.0)
-    jwt (2.7.1)
+    jwt (2.8.1)
+      base64
     minitest (5.19.0)
     openssl (3.2.0)
     parallel (1.22.1)
