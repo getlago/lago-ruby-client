@@ -1,17 +1,18 @@
 {
   "fee": {
-    "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
-    "lago_group_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
-    "lago_invoice_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
-    "lago_true_up_fee_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+    "lago_id": "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba",
+    "lago_group_id": "1a2d9c8d-5875-4688-9854-5ccfd414bc5e",
+    "lago_charge_filter_id": "1a2d9c8d-5875-4688-9854-5ccfd414bc5e",
+    "lago_invoice_id": "1a2d9c8d-5875-4688-9854-5ccfd414bc5e",
+    "lago_true_up_fee_id": "1a2d9c8d-5875-4688-9854-5ccfd414bc5e",
     "lago_true_up_parent_fee_id": null,
-    "invoice_display_name": "Fee name",
+    "invoice_display_name": "fee_invoice_display_name",
     "item": {
       "type": "charge",
       "code": "fee_code",
       "name": "Fee Code",
-      "invoice_display_name": "Fee C1",
-      "group_invoice_display_name": "Transactions - ACH",
+      "invoice_display_name": "charge_invoice_display_name",
+      "charge_filter_invoice_display_name": "charge_filter_invoice_display_name",
       "grouped_by": {
         "agent_name": "aragorn"
       }
@@ -23,9 +24,7 @@
     "total_amount_cents": 140,
     "total_amount_currency": "EUR",
     "units": "10.0",
-    "precise_unit_amount": "14.0",
     "events_count": 10,
-    "amount_details": {},
     "applied_taxes": [
       {
         "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",

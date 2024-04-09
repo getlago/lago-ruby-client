@@ -60,6 +60,7 @@ module Lago
               :min_amount_cents,
               :properties,
               :group_properties,
+              :filters,
               :tax_codes,
             )
 
