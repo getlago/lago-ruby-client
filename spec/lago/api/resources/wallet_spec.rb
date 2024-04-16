@@ -175,6 +175,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
             'granted_credits' => factory_wallet.granted_credits,
             'rate_amount' => factory_wallet.rate_amount,
             'created_at' => '2022-04-29T08:59:51Z',
+            'recurring_transaction_rules' => factory_wallet.recurring_transaction_rules,
           }
         ],
         'meta': {
