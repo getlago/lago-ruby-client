@@ -3,7 +3,7 @@
     "from_datetime": "2022-07-01T00:00:00Z",
     "to_datetime": "2022-07-31T23:59:59Z",
     "issuing_date": "2022-08-01",
-    "lago_invoice_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+    "invoice_id": null,
     "currency": "EUR",
     "amount_cents": 123,
     "total_amount_cents": 123,
@@ -15,16 +15,70 @@
         "amount_cents": 123,
         "amount_currency": "EUR",
         "charge": {
-          "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+          "lago_id": "5eb02857-a71e-4ea2-bcf9-57d3a41bc6ba",
           "charge_model": "graduated",
-          "invoice_display_name": "Setup"
+          "invoice_display_name": "add_on_invoice_display_name"
         },
         "billable_metric": {
-          "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+          "lago_id": "99a6094e-199b-4101-896a-54e927ce7bd7",
           "name": "Usage metric",
           "code": "usage_metric",
           "aggregation_type": "sum"
-        }
+        },
+        "groups": [
+          {
+            "lago_id": "12435687-1de8-4428-9bcd-779314ac1111",
+            "key": "google",
+            "value": "europe",
+            "units": "3.0",
+            "events_count": 1,
+            "amount_cents": 123
+          }
+        ],
+        "filters": [
+          {
+            "units": "3.0",
+            "events_count": 1,
+            "amount_cents": 123,
+            "values": {
+              "country": [
+                "france"
+              ]
+            }
+          }
+        ],
+        "grouped_usage": [
+          {
+            "amount_cents": 123,
+            "events_count": 1,
+            "units": "3.0",
+            "grouped_by": {
+              "agent_name": "aragorn"
+            },
+            "groups": [
+              {
+                "lago_id": "12435687-1de8-4428-9bcd-779314ac1111",
+                "key": "google",
+                "value": "europe",
+                "units": "3.0",
+                "events_count": 1,
+                "amount_cents": 123
+              }
+            ],
+            "filters": [
+              {
+                "units": "3.0",
+                "events_count": 1,
+                "amount_cents": 123,
+                "values": {
+                  "country": [
+                    "france"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
       }
     ]
   }
