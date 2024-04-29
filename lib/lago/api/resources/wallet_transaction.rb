@@ -24,7 +24,8 @@ module Lago
             'wallet_transaction' => {
               wallet_id: params[:wallet_id],
               paid_credits: params[:paid_credits],
-              granted_credits: params[:granted_credits]
+              granted_credits: params[:granted_credits],
+              voided_credits: params[:voided_credits]
             }.compact
           }
         end
