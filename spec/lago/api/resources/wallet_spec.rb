@@ -49,7 +49,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
 
         expect(wallet.lago_id).to eq('this-is-lago-id')
         expect(wallet.name).to eq(factory_wallet.name)
-        expect(wallet.recurring_transaction_rules.first.rule_type).to eq('interval')
+        expect(wallet.recurring_transaction_rules.first.trigger).to eq('interval')
         expect(wallet.recurring_transaction_rules.first.interval).to eq('monthly')
       end
     end

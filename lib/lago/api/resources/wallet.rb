@@ -37,8 +37,8 @@ module Lago
               :lago_id,
               :paid_credits,
               :granted_credits,
-              :rule_type,
               :threshold_credits,
+              :trigger,
               :interval,
             )
 
