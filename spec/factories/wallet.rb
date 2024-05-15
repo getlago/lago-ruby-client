@@ -9,7 +9,7 @@ FactoryBot.define do
     recurring_transaction_rules do
       [
         {
-          rule_type: 'interval',
+          trigger: 'interval',
           interval: 'monthly',
           paid_credits: '105',
           granted_credits: '105',
