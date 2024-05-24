@@ -40,6 +40,8 @@ module Lago
               :threshold_credits,
               :trigger,
               :interval,
+              :method,
+              :target_ongoing_balance,
             )
 
             processed_rules << result unless result.empty?
