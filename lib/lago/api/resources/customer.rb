@@ -78,6 +78,10 @@ module Lago
             result_hash[:billing_configuration] = config unless config.empty?
           end
 
+          whitelist_integration_customer(params[:integration_customer]).tap do |int_customer|
+            result_hash[:integration_customer] = int_customer unless int_customer.empty?
+          end
+
           metadata = whitelist_metadata(params[:metadata])
           result_hash[:metadata] = metadata unless metadata.empty?
 
@@ -94,6 +98,16 @@ module Lago
             :sync_with_provider,
             :document_locale,
             :provider_payment_methods,
+          )
+        end
+
+        def whitelist_integration_customer(int_customer_params)
+          (int_customer_params || {}).slice(
+            :external_customer_id,
+            :integration_type,
+            :integration_code,
+            :subsidiary_id,
+            :sync_with_provider,
           )
         end
 
