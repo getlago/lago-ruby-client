@@ -40,7 +40,7 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect(customer.billing_configuration.provider_customer_id).to eq('cus_12345')
         expect(customer.billing_configuration.provider_payment_methods).to eq(['card'])
         expect(customer.integration_customer.external_customer_id).to eq('123456789')
-        expect(customer.integration_customer.integration_type).to eq(['netsuite'])
+        expect(customer.integration_customer.integration_type).to eq('netsuite')
         expect(customer.metadata.first.key).to eq('key')
         expect(customer.metadata.first.value).to eq('value')
         expect(customer.taxes.map(&:code)).to eq(['tax_code'])
