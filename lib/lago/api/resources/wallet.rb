@@ -41,6 +41,7 @@ module Lago
               :trigger,
               :interval,
               :method,
+              :started_at,
               :target_ongoing_balance,
             )
 

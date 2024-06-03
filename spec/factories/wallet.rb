@@ -13,6 +13,7 @@ FactoryBot.define do
           interval: 'monthly',
           paid_credits: '105',
           granted_credits: '105',
+          started_at: nil,
           threshold_credits: '0',
           method: 'fixed'
         },
