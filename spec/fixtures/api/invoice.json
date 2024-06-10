@@ -6,6 +6,7 @@
     "issuing_date": "2022-06-02",
     "payment_dispute_lost_at": "2022-04-29T08:59:51Z",
     "payment_due_date": "2022-06-02",
+    "payment_overdue": false,
     "invoice_type": "one_off",
     "version_number": 2,
     "status": "finalized",
