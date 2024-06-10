@@ -50,6 +50,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
           net_payment_term: 0,
           payment_due_date: '2022-06-02',
           payment_status: 'succeeded',
+          payment_overdue: false,
           invoice_type: 'one_off'
         )
         expect(invoice.applied_taxes.first.tax_code).to eq('tax_code')
