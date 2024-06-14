@@ -28,13 +28,15 @@ FactoryBot.define do
         document_locale: 'fr',
       }
     end
-    integration_customer do
-      {
-        integration_type: "netsuite",
-        integration_code: "test-123",
-        subsidiary_id: "2",
-        sync_with_provider: true
-      }
+    integration_customers do
+      [
+        {
+          integration_type: "netsuite",
+          integration_code: "test-123",
+          subsidiary_id: "2",
+          sync_with_provider: true
+        }
+      ]
     end
     metadata do
       [

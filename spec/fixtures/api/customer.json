@@ -30,13 +30,15 @@
       "document_locale": "fr",
       "provider_payment_methods": ["card"]
     },
-    "integration_customer": {
-      "external_customer_id": "123456789",
-      "integration_type": "netsuite",
-      "integration_code": "test-123",
-      "subsidiary_id": "2",
-      "sync_with_provider": true
-    },
+    "integration_customers": [
+      {
+        "external_customer_id": "123456789",
+        "integration_type": "netsuite",
+        "integration_code": "test-123",
+        "subsidiary_id": "2",
+        "sync_with_provider": true
+      }
+    ],
     "metadata": [
       {
         "key": "key",
