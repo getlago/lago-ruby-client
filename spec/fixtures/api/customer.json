@@ -32,8 +32,9 @@
     },
     "integration_customers": [
       {
+        "lago_id": "123asd123lkj987lkj",
         "external_customer_id": "123456789",
-        "integration_type": "netsuite",
+        "type": "netsuite",
         "integration_code": "test-123",
         "subsidiary_id": "2",
         "sync_with_provider": true
