@@ -30,6 +30,13 @@
       "document_locale": "fr",
       "provider_payment_methods": ["card"]
     },
+    "shipping_address": {
+      "address_line1": "5230 Penfield Ave",
+      "city": "Woodland Hills",
+      "zipcode": "91364",
+      "state": "CA",
+      "country": "US"
+    },
     "integration_customers": [
       {
         "lago_id": "123asd123lkj987lkj",

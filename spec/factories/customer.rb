@@ -28,6 +28,15 @@ FactoryBot.define do
         document_locale: 'fr',
       }
     end
+    shipping_address do
+      {
+        address_line1: '5230 Penfield Ave',
+        city: 'Woodland Hills',
+        zipcode: '91364',
+        state: 'CA',
+        country: 'US',
+      }
+    end
     integration_customers do
       [
         {

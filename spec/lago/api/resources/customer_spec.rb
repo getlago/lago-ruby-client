@@ -39,6 +39,8 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect(customer.billing_configuration.invoice_grace_period).to eq(3)
         expect(customer.billing_configuration.provider_customer_id).to eq('cus_12345')
         expect(customer.billing_configuration.provider_payment_methods).to eq(['card'])
+        expect(customer.shipping_address.city).to eq('Woodland Hills')
+        expect(customer.shipping_address.country).to eq('US')
         expect(customer.integration_customers.first.external_customer_id).to eq('123456789')
         expect(customer.integration_customers.first.type).to eq('netsuite')
         expect(customer.metadata.first.key).to eq('key')
