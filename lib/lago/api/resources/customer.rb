@@ -78,6 +78,10 @@ module Lago
             result_hash[:billing_configuration] = config unless config.empty?
           end
 
+          whitelist_shipping_address(params[:shipping_address]).tap do |address|
+            result_hash[:shipping_address] = address unless address.empty?
+          end
+
           integration_customers = whitelist_integration_customers(params[:integration_customers])
           result_hash[:integration_customers] = integration_customers unless integration_customers.empty?
 
@@ -97,6 +101,17 @@ module Lago
             :sync_with_provider,
             :document_locale,
             :provider_payment_methods,
+          )
+        end
+
+        def whitelist_shipping_address(address)
+          (address || {}).slice(
+            :address_line1,
+            :address_line2,
+            :city,
+            :zipcode,
+            :state,
+            :country,
           )
         end
 
