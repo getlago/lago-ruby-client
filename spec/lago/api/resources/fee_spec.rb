@@ -12,7 +12,7 @@ RSpec.describe Lago::Api::Resources::Fee do
   let(:fee_id) { fee_json['lago_id'] }
   let(:fee_invoice_display_name) { fee_json['invoice_display_name'] }
   let(:fee_item_invoice_display_name) { fee_json['item']['invoice_display_name'] }
-  let(:fee_item_group_invoice_display_name) { fee_json['item']['group_invoice_display_name'] }
+  let(:fee_item_filter_invoice_display_name) { fee_json['item']['filter_invoice_display_name'] }
 
   let(:error_response) do
     {
@@ -35,7 +35,7 @@ RSpec.describe Lago::Api::Resources::Fee do
         expect(fee.lago_id).to eq(fee_id)
         expect(fee.invoice_display_name).to eq(fee_invoice_display_name)
         expect(fee.item.invoice_display_name).to eq(fee_item_invoice_display_name)
-        expect(fee.item.group_invoice_display_name).to eq(fee_item_group_invoice_display_name)
+        expect(fee.item.filter_invoice_display_name).to eq(fee_item_filter_invoice_display_name)
       end
     end
 

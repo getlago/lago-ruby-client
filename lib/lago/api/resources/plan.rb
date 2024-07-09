@@ -59,7 +59,6 @@ module Lago
               :invoice_display_name,
               :min_amount_cents,
               :properties,
-              :group_properties,
               :filters,
               :tax_codes,
             )

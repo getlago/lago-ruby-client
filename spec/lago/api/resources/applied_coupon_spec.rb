@@ -11,7 +11,7 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
     {
       'status' => 422,
       'error' => 'Unprocessable Entity',
-      'message' => 'Validation error on the record'
+      'message' => 'Validation error on the record',
     }.to_json
   end
 
@@ -19,7 +19,7 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
     let(:params) { factory_applied_coupon.to_h }
     let(:body) do
       {
-        'applied_coupon' => factory_applied_coupon.to_h
+        'applied_coupon' => factory_applied_coupon.to_h,
       }
     end
 
@@ -34,10 +34,10 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
             'frequency' => factory_applied_coupon.frequency,
             'amount_cents' => 123,
             'amount_currency' => 'EUR',
-            'expiration_date' => '2022-04-29',
+            'expiration_at' => '2022-04-29T08:59:51Z',
             'created_at' => '2022-04-29T08:59:51Z',
-            'terminated_at' => '2022-04-29T08:59:51Z'
-          }
+            'terminated_at' => '2022-04-29T08:59:51Z',
+          },
         }.to_json
       end
 
@@ -83,18 +83,18 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
             'amount_currency' => 'EUR',
             'frequency_duration' => 3,
             'frequency_duration_remaining' => 1,
-            'expiration_date' => '2022-04-29',
+            'expiration_at' => '2022-04-29T08:59:51Z',
             'created_at' => '2022-04-29T08:59:51Z',
-            'terminated_at' => '2022-04-29T08:59:51Z'
-          }
+            'terminated_at' => '2022-04-29T08:59:51Z',
+          },
         ],
         'meta': {
           'current_page' => 1,
           'next_page' => 2,
           'prev_page' => nil,
           'total_pages' => 7,
-          'total_count' => 63
-        }
+          'total_count' => 63,
+        },
       }.to_json
     end
 
@@ -152,10 +152,10 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
           'frequency' => factory_applied_coupon.frequency,
           'amount_cents' => 123,
           'amount_currency' => 'EUR',
-          'expiration_date' => '2022-04-29',
+          'expiration_at' => '2022-04-29T08:59:51Z',
           'created_at' => '2022-04-29T08:59:51Z',
-          'terminated_at' => '2022-04-29T08:59:51Z'
-        }
+          'terminated_at' => '2022-04-29T08:59:51Z',
+        },
       }.to_json
     end
 

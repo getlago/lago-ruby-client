@@ -19,14 +19,14 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
   end
 
   describe '#create' do
-    let(:group) do
+    let(:filters) do
       {
         key: 'country',
         values: %w[france italy spain],
       }
     end
 
-    let(:params) { create(:create_billable_metric).to_h.merge(group: group) }
+    let(:params) { create(:create_billable_metric).to_h.merge(filters: [filters.to_h]) }
 
     context 'when billable metric is successfully created' do
       before do
@@ -40,7 +40,7 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
 
         expect(billable_metric.lago_id).to eq('b7ab2926-1de8-4428-9bcd-779314ac129b')
         expect(billable_metric.name).to eq('bm_name')
-        expect(billable_metric.group.to_h).to eq(group)
+        expect(billable_metric.filters.map(&:to_h)).to eq([filters.to_h])
         expect(billable_metric.weighted_interval).to be_nil
       end
     end
