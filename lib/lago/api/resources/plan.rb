@@ -44,6 +44,7 @@ module Lago
               :charge_model,
               :pay_in_advance,
               :invoiceable,
+              :regroup_paid_fees,
               :invoice_display_name,
               :min_amount_cents,
               :properties,
