@@ -48,7 +48,6 @@ module Lago
           {
             root_name => {
               code: params[:code],
-              external_customer_id: params[:external_customer_id],
               external_subscription_id: params[:external_subscription_id],
               properties: params[:properties],
             }.compact,

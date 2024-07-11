@@ -28,7 +28,6 @@ FactoryBot.define do
   end
 
   factory :estimate_fees_event, class: OpenStruct do
-    external_customer_id { '5eb02857-a71e-4ea2-bcf9-57d8885990ba' }
     external_subscription_id { '5eb02857-a71e-4ea2-bcf9-57d8885990ba' }
     code { '123' }
     properties do
