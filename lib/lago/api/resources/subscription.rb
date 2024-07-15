@@ -22,9 +22,8 @@ module Lago
               billing_time: params[:billing_time],
               subscription_at: params[:subscription_at],
               ending_at: params[:ending_at],
-              subscription_date: params[:subscription_date], # Deprecated
               plan_overrides: params[:plan_overrides],
-            }.compact
+            }.compact,
           }
         end
       end

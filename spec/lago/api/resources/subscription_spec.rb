@@ -4,24 +4,25 @@ require 'spec_helper'
 
 RSpec.describe Lago::Api::Resources::Subscription do
   subject(:resource) { described_class.new(client) }
+
   let(:client) { Lago::Api::Client.new }
   let(:factory_subscription) { build(:subscription) }
   let(:error_response) do
     {
       'status' => 422,
       'error' => 'Unprocessable Entity',
-      'message' => 'Validation error on the record'
+      'message' => 'Validation error on the record',
     }.to_json
   end
   let(:response) do
     {
-      'subscription' => factory_subscription.to_h
+      'subscription' => factory_subscription.to_h,
     }.to_json
   end
   let(:pending_subscription) { create(:subscription, id: '456', status: 'pending') }
   let(:response_with_pending) do
     {
-      'subscription' => pending_subscription.to_h
+      'subscription' => pending_subscription.to_h,
     }.to_json
   end
 
@@ -31,7 +32,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         external_customer_id: factory_subscription.external_customer_id,
         plan_code: factory_subscription.plan_code,
         external_id: factory_subscription.external_id,
-        subscription_date: factory_subscription.subscription_date,
+        subscription_at: factory_subscription.subscription_at,
         billing_time: factory_subscription.billing_time,
         ending_at: factory_subscription.ending_at,
         plan_overrides: {
@@ -40,12 +41,12 @@ RSpec.describe Lago::Api::Resources::Subscription do
             amount_cents: 2000,
             invoice_display_name: 'Minimum commitment (C1)',
           },
-        }
+        },
       }
     end
     let(:body) do
       {
-        'subscription' => params
+        'subscription' => params,
       }
     end
 
@@ -63,7 +64,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
         expect(subscription.external_id).to eq(factory_subscription.external_id)
-        expect(subscription.subscription_date).to eq(factory_subscription.subscription_date)
+        expect(subscription.subscription_at).to eq(factory_subscription.subscription_at)
         expect(subscription.billing_time).to eq(factory_subscription.billing_time)
         expect(subscription.ending_at).to eq(factory_subscription.ending_at)
       end
@@ -101,7 +102,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
     context 'when subscription is pending' do
       before do
         stub_request(:delete, 'https://api.getlago.com/api/v1/subscriptions/456?status=pending')
-        .to_return(body: response_with_pending, status: 200)
+          .to_return(body: response_with_pending, status: 200)
       end
 
       it 'returns subscription' do
@@ -129,7 +130,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
     let(:params) { { name: 'new name' } }
     let(:body) do
       {
-        'subscription' => params
+        'subscription' => params,
       }
     end
 
@@ -193,15 +194,15 @@ RSpec.describe Lago::Api::Resources::Subscription do
     let(:response) do
       {
         'subscriptions' => [
-          factory_subscription.to_h
+          factory_subscription.to_h,
         ],
         'meta': {
           'current_page' => 1,
           'next_page' => 2,
           'prev_page' => nil,
           'total_pages' => 7,
-          'total_count' => 63
-        }
+          'total_count' => 63,
+        },
       }.to_json
     end
 
