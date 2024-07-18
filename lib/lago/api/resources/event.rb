@@ -12,6 +12,15 @@ module Lago
           'event'
         end
 
+        def create(params)
+          uri = URI("#{client.base_ingest_api_url}#{api_resource}")
+
+          payload = whitelist_params(params)
+          response = connection.post(payload, uri)[root_name]
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def batch_create(params)
           uri = URI("#{client.base_api_url}#{api_resource}/batch")
 
