@@ -21,7 +21,7 @@ module Lago
             granted_credits: params[:granted_credits],
             currency: params[:currency],
             expiration_at: params[:expiration_at],
-            invoice_require_successful_payment: params[:invoice_require_successful_payment],
+            invoice_requires_successful_payment: params[:invoice_requires_successful_payment],
           }.compact
 
           recurring_rules = whitelist_recurring_rules(params[:recurring_transaction_rules])
@@ -39,7 +39,7 @@ module Lago
               :paid_credits,
               :granted_credits,
               :threshold_credits,
-              :invoice_require_successful_payment,
+              :invoice_requires_successful_payment,
               :trigger,
               :interval,
               :method,

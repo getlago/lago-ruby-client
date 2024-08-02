@@ -26,7 +26,7 @@ module Lago
               paid_credits: params[:paid_credits],
               granted_credits: params[:granted_credits],
               voided_credits: params[:voided_credits],
-              invoice_require_successful_payment: params[:invoice_require_successful_payment],
+              invoice_requires_successful_payment: params[:invoice_requires_successful_payment],
             }.compact
           }
         end
