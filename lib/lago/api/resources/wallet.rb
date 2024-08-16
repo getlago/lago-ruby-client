@@ -21,6 +21,7 @@ module Lago
             granted_credits: params[:granted_credits],
             currency: params[:currency],
             expiration_at: params[:expiration_at],
+            transaction_metadata: params[:transaction_metadata],
             invoice_requires_successful_payment: params[:invoice_requires_successful_payment],
           }.compact
 
@@ -45,6 +46,7 @@ module Lago
               :method,
               :started_at,
               :target_ongoing_balance,
+              :transaction_metadata
             )
 
             processed_rules << result unless result.empty?
