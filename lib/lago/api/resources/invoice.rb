@@ -56,6 +56,13 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
+        def retry(invoice_id)
+          path = "/api/v1/invoices/#{invoice_id}/retry"
+          response = connection.post({}, path)
+
+          JSON.parse(response.to_json, object_class: OpenStruct).invoice
+        end
+
         def payment_url(invoice_id)
           path = "/api/v1/invoices/#{invoice_id}/payment_url"
           response = connection.post({}, path)['invoice_payment_details']
