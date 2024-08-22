@@ -2,10 +2,9 @@
 
 require 'debug'
 require 'factory_bot'
-
 require 'lago-ruby-client'
-
 require 'webmock/rspec'
+require 'ostruct'
 
 require_relative 'support/fixture_helper'
 

@@ -4,6 +4,7 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'openssl'
+require 'ostruct'
 require 'jwt'
 
 require 'lago/version'
