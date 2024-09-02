@@ -35,6 +35,10 @@ module Lago
             result_hash[:minimum_commitment] = minimum_commitment
           end
 
+          whitelist_usage_thresholds(params[:usage_thresholds]).tap do |usage_thresholds|
+            result_hash[:usage_thresholds] = usage_thresholds unless usage_thresholds.empty?
+          end
+
           { root_name => result_hash }
         end
 
@@ -68,6 +72,23 @@ module Lago
           end
 
           processed_charges
+        end
+
+        def whitelist_usage_thresholds(usage_thresholds)
+          processed_usage_thresholds = []
+
+          usage_thresholds&.each do |c|
+            result = (c || {}).slice(
+              :id,
+              :threshold_display_name,
+              :amount_cents,
+              :recurring,
+            )
+
+            processed_usage_thresholds << result unless result.empty?
+          end
+
+          processed_usage_thresholds
         end
       end
     end
