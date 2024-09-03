@@ -25,6 +25,22 @@ RSpec.describe Lago::Api::Resources::Event do
         expect(event.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
       end
     end
+
+    context 'when ingest url is used' do
+      let(:client) { Lago::Api::Client.new(use_ingest_service: true) }
+
+      before do
+        stub_request(:post, 'https://ingest.getlago.com/api/v1/events')
+          .with(body: { event: params })
+          .to_return(body: event_response, status: 200)
+      end
+
+      it 'returns true' do
+        event = resource.create(params)
+
+        expect(event.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+      end
+    end
   end
 
   describe '#batch_create' do

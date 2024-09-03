@@ -3,20 +3,30 @@
 module Lago
   module Api
     BASE_URL = 'https://api.getlago.com/'
+    BASE_INGEST_URL = 'https://ingest.getlago.com/'
     API_PATH = 'api/v1/'
 
     class Client
-      attr_reader :api_key, :api_url
+      attr_reader :api_key, :api_url, :use_ingest_service, :ingest_api_url
 
-      def initialize(api_key: nil, api_url: nil)
+      def initialize(api_key: nil, api_url: nil, use_ingest_service: false, ingest_api_url: nil)
         @api_key = api_key
         @api_url = api_url
+        @use_ingest_service = use_ingest_service
+        @ingest_api_url = ingest_api_url
       end
 
       def base_api_url
         base_url = api_url.nil? ? Lago::Api::BASE_URL : api_url
 
         URI.join(base_url, Lago::Api::API_PATH)
+      end
+
+      def base_ingest_api_url
+        return base_api_url unless use_ingest_service
+
+        ingest_url = ingest_api_url.nil? ? Lago::Api::BASE_INGEST_URL : ingest_api_url
+        URI.join(ingest_url, Lago::Api::API_PATH)
       end
 
       def customers
