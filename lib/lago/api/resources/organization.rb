@@ -32,6 +32,7 @@ module Lago
             email_settings: params[:email_settings],
             document_numbering: params[:document_numbering],
             document_number_prefix: params[:document_number_prefix],
+            finalize_zero_amount_invoice: params[:finalize_zero_amount_invoice],
           }.compact
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|

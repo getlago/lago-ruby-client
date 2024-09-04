@@ -72,6 +72,7 @@ module Lago
             currency: params[:currency],
             tax_codes: params[:tax_codes],
             timezone: params[:timezone],
+            finalize_zero_amount_invoice: params[:finalize_zero_amount_invoice],
           }
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
