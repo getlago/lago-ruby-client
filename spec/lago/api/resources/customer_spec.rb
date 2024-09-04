@@ -29,7 +29,10 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
 
       it 'returns customer' do
+        pp params
         customer = resource.create(params)
+
+        pp customer
 
         expect(customer.external_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
         expect(customer.name).to eq('Gavin Belson')

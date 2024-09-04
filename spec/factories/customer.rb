@@ -18,6 +18,7 @@ FactoryBot.define do
     legal_number { '49-008-2965' }
     net_payment_term { nil }
     tax_identification_number { 'EU123456789' }
+    finalize_zero_amount_invoice { 'inherit' }
     billing_configuration do
       {
         invoice_grace_period: 3,
