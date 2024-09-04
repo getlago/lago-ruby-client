@@ -11,6 +11,16 @@ module Lago
         def root_name
           'payment_request'
         end
+
+        def whitelist_params(params)
+          result_hash = {
+            email: params[:email],
+            external_customer_id: params[:external_customer_id],
+            lago_invoice_ids: params[:lago_invoice_ids]
+          }.compact
+
+          { root_name => result_hash }
+        end
       end
     end
   end

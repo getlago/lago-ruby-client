@@ -71,4 +71,56 @@ RSpec.describe Lago::Api::Resources::PaymentRequest do
       end
     end
   end
+
+  describe "#create" do
+    let(:params) { create(:create_payment_request).to_h }
+
+    context "when payment request is successfully created" do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/payment_requests")
+          .with(body: { payment_request: params })
+          .to_return(body: payment_request_response, status: 200)
+      end
+
+      it "returns a payment request", :aggregate_failures do
+        payment_request = resource.create(params)
+
+        expect(payment_request.lago_id).to eq("89b6b61e-4dbc-4307-ac96-4abcfa9e3e2d")
+        expect(payment_request.email).to eq("gavin@overdue.test")
+        expect(payment_request.amount_cents).to eq(199_55)
+        expect(payment_request.amount_currency).to eq("EUR")
+        expect(payment_request.payment_status).to eq("pending")
+        expect(payment_request.created_at).to eq("2024-06-30T10:59:51Z")
+
+        expect(payment_request.customer[:lago_id]).to eq("1a901a90-1a90-1a90-1a90-1a901a901a90")
+        expect(payment_request.customer[:external_id]).to eq("gavin_001")
+        expect(payment_request.customer[:name]).to eq("Gavin Belson")
+        expect(payment_request.customer[:currency]).to eq("EUR")
+
+        expect(payment_request.invoices.size).to eq(2)
+        expect(payment_request.invoices.first[:lago_id]).to eq("f8e194df-5d90-4382-b146-c881d2c67f28")
+        expect(payment_request.invoices.last[:lago_id]).to eq("a20b1805-d54c-4e57-873d-721cc153035e")
+      end
+    end
+
+    context "when payment request is not successfully created" do
+      let(:response) do
+        {
+          "status" => 422,
+          "error" => "Unprocessable Entity",
+          "message" => "Validation error on the record",
+        }.to_json
+      end
+
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/payment_requests")
+          .with(body: { payment_request: params })
+          .to_return(body: response, status: 422)
+      end
+
+      it "raises an error" do
+        expect { resource.create(params) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
 end
