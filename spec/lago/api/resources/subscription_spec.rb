@@ -247,4 +247,82 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
     end
   end
+
+  describe '#lifetime_usage' do
+    let(:json_response) { load_fixture('subscription_lifetime_usage') }
+    let(:lifetime_usage_response) { JSON.parse(json_response) }
+    let(:external_subscription_id) { lifetime_usage_response['lifetime_usage']['external_subscription_id'] }
+
+    context 'when lifetime usage is successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/lifetime_usage")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns lifetime usage' do
+        lifetime_usage = resource.lifetime_usage(external_subscription_id)
+
+        expect(lifetime_usage.external_subscription_id).to eq(external_subscription_id)
+      end
+    end
+
+    context 'when lifetime usage is not found' do
+      let(:not_found_response) do
+        {
+          'status' => 404,
+          'error' => 'Not Found',
+          'code' => 'credit_note_not_found',
+        }.to_json
+      end
+
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/lifetime_usage")
+          .to_return(body: not_found_response, status: 404)
+      end
+
+      it 'raises an error' do
+        expect { resource.lifetime_usage(external_subscription_id) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#update_lifetime_usage' do
+    let(:params) { create(:update_lifetime_usage).to_h }
+
+    let(:json_response) { load_fixture('subscription_lifetime_usage') }
+    let(:lifetime_usage_response) { JSON.parse(json_response) }
+    let(:external_subscription_id) { lifetime_usage_response['lifetime_usage']['external_subscription_id'] }
+
+    before do
+      stub_request(:put, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/lifetime_usage")
+        .with(body: { lifetime_usage: params })
+        .to_return(body: json_response, status: 200)
+    end
+
+    it 'returns lifetime usage' do
+      lifetime_usage = resource.update_lifetime_usage(external_subscription_id, params)
+
+      expect(lifetime_usage.external_subscription_id).to eq(external_subscription_id)
+    end
+
+    context 'when lifetime usage is not found' do
+      let(:not_found_response) do
+        {
+          'status' => 404,
+          'error' => 'Not Found',
+          'code' => 'credit_note_not_found',
+        }.to_json
+      end
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/lifetime_usage")
+          .with(body: { lifetime_usage: params })
+          .to_return(body: not_found_response, status: 404)
+      end
+
+      it 'raises an error' do
+        expect { resource.update_lifetime_usage(external_subscription_id, params) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
 end
