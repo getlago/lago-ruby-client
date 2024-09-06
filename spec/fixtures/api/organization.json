@@ -21,6 +21,7 @@
     "timezone": "America/New_York",
     "document_numbering": "per_customer",
     "document_number_prefix": "ORG-1234",
+    "finalize_zero_amount_invoice": true,
     "billing_configuration": {
       "invoice_footer": null,
       "invoice_grace_period": 3,
