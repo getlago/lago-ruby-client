@@ -41,11 +41,11 @@ FactoryBot.define do
     integration_customers do
       [
         {
-          integration_type: "netsuite",
-          integration_code: "test-123",
-          subsidiary_id: "2",
-          sync_with_provider: true
-        }
+          integration_type: 'netsuite',
+          integration_code: 'test-123',
+          subsidiary_id: '2',
+          sync_with_provider: true,
+        },
       ]
     end
     metadata do

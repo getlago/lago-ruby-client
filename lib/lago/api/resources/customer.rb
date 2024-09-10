@@ -26,7 +26,7 @@ module Lago
           )
 
           connection.get_all(
-            options.merge(external_subscription_id: external_subscription_id),
+            options.merge(external_subscription_id:),
             uri,
           )
         end
@@ -124,7 +124,12 @@ module Lago
 
           (integration_customers || []).each do |m|
             result = (m || {})
-              .slice(:id, :external_customer_id, :integration_type, :integration_code, :subsidiary_id, :sync_with_provider)
+              .slice(:id,
+                     :external_customer_id,
+                     :integration_type,
+                     :integration_code,
+                     :subsidiary_id,
+                     :sync_with_provider)
 
             processed_integration_customers << result unless result.empty?
           end
