@@ -281,6 +281,20 @@ RSpec.describe Lago::Api::Resources::Invoice do
     end
   end
 
+  describe '#retry' do
+    before do
+      stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/retry")
+        .with(body: {}).to_return(body: invoice_response, status: 200)
+    end
+
+    it 'returns invoice' do
+      result = resource.retry(invoice_id)
+
+      expect(result.lago_id).to eq(invoice_id)
+      expect(result.status).to eq('finalized')
+    end
+  end
+
   describe '#payment_url' do
     let(:url_response) do
       {
