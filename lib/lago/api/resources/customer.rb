@@ -26,7 +26,7 @@ module Lago
           )
 
           connection.get_all(
-            options.merge(external_subscription_id:),
+            options.merge(external_subscription_id: external_subscription_id),
             uri,
           )
         end
