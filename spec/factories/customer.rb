@@ -4,6 +4,9 @@ FactoryBot.define do
   factory :create_customer, class: OpenStruct do
     external_id { '1a901a90-1a90-1a90-1a90-1a901a901a90' }
     name { 'Gavin Belson' }
+    firstname { 'Gavin' }
+    lastname { 'Belson' }
+    customer_type { 'individual' }
     country { 'US' }
     address_line1 { '5230 Penfield Ave' }
     address_line2 { 'fzufuzfuz' }
@@ -41,11 +44,11 @@ FactoryBot.define do
     integration_customers do
       [
         {
-          integration_type: "netsuite",
-          integration_code: "test-123",
-          subsidiary_id: "2",
-          sync_with_provider: true
-        }
+          integration_type: 'netsuite',
+          integration_code: 'test-123',
+          subsidiary_id: '2',
+          sync_with_provider: true,
+        },
       ]
     end
     metadata do

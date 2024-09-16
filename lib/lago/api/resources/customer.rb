@@ -65,6 +65,9 @@ module Lago
             tax_identification_number: params[:tax_identification_number],
             logo_url: params[:logo_url],
             name: params[:name],
+            firstname: params[:firstname],
+            lastname: params[:lastname],
+            customer_type: params[:customer_type],
             phone: params[:phone],
             state: params[:state],
             url: params[:url],
@@ -121,7 +124,12 @@ module Lago
 
           (integration_customers || []).each do |m|
             result = (m || {})
-              .slice(:id, :external_customer_id, :integration_type, :integration_code, :subsidiary_id, :sync_with_provider)
+              .slice(:id,
+                     :external_customer_id,
+                     :integration_type,
+                     :integration_code,
+                     :subsidiary_id,
+                     :sync_with_provider)
 
             processed_integration_customers << result unless result.empty?
           end
