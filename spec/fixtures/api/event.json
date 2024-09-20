@@ -5,6 +5,7 @@
     "lago_customer_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
     "code": "bm_code",
     "timestamp": "2022-04-29T08:59:51.998Z",
+    "precise_total_amount_cents": null,
     "properties": {
       "custom_field": 12
     },
