@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    lago-ruby-client (1.11.0)
+    lago-ruby-client (1.12.2)
       jwt
       openssl
 
