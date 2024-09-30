@@ -43,6 +43,7 @@ module Lago
               code: params[:code],
               timestamp: params[:timestamp],
               external_subscription_id: params[:external_subscription_id],
+              precise_total_amount_cents: params[:precise_total_amount_cents],
               properties: params[:properties],
             }.compact,
           }
@@ -59,6 +60,7 @@ module Lago
             root_name => {
               code: params[:code],
               external_subscription_id: params[:external_subscription_id],
+              precise_total_amount_cents: params[:precise_total_amount_cents],
               properties: params[:properties],
             }.compact,
           }
