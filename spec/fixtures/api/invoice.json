@@ -107,6 +107,7 @@
     "fees": [
       {
         "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+        "lago_charge_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
         "item": {
           "type": "charge",
           "code": "seats",
