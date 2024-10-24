@@ -22,6 +22,7 @@ module Lago
               aggregation_type: params[:aggregation_type],
               weighted_interval: params[:weighted_interval],
               field_name: params[:field_name],
+              expression: params[:expression],
               filters: params[:filters],
             }.compact,
           }
