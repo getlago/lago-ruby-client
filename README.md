@@ -5,6 +5,13 @@ This is a ruby wrapper for Lago API
 [![Gem Version](https://badge.fury.io/rb/lago-ruby-client.svg)](https://badge.fury.io/rb/lago-ruby-client)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://spdx.org/licenses/MIT.html)
 
+## Current Releases
+
+| Project            | Release Badge                                                                                       |
+|--------------------|-----------------------------------------------------------------------------------------------------|
+| **Lago**           | [![Lago Release](https://img.shields.io/github/v/release/getlago/lago)](https://github.com/getlago/lago/releases) |
+| **Lago Ruby Client**     | [![Lago Ruby Client Release](https://img.shields.io/github/v/release/getlago/lago-ruby-client)](https://github.com/getlago/lago-ruby-client/releases) |
+
 ## Installation
 
 Install the gem and add to the application's Gemfile by executing:
