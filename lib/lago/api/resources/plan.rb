@@ -25,6 +25,7 @@ module Lago
             pay_in_advance: params[:pay_in_advance],
             bill_charges_monthly: params[:bill_charges_monthly],
             tax_codes: params[:tax_codes],
+            cascade_updates: params[:cascade_updates],
           }.compact
 
           whitelist_charges(params[:charges]).tap do |charges|
