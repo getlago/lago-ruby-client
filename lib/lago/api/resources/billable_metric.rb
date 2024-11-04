@@ -33,6 +33,8 @@ module Lago
               field_name: params[:field_name],
               expression: params[:expression],
               filters: params[:filters],
+              rounding_function: params[:rounding_function],
+              rounding_precision: params[:rounding_precision],
             }.compact,
           }
         end
