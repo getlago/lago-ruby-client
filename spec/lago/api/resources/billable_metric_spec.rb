@@ -187,4 +187,36 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
       end
     end
   end
+
+  describe '#evaluate_expression' do
+    let(:expression) { 'round(event.properties.value * event.properties.units)' }
+    let(:event) { { properties: { value: 10, units: 2 } } }
+
+    let(:evaluate_expression_response) { load_fixture('billable_metric_evaluate_expression') }
+
+    context 'when expression is successfully evaluated' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/billable_metrics/evaluate_expression')
+          .with(body: { expression: expression, event: event })
+          .to_return(body: evaluate_expression_response, status: 200)
+      end
+
+      it 'returns the evaluation result' do
+        evaluation_result = resource.evaluate_expression(event: event, expression: expression)
+
+        expect(evaluation_result.value).to eq('2.0')
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/billable_metrics/evaluate_expression')
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.evaluate_expression(event: event, expression: expression) }.to raise_error Lago::Api::HttpError
+      end
+    end
+  end
 end
