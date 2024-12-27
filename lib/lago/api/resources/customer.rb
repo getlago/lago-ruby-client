@@ -46,7 +46,7 @@ module Lago
             "#{client.base_api_url}#{api_resource}/#{external_customer_id}/checkout_url",
           )
 
-          response = connection.post(uri)[root_name]
+          response = connection.post({}, uri)[root_name]
 
           JSON.parse(response.to_json, object_class: OpenStruct)
         end

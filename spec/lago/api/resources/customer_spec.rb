@@ -253,11 +253,7 @@ RSpec.describe Lago::Api::Resources::Customer do
 
     context 'when the customer exists' do
       before do
-        # NOTE: Api makes POST to /customers endpoint first
-        # stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/checkout_url")
-        #   .to_return(body: response_body, status: 200)
-
-        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
+        stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/checkout_url")
           .to_return(body: response_body, status: 200)
       end
 
@@ -275,11 +271,7 @@ RSpec.describe Lago::Api::Resources::Customer do
       let(:customer_external_id) { 'DOESNOTEXIST' }
 
       before do
-        # NOTE: Api makes POST to /customers endpoint first
-        # stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/checkout_url")
-        #   .to_return(body: JSON.generate(status: 404, error: 'Not Found'), status: 404)
-
-        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
+        stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/checkout_url")
           .to_return(body: JSON.generate(status: 404, error: 'Not Found'), status: 404)
       end
 
