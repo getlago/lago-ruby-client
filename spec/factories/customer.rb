@@ -22,6 +22,7 @@ FactoryBot.define do
     net_payment_term { nil }
     tax_identification_number { 'EU123456789' }
     finalize_zero_amount_invoice { 'inherit' }
+    skip_invoice_custom_sections { false }
     billing_configuration do
       {
         invoice_grace_period: 3,
@@ -62,6 +63,7 @@ FactoryBot.define do
     end
     currency { 'EUR' }
     tax_codes { ['tax_code'] }
+    invoice_custom_section_codes { ['ics_code'] }
     timezone { 'Europe/Paris' }
   end
 end
