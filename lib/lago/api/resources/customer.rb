@@ -77,7 +77,7 @@ module Lago
             invoice_custom_section_codes: params[:invoice_custom_section_codes],
             timezone: params[:timezone],
             finalize_zero_amount_invoice: params[:finalize_zero_amount_invoice],
-            skip_invoice_custom_sections: params[:skip_invoice_custom_sections  ],
+            skip_invoice_custom_sections: params[:skip_invoice_custom_sections],
           }
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
