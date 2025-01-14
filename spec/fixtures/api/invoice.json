@@ -43,6 +43,21 @@
         "created_at": "2022-04-29T08:59:51Z"
       }
     ],
+    "applied_invoice_custom_sections": [
+      {
+
+        code: model.code,
+        details: model.details,
+        display_name: model.display_name,
+        created_at: model.created_at.iso8601,
+        "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+        "lago_invoice_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+        "code": "ics_code",
+        "details": "This part will be shown at the invoice",
+        "display_name": "Section name displayed on invoice",
+        "created_at": "2022-04-29T08:59:51Z"
+      }
+    ],
     "customer": {
       "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
       "external_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",

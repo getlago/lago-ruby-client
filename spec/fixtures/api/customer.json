@@ -25,6 +25,7 @@
     "timezone": "Europe/Paris",
     "applicable_timezone": "Europe/Paris",
     "finalize_zero_amount_invoice": "inherit",
+    "skip_invoice_custom_sections": false,
     "billing_configuration": {
       "invoice_grace_period": 3,
       "payment_provider": "stripe",
@@ -70,6 +71,18 @@
         "plans_count": 0,
         "charges_count": 0,
         "applied_to_organization": false,
+        "created_at": "2022-04-29T08:59:51Z"
+      }
+    ],
+    "invoice_custom_sections": [
+      {
+        "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+        "code": "ics_code",
+        "name": "ics_name",
+        "description": "something about this section",
+        "details": "This part will be shown at the invoice",
+        "display_name": "Section name displayed on invoice",
+        "applied_to_organization": true,
         "created_at": "2022-04-29T08:59:51Z"
       }
     ]
