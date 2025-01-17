@@ -17,6 +17,7 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     base64 (0.2.0)
+    bigdecimal (3.1.9)
     concurrent-ruby (1.2.2)
     crack (0.4.5)
       rexml
@@ -37,6 +38,8 @@ GEM
       base64
     language_server-protocol (3.17.0.3)
     minitest (5.19.0)
+    mutex_m (0.3.0)
+    observer (0.1.2)
     openssl (3.2.0)
     parallel (1.26.3)
     parser (3.3.4.2)
@@ -91,9 +94,12 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bigdecimal
   debug (>= 1.0.0)
   factory_bot
   lago-ruby-client!
+  mutex_m
+  observer
   rake (~> 13.0)
   rspec (~> 3.0)
   rubocop (~> 1.21)
