@@ -70,6 +70,14 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
+        def preview(params)
+          path = "/api/v1/invoices/preview"
+          payload = params.slice(:customer, :plan_code, :subscription_at, :billing_time, :coupons)
+          response = connection.post(payload, path)[root_name]
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def whitelist_params(params)
           result = {
             payment_status: params[:payment_status],

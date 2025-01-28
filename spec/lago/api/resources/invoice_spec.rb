@@ -316,4 +316,56 @@ RSpec.describe Lago::Api::Resources::Invoice do
       expect(result.payment_url).to eq('https://example.com')
     end
   end
+
+  describe '#preview' do
+    subject { resource.preview(params) }
+
+    let(:params) do
+      {
+        customer: {
+          external_id: '_ID_'
+        },
+        plan_code: 'plan_code',
+        coupons: [
+          {
+            code: 'coupon_preview'
+          }
+        ]
+      }
+    end
+
+    context 'when invoice preview is created' do
+      let(:invoice_response) { load_fixture('invoice_preview') }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices/preview')
+          .with(body: params)
+          .to_return(body: invoice_response, status: 200)
+      end
+
+      it 'returns invoice' do
+        expect(subject).to have_attributes(lago_id: nil)
+      end
+    end
+
+    context 'when invoice preview is not created' do
+      let(:error_response) do
+        {
+          'status' => 404,
+          'error' => 'Not Found',
+          'message' => 'plan_not_found',
+        }.to_json
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices/preview')
+          .with(body: params)
+          .to_return(body: error_response, status: 404)
+      end
+
+      it 'raises an error' do
+        expect { subject }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
 end
