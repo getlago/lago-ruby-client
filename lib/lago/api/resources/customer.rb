@@ -12,11 +12,12 @@ module Lago
           'customer'
         end
 
-        def current_usage(external_customer_id, external_subscription_id)
-          uri = URI(
-            "#{client.base_api_url}#{api_resource}/#{external_customer_id}" \
-              "/current_usage?external_subscription_id=#{external_subscription_id}",
-          )
+        def current_usage(external_customer_id, external_subscription_id, apply_taxes: nil)
+          query_params = { external_subscription_id: external_subscription_id }
+          query_params[:apply_taxes] = apply_taxes unless apply_taxes.nil?
+          query_string = URI.encode_www_form(query_params)
+
+          uri = URI("#{client.base_api_url}#{api_resource}/#{external_customer_id}/current_usage?#{query_string}")
           connection.get(uri, identifier: nil)
         end
 
