@@ -118,6 +118,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
         expect(invoice.lago_id).to eq(invoice_id)
         expect(invoice.net_payment_term).to eq(0)
         expect(invoice.payment_status).to eq('succeeded')
+        expect(invoice.total_due_amount_cents).to eq(0)
       end
     end
 
