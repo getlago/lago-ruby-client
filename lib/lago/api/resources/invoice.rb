@@ -72,7 +72,9 @@ module Lago
 
         def preview(params)
           path = "/api/v1/invoices/preview"
-          payload = params.slice(:customer, :plan_code, :subscription_at, :billing_time, :coupons)
+          payload = params.slice(
+            :customer, :plan_code, :subscription_at, :billing_time, :coupons, :subscriptions
+          )
           response = connection.post(payload, path)[root_name]
 
           JSON.parse(response.to_json, object_class: OpenStruct)
