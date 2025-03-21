@@ -45,6 +45,7 @@ module Lago
               :interval,
               :method,
               :started_at,
+              :expiration_at,
               :target_ongoing_balance,
               :transaction_metadata
             )
