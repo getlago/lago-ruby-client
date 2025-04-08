@@ -100,4 +100,29 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
       expect(response['meta']['current_page']).to eq(1)
     end
   end
+
+  describe '#payment_url' do
+    let(:wallet_transaction) { create(:wallet_transaction) }
+    let(:wallet_transaction_id) { wallet_transaction.id }
+
+    let(:url_response) do
+      {
+        'wallet_transaction_payment_details' => {
+          'payment_url' => 'https://example.com',
+        }
+      }.to_json
+    end
+
+    before do
+      stub_request(:post, "https://api.getlago.com/api/v1/wallet_transactions/#{wallet_transaction_id}/payment_url")
+        .with(body: {})
+        .to_return(body: url_response, status: 200)
+    end
+
+    it 'returns payment url' do
+      result = resource.payment_url(wallet_transaction_id)
+
+      expect(result.payment_url).to eq('https://example.com')
+    end
+  end
 end
