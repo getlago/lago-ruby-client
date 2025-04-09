@@ -79,6 +79,7 @@ module Lago
             timezone: params[:timezone],
             finalize_zero_amount_invoice: params[:finalize_zero_amount_invoice],
             skip_invoice_custom_sections: params[:skip_invoice_custom_sections],
+            billing_entity_code: params[:billing_entity_code],
           }
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
