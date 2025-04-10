@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :create_customer, class: OpenStruct do
     external_id { '1a901a90-1a90-1a90-1a90-1a901a901a90' }
+    billing_entity_code { 'billing_entity_code' }
     name { 'Gavin Belson' }
     firstname { 'Gavin' }
     lastname { 'Belson' }

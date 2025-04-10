@@ -2,6 +2,7 @@
   "credit_note": {
     "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
     "sequential_id": 16,
+    "billing_entity_code": "acme_corp",
     "number": "LAG15-CN16",
     "lago_invoice_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
     "invoice_number": "LAG15",
