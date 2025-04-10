@@ -11,9 +11,6 @@ module Lago
         def root_name
           'billing_entity'
         end
-
-        def whitelist_params(params)
-        end
       end
     end
   end
