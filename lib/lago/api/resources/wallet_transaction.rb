@@ -19,6 +19,13 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
+        def payment_url(wallet_transaction_id)
+          path = "/api/v1/wallet_transactions/#{wallet_transaction_id}/payment_url"
+          response = connection.post({}, path)['wallet_transaction_payment_details']
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def whitelist_params(params)
           {
             'wallet_transaction' => {
