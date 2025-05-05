@@ -100,6 +100,10 @@ module Lago
       def billing_entities
         Lago::Api::Resources::BillingEntity.new(self)
       end
+
+      def activity_logs
+        Lago::Api::Resources::ActivityLog.new(self)
+      end
     end
   end
 end

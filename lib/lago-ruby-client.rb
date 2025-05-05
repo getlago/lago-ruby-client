@@ -13,6 +13,7 @@ require 'lago/api/connection'
 require 'lago/api/http_error'
 
 require 'lago/api/resources/base'
+require 'lago/api/resources/activity_log'
 require 'lago/api/resources/add_on'
 require 'lago/api/resources/applied_coupon'
 require 'lago/api/resources/billable_metric'
