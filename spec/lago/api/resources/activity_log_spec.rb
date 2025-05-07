@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Lago::Api::Resources::ActivityLog do
@@ -6,9 +8,9 @@ RSpec.describe Lago::Api::Resources::ActivityLog do
   let(:client) { Lago::Api::Client.new }
 
   let(:activity_log_response) { load_fixture('activity_log') }
-  let(:activity_log_id) { "1262046f-ea6e-423b-8bf7-3a985232f91b" }
-  
-  describe "#get" do
+  let(:activity_log_id) { '1262046f-ea6e-423b-8bf7-3a985232f91b' }
+
+  describe '#get' do
     let(:endpoint) { "https://api.getlago.com/api/v1/activity_logs/#{activity_log_id}" }
     let(:not_found_response) do
       {
@@ -28,7 +30,7 @@ RSpec.describe Lago::Api::Resources::ActivityLog do
         activity_log = resource.get(activity_log_id)
 
         expect(activity_log.activity_id).to eq(activity_log_id)
-        expect(activity_log.activity_type).to eq("billable_metric.created")
+        expect(activity_log.activity_type).to eq('billable_metric.created')
       end
     end
 
@@ -46,12 +48,12 @@ RSpec.describe Lago::Api::Resources::ActivityLog do
 
   describe '#get_all' do
     let(:endpoint) { "https://api.getlago.com/api/v1/activity_logs#{options}" }
-    let(:options) { "" }
+    let(:options) { '' }
     let(:activity_logs_response) { load_fixture('activity_logs_index') }
     let(:not_allowed_response) do
       {
         'status' => 405,
-        'error' => "Method Not Allowed",
+        'error' => 'Method Not Allowed',
         'code' => '',
       }
     end
@@ -65,8 +67,10 @@ RSpec.describe Lago::Api::Resources::ActivityLog do
       it 'returns activity logs on the first page' do
         response = resource.get_all
 
-        expect(response['activity_logs'].first['activity_id']).to eq("1262046f-ea6e-423b-8bf7-3a985232f91b")
+        expect(response['activity_logs'].first['activity_id']).to eq('1262046f-ea6e-423b-8bf7-3a985232f91b')
         expect(response['activity_logs'].first['activity_type']).to eq('billable_metric.created')
+        expect(response['activity_logs'].last['activity_id']).to eq('6744ddec-3516-4e26-9c7e-dc3c30fc4e80')
+        expect(response['activity_logs'].last['activity_type']).to eq('plan.created')
         expect(response['meta']['current_page']).to eq(1)
       end
     end
@@ -74,7 +78,7 @@ RSpec.describe Lago::Api::Resources::ActivityLog do
     context 'when options are present' do
       let(:options_hash) { { per_page: 2, page: 1 } }
       let(:options) { "?#{URI.encode_www_form(options_hash)}" }
-  
+
       before do
         stub_request(:get, endpoint)
           .to_return(body: activity_logs_response, status: 200)
@@ -83,7 +87,7 @@ RSpec.describe Lago::Api::Resources::ActivityLog do
       it 'returns activity logs on selected page' do
         response = resource.get_all(options_hash)
 
-        expect(response['activity_logs'].first['activity_id']).to eq("1262046f-ea6e-423b-8bf7-3a985232f91b")
+        expect(response['activity_logs'].first['activity_id']).to eq('1262046f-ea6e-423b-8bf7-3a985232f91b')
         expect(response['activity_logs'].first['activity_type']).to eq('billable_metric.created')
         expect(response['meta']['current_page']).to eq(1)
       end
