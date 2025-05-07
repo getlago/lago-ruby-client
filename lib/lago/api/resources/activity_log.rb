@@ -17,8 +17,8 @@ module Lago
         def whitelist_params(params)
           {
             root_name => {
-              activity_id: params[:activity_id]
-            }
+              activity_id: params[:activity_id],
+            },
           }
         end
       end
