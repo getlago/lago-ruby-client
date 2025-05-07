@@ -67,6 +67,8 @@ RSpec.describe Lago::Api::Resources::ActivityLog do
 
         expect(response['activity_logs'].first['activity_id']).to eq("1262046f-ea6e-423b-8bf7-3a985232f91b")
         expect(response['activity_logs'].first['activity_type']).to eq('billable_metric.created')
+        expect(response['activity_logs'].last['activity_id']).to eq("6744ddec-3516-4e26-9c7e-dc3c30fc4e80")
+        expect(response['activity_logs'].last['activity_type']).to eq("plan.created")
         expect(response['meta']['current_page']).to eq(1)
       end
     end
