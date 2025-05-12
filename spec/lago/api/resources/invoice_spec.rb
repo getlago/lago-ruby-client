@@ -25,6 +25,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
         external_customer_id: '_ID_',
         currency: 'EUR',
         net_payment_term: 0,
+        skip_psp: true,
         fees: [
           {
             add_on_code: '123',

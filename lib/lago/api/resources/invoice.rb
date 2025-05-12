@@ -109,6 +109,7 @@ module Lago
             external_customer_id: params[:external_customer_id],
             currency: params[:currency],
             net_payment_term: params[:net_payment_term],
+            skip_psp: params[:skip_psp]
           }
 
           fees = whitelist_fees(params[:fees])
