@@ -96,6 +96,10 @@ module Lago
       def webhook_endpoints
         Lago::Api::Resources::WebhookEndpoint.new(self)
       end
+
+      def activity_logs
+        Lago::Api::Resources::ActivityLog.new(self)
+      end
     end
   end
 end
