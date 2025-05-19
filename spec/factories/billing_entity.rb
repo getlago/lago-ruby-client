@@ -24,7 +24,7 @@ FactoryBot.define do
     legal_number { '123456789' }
     tax_identification_number { 'US123456789' }
     tax_codes { ['TAX-001'] }
-    email_settings { { invoice_finalized: true } }
+    email_settings { ['invoice.finalized'] }
     billing_configuration do
       {
         invoice_footer: 'Thank you for your business',
