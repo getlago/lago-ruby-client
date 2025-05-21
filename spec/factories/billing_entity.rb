@@ -19,11 +19,10 @@ FactoryBot.define do
     finalize_zero_amount_invoice { true }
     net_payment_term { 0 }
     eu_tax_management { false }
-    logo { 'https://example.com/logo.png' }
+    logo { 'base64 encoded image' }
     legal_name { 'Legal Company Name' }
     legal_number { '123456789' }
     tax_identification_number { 'US123456789' }
-    tax_codes { ['TAX-001'] }
     email_settings { ['invoice.finalized'] }
     billing_configuration do
       {
@@ -42,7 +41,7 @@ FactoryBot.define do
     zipcode { '90001' }
     country { 'US' }
     email { 'updated@example.com' }
-    tax_codes { ['TAX-002'] }
+    tax_codes { ['TAX-002', 'TAX-032'] }
     billing_configuration do
       {
         invoice_footer: 'Updated footer',

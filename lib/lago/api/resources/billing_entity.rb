@@ -53,8 +53,7 @@ module Lago
             :legal_name,
             :legal_number,
             :tax_identification_number,
-            :tax_codes,
-            :email_settings,
+            :email_settings
           ).compact
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
