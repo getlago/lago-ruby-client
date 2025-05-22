@@ -96,6 +96,10 @@ module Lago
       def webhook_endpoints
         Lago::Api::Resources::WebhookEndpoint.new(self)
       end
+
+      def billing_entities
+        Lago::Api::Resources::BillingEntity.new(self)
+      end
     end
   end
 end

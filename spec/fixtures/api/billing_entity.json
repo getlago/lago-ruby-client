@@ -4,6 +4,7 @@
     "name": "Acme Corp",
     "code": "acme_corp",
     "created_at": "2022-05-02T13:04:09Z",
+    "updated_at": "2022-05-12T09:29:10Z",
     "country": null,
     "default_currency": "USD",
     "address_line1": null,
@@ -16,6 +17,7 @@
     "legal_number": null,
     "net_payment_term": 0,
     "tax_identification_number": "EU123456789",
+    "eu_tax_management": false,
     "timezone": "America/New_York",
     "document_numbering": "per_customer",
     "document_number_prefix": "BIL_ENT-1234",
@@ -23,6 +25,18 @@
     "invoice_footer": null,
     "invoice_grace_period": 3,
     "document_locale": "fr",
-    "is_default": false
+    "is_default": false,
+    "logo_url": "https://test-example.example/logo.png",
+    "email_settings": ["invoice.finalized"],
+    "taxes": [
+      {
+        "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+        "name": "tax_name",
+        "code": "tax_code",
+        "rate": 15.0,
+        "description": "tax_desc",
+        "created_at": "2022-04-29T08:59:51Z"
+      }
+    ]
   }
 }
