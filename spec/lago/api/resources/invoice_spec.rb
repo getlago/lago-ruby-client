@@ -234,10 +234,6 @@ RSpec.describe Lago::Api::Resources::Invoice do
   end
 
   describe '#finalize' do
-    let(:response_body) do
-      { 'invoice' => factory_invoice.to_h }
-    end
-
     before do
       stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/finalize")
         .with(body: {}).to_return(body: invoice_response, status: 200)
@@ -251,11 +247,20 @@ RSpec.describe Lago::Api::Resources::Invoice do
     end
   end
 
-  describe '#lose_dispute' do
-    let(:response_body) do
-      { 'invoice' => factory_invoice.to_h }
+  describe '#void' do
+    before do
+      stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/void")
+        .with(body: {}).to_return(body: invoice_response, status: 200)
     end
 
+    it 'returns the invoice' do
+      invoice = resource.void(invoice_id)
+
+      expect(invoice.lago_id).to eq(invoice_id)
+    end
+  end
+
+  describe '#lose_dispute' do
     before do
       stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/lose_dispute")
         .with(body: {}).to_return(body: invoice_response, status: 200)
