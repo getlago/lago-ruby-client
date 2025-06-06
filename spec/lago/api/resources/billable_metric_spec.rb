@@ -215,7 +215,9 @@ RSpec.describe Lago::Api::Resources::BillableMetric do
       end
 
       it 'raises an error' do
-        expect { resource.evaluate_expression(event: event, expression: expression) }.to raise_error Lago::Api::HttpError
+        expect {
+          resource.evaluate_expression(event: event, expression: expression)
+        }.to raise_error Lago::Api::HttpError
       end
     end
   end

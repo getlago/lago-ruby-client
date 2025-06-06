@@ -7,10 +7,10 @@ This is a ruby wrapper for Lago API
 
 ## Current Releases
 
-| Project            | Release Badge                                                                                       |
-|--------------------|-----------------------------------------------------------------------------------------------------|
-| **Lago**           | [![Lago Release](https://img.shields.io/github/v/release/getlago/lago)](https://github.com/getlago/lago/releases) |
-| **Lago Ruby Client**     | [![Lago Ruby Client Release](https://img.shields.io/github/v/release/getlago/lago-ruby-client)](https://github.com/getlago/lago-ruby-client/releases) |
+| Project              | Release Badge                                                                                                                                         |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Lago**             | [![Lago Release](https://img.shields.io/github/v/release/getlago/lago)](https://github.com/getlago/lago/releases)                                     |
+| **Lago Ruby Client** | [![Lago Ruby Client Release](https://img.shields.io/github/v/release/getlago/lago-ruby-client)](https://github.com/getlago/lago-ruby-client/releases) |
 
 ## Installation
 
@@ -24,7 +24,23 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
-Check the [lago API reference](https://doc.getlago.com/docs/api/intro)
+Once the gem is installed, you can use it in your Ruby application as follows:
+
+```ruby
+require 'lago-ruby-client'
+
+client = Lago::Api::Client.new(api_key: "xyz")
+applied_coupons = client.applied_coupons.get_all(
+  page: 1,
+  per_page: 10,
+  "coupon_code[]": ["BLACK_FRIDAY", "CHRISTMAS"],
+)
+
+puts "Listing all applied coupons:"
+puts applied_coupons
+```
+
+For detailed usage, refer to the [lago API reference](https://getlago.com/docs/api-reference/intro).
 
 ## Development
 
@@ -38,6 +54,18 @@ bundle install
 
 ```bash
 bundle exec rspec
+```
+
+### Run the linter
+
+```bash
+bundle exec rubocop
+```
+
+To format the code, run:
+
+```bash
+bundle exec rubocop -a # or -A
 ```
 
 ## Documentation
