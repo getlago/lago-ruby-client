@@ -76,6 +76,7 @@ module Lago
 
           result_params.delete(:code)
           result_params[:tax_codes] = params[:tax_codes] unless params[:tax_codes].empty?
+          result_params[:invoice_custom_section_codes] = params[:invoice_custom_section_codes] if params.key?(:invoice_custom_section_codes)
 
           { root_name => result_params }
         end
