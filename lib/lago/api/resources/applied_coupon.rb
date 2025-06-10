@@ -20,7 +20,8 @@ module Lago
         end
 
         def whitelist_params(params)
-          {root_name => {
+          {
+            root_name => {
               external_customer_id: params[:external_customer_id],
               coupon_code: params[:coupon_code],
               amount_cents: params[:amount_cents],
