@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 require:
   - rubocop-rspec
   - rubocop-performance
@@ -23,13 +25,13 @@ Layout/ClassStructure:
       - prepend
       - extend
   ExpectedOrder:
-      - module_inclusion
-      - constants
-      - public_class_methods
-      - initializer
-      - public_methods
-      - protected_methods
-      - private_methods
+    - module_inclusion
+    - constants
+    - public_class_methods
+    - initializer
+    - public_methods
+    - protected_methods
+    - private_methods
 
 Layout/EndAlignment:
   Description: 'Align ends correctly.'
@@ -167,8 +169,8 @@ RSpec/NestedGroups:
 
 Style/BlockDelimiters:
   Description: >-
-                Avoid using {...} for multi-line blocks (multiline chaining is always ugly).
-                Prefer {...} over do...end for single-line blocks.
+    Avoid using {...} for multi-line blocks (multiline chaining is always ugly).
+    Prefer {...} over do...end for single-line blocks.
   Enabled: true
   EnforcedStyle: line_count_based
   AllowedMethods:
@@ -214,8 +216,8 @@ Style/MethodCallWithArgsParentheses:
 
 Style/NestedParenthesizedCalls:
   Description: >-
-                 Parenthesize method calls which are nested inside the
-                 argument list of another parenthesized method call.
+    Parenthesize method calls which are nested inside the
+    argument list of another parenthesized method call.
   Enabled: true
   AllowedMethods: []
 
@@ -225,8 +227,8 @@ Style/OneLineConditional:
 
 Style/Send:
   Description: >-
-                 Prefer `Object#__send__` or `Object#public_send` to `send`,
-                 as `send` may overlap with existing methods.
+    Prefer `Object#__send__` or `Object#public_send` to `send`,
+    as `send` may overlap with existing methods.
   Enabled: true
 
 Style/SymbolArray:

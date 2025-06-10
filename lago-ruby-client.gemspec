@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('lib', __dir__)
+$LOAD_PATH.push(File.expand_path('lib', __dir__))
 
 require 'lago/version'
 
@@ -26,15 +26,19 @@ Gem::Specification.new do |spec|
   spec.add_dependency('jwt')
   spec.add_dependency('openssl')
 
-  spec.add_development_dependency 'debug', '>= 1.0.0'
-  spec.add_development_dependency 'observer'
-  spec.add_development_dependency 'mutex_m'
-  spec.add_development_dependency 'bigdecimal'
-  spec.add_development_dependency 'factory_bot'
-  spec.add_development_dependency 'rake', '~> 13.0'
-  spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'rubocop', '~> 1.21'
-  spec.add_development_dependency 'webmock'
+  spec.add_development_dependency('bigdecimal')
+  spec.add_development_dependency('debug', '>= 1.0.0')
+  spec.add_development_dependency('factory_bot')
+  spec.add_development_dependency('mutex_m')
+  spec.add_development_dependency('observer')
+  spec.add_development_dependency('rake', '~> 13.0')
+  spec.add_development_dependency('rspec', '~> 3.0')
+  spec.add_development_dependency('rubocop', '~> 1.21')
+  spec.add_development_dependency('rubocop-performance')
+  spec.add_development_dependency('rubocop-rails')
+  spec.add_development_dependency('rubocop-rspec')
+  spec.add_development_dependency('rubocop-thread_safety')
+  spec.add_development_dependency('webmock')
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
