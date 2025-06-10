@@ -49,5 +49,6 @@ FactoryBot.define do
         document_locale: 'fr',
       }
     end
+    invoice_custom_section_codes { ['CUSTOM-001', 'CUSTOM-002'] }
   end
 end
