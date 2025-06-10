@@ -169,7 +169,7 @@ RSpec.describe Lago::Api::Resources::Plan do
         expect(response['plans'].first['name']).to eq(plan_name)
         expect(response['plans'].first['invoice_display_name']).to eq(plan_dsplay_name)
         expect(response['plans'].first['charges'].first['invoice_display_name']).to eq('Charge 1')
-        expect(response['plans'].first['charges'].first['properties']['grouped_by']).to eq(['agent_name'])
+        expect(response['plans'].first['charges'].first['properties']['pricing_group_keys']).to eq(['agent_name'])
         expect(response['plans'].first['minimum_commitment']['invoice_display_name']).to eq('Minimum commitment (C1)')
         expect(response['meta']['current_page']).to eq(1)
       end
