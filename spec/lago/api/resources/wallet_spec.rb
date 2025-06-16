@@ -18,6 +18,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
         'rate_amount' => factory_wallet.rate_amount,
         'created_at' => '2022-04-29T08:59:51Z',
         'recurring_transaction_rules' => factory_wallet.recurring_transaction_rules,
+        'applies_to' => factory_wallet.applies_to,
       }
     }.to_json
   end
@@ -55,6 +56,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
         expect(wallet.recurring_transaction_rules.first.expiration_at).to eq(
           factory_wallet.recurring_transaction_rules.first[:expiration_at]
         )
+        expect(wallet.applies_to).to eq(factory_wallet.applies_to)
       end
     end
 

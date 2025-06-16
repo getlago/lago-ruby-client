@@ -6,6 +6,11 @@ FactoryBot.define do
     rate_amount { '1' }
     paid_credits { '100' }
     granted_credits { '100' }
+    applies_to do
+      {
+        fee_types: %w[charge]
+      }
+    end
     recurring_transaction_rules do
       [
         {

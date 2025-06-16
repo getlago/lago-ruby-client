@@ -28,6 +28,9 @@ module Lago
           recurring_rules = whitelist_recurring_rules(params[:recurring_transaction_rules])
           result_hash[:recurring_transaction_rules] = recurring_rules unless recurring_rules.empty?
 
+          applies_to = whitelist_applies_to(params[:applies_to])
+          result_hash[:applies_to] = applies_to unless applies_to.empty?
+
           { root_name => result_hash }
         end
 
@@ -54,6 +57,10 @@ module Lago
           end
 
           processed_rules
+        end
+
+        def whitelist_applies_to(applies_to_params)
+          (applies_to_params || {}).slice(:fee_types)
         end
       end
     end
