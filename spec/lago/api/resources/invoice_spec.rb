@@ -375,4 +375,20 @@ RSpec.describe Lago::Api::Resources::Invoice do
       end
     end
   end
+
+  describe '#void' do
+    let(:invoice_response) { load_fixture('voided_invoice') }
+    before do
+      stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/void")
+        .with(body: {})
+        .to_return(body: invoice_response, status: 200)
+    end
+
+    it 'returns invoice' do
+      invoice = resource.void(invoice_id)
+
+      expect(invoice.lago_id).to eq(invoice_id)
+      expect(invoice.status).to eq('voided')
+    end
+  end
 end
