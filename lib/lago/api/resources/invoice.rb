@@ -45,7 +45,7 @@ module Lago
         def void(invoice_id, params = {})
           path = "/api/v1/invoices/#{invoice_id}/void"
           payload = whitelist_void_params(params)
-          response = connection.post(path, payload)
+          response = connection.post(payload, path)
 
           JSON.parse(response.to_json, object_class: OpenStruct).invoice
         end
