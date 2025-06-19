@@ -247,7 +247,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
     end
   end
 
-  describe '#void' do
+  describe '#void (basic)' do
     before do
       stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/void")
         .with(body: {}).to_return(body: invoice_response, status: 200)
@@ -376,8 +376,9 @@ RSpec.describe Lago::Api::Resources::Invoice do
     end
   end
 
-  describe '#void' do
+  describe '#void (with params)' do
     let(:invoice_response) { load_fixture('voided_invoice') }
+
     before do
       stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/void")
         .with(body: {})
