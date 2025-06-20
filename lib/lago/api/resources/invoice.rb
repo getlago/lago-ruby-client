@@ -42,9 +42,10 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).invoice
         end
 
-        def void(invoice_id)
+        def void(invoice_id, params = {})
           path = "/api/v1/invoices/#{invoice_id}/void"
-          response = connection.post({}, path)
+          payload = whitelist_void_params(params)
+          response = connection.post(payload, path)
 
           JSON.parse(response.to_json, object_class: OpenStruct).invoice
         end
@@ -142,6 +143,16 @@ module Lago
           end
 
           processed_fees
+        end
+
+        def whitelist_void_params(params)
+          return {} unless params[:generate_credit_note]
+
+          {
+            generate_credit_note: params[:generate_credit_note],
+            refund_amount: params[:refund_amount],
+            credit_amount: params[:credit_amount]
+          }.compact
         end
       end
     end
