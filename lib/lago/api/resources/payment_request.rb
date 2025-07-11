@@ -16,6 +16,7 @@ module Lago
           result_hash = {
             email: params[:email],
             external_customer_id: params[:external_customer_id],
+            payment_status: params[:payment_status],
             lago_invoice_ids: params[:lago_invoice_ids]
           }.compact
 
