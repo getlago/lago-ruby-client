@@ -18,6 +18,14 @@ RSpec.describe Lago::Api::Resources::PaymentRequest do
     }.to_json
   end
 
+  let(:not_found_response) do
+    {
+      'status' => 404,
+      'error' => 'Not Found',
+      'code' => 'payment_request_not_found',
+    }.to_json
+  end
+
   describe '#get' do
     context 'when payment request is successfully fetched' do
       before do
@@ -35,10 +43,10 @@ RSpec.describe Lago::Api::Resources::PaymentRequest do
       end
     end
 
-    context 'when there is an issue' do
+    context 'when payment request is not found' do
       before do
         stub_request(:get, "https://api.getlago.com/api/v1/payment_requests/#{payment_request_id}")
-          .to_return(body: error_response, status: 422)
+          .to_return(body: not_found_response, status: 404)
       end
 
       it 'raises an error' do
