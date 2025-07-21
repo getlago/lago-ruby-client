@@ -60,7 +60,7 @@ module Lago
         end
 
         def whitelist_applies_to(applies_to_params)
-          (applies_to_params || {}).slice(:fee_types)
+          (applies_to_params || {}).slice(:fee_types, :billable_metric_codes)
         end
       end
     end

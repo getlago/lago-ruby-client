@@ -57,6 +57,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
           factory_wallet.recurring_transaction_rules.first[:expiration_at]
         )
         expect(wallet.applies_to.fee_types).to eq(factory_wallet.applies_to[:fee_types])
+        expect(wallet.applies_to.billable_metric_codes).to eq(factory_wallet.applies_to[:billable_metric_codes])
       end
     end
 
