@@ -67,6 +67,7 @@ module Lago
               :properties,
               :filters,
               :tax_codes,
+              :applied_pricing_unit,
             )
 
             processed_charges << result unless result.empty?
