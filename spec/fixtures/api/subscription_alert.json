@@ -1,0 +1,18 @@
+{
+  "alert": {
+    "external_subscription_id": "sub-12345",
+    "code": "storage_threshold_alert",
+    "alert_type": "usage_amount",
+    "thresholds": [
+      {
+        "code": "warn",
+        "value": 10000
+      },
+      {
+        "code": "alert",
+        "value": 1000,
+        "recurring": true
+      }
+    ]
+  }
+}
