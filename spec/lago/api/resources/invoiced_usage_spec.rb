@@ -15,45 +15,54 @@ RSpec.describe Lago::Api::Resources::InvoicedUsage do
     }.to_json
   end
 
-  describe '#get_all' do
-    let(:invoiced_usages_response) { load_fixture('invoiced_usage_index') }
+  [
+    ['when using resource', -> { described_class.new(client) }],
+    ['when using client', -> { client.invoiced_usages }],
+  ].each do |resource_name, resource_block|
+    context resource_name do
+      subject(:resource, &resource_block)
 
-    context 'when there is no options' do
-      before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoiced_usage')
-          .to_return(body: invoiced_usages_response, status: 200)
-      end
+      describe '#get_all' do
+        let(:invoiced_usages_response) { load_fixture('invoiced_usage_index') }
 
-      it 'returns gross revenue' do
-        response = resource.get_all
+        context 'when there is no options' do
+          before do
+            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoiced_usage')
+              .to_return(body: invoiced_usages_response, status: 200)
+          end
 
-        expect(response['invoiced_usages'].first['currency']).to eq('EUR')
-        expect(response['invoiced_usages'].first['amount_cents']).to eq(100)
-      end
-    end
+          it 'returns gross revenue' do
+            response = resource.get_all
 
-    context 'when options are present' do
-      before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoiced_usage?currency=EUR')
-          .to_return(body: invoiced_usages_response, status: 200)
-      end
+            expect(response['invoiced_usages'].first['currency']).to eq('EUR')
+            expect(response['invoiced_usages'].first['amount_cents']).to eq(100)
+          end
+        end
 
-      it 'returns gross revenue' do
-        response = resource.get_all({ currency: 'EUR' })
+        context 'when options are present' do
+          before do
+            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoiced_usage?currency=EUR')
+              .to_return(body: invoiced_usages_response, status: 200)
+          end
 
-        expect(response['invoiced_usages'].first['currency']).to eq('EUR')
-        expect(response['invoiced_usages'].first['amount_cents']).to eq(100)
-      end
-    end
+          it 'returns gross revenue' do
+            response = resource.get_all({ currency: 'EUR' })
 
-    context 'when there is an issue' do
-      before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoiced_usage')
-          .to_return(body: error_response, status: 422)
-      end
+            expect(response['invoiced_usages'].first['currency']).to eq('EUR')
+            expect(response['invoiced_usages'].first['amount_cents']).to eq(100)
+          end
+        end
 
-      it 'raises an error' do
-        expect { resource.get_all }.to raise_error Lago::Api::HttpError
+        context 'when there is an issue' do
+          before do
+            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoiced_usage')
+              .to_return(body: error_response, status: 422)
+          end
+
+          it 'raises an error' do
+            expect { resource.get_all }.to raise_error Lago::Api::HttpError
+          end
+        end
       end
     end
   end
