@@ -28,8 +28,6 @@ RSpec.describe Lago::Api::Resources::Payment do
       it 'returns a payment' do
         payment = resource.get(payment_id)
 
-        # debugger
-
         expect(payment.lago_id).to eq(payment_id)
         expect(payment.amount_cents).to eq(100)
         expect(payment.invoice_ids).to eq(['ed267c66-8170-4d23-83e8-6d6e4fc735ef'])
