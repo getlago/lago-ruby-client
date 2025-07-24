@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'lago/api/resources/base'
+
 module Lago
   module Api
     module Resources
