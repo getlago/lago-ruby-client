@@ -1,5 +1,35 @@
 # frozen_string_literal: true
 
+require 'lago/api/resources/base'
+require 'lago/api/resources/activity_log'
+require 'lago/api/resources/add_on'
+require 'lago/api/resources/api_log'
+require 'lago/api/resources/applied_coupon'
+require 'lago/api/resources/billable_metric'
+require 'lago/api/resources/billing_entity'
+require 'lago/api/resources/coupon'
+require 'lago/api/resources/credit_note'
+require 'lago/api/resources/customer'
+require 'lago/api/resources/event'
+require 'lago/api/resources/fee'
+require 'lago/api/resources/gross_revenue'
+require 'lago/api/resources/invoice'
+require 'lago/api/resources/invoice_collection'
+require 'lago/api/resources/invoiced_usage'
+require 'lago/api/resources/mrr'
+require 'lago/api/resources/organization'
+require 'lago/api/resources/overdue_balance'
+require 'lago/api/resources/payment'
+require 'lago/api/resources/payment_receipt'
+require 'lago/api/resources/payment_request'
+require 'lago/api/resources/plan'
+require 'lago/api/resources/subscription'
+require 'lago/api/resources/tax'
+require 'lago/api/resources/wallet'
+require 'lago/api/resources/wallet_transaction'
+require 'lago/api/resources/webhook'
+require 'lago/api/resources/webhook_endpoint'
+
 module Lago
   module Api
     BASE_URL = 'https://api.getlago.com/'
@@ -29,80 +59,81 @@ module Lago
         URI.join(ingest_url, Lago::Api::API_PATH)
       end
 
-      def customers
-        Lago::Api::Resources::Customer.new(self)
-      end
-
-      def invoices
-        Lago::Api::Resources::Invoice.new(self)
-      end
-
-      def subscriptions
-        Lago::Api::Resources::Subscription.new(self)
-      end
-
-      def events
-        Lago::Api::Resources::Event.new(self)
-      end
-
-      def fees
-        Lago::Api::Resources::Fee.new(self)
-      end
-
-      def applied_coupons
-        Lago::Api::Resources::AppliedCoupon.new(self)
-      end
-
-      def billable_metrics
-        Lago::Api::Resources::BillableMetric.new(self)
-      end
-
-      def credit_notes
-        Lago::Api::Resources::CreditNote.new(self)
-      end
-
-      def plans
-        Lago::Api::Resources::Plan.new(self)
-      end
-
-      def coupons
-        Lago::Api::Resources::Coupon.new(self)
+      # Resources
+      def activity_logs
+        Resources::ActivityLog.new(self)
       end
 
       def add_ons
-        Lago::Api::Resources::AddOn.new(self)
+        Resources::AddOn.new(self)
       end
 
-      def organizations
-        Lago::Api::Resources::Organization.new(self)
+      def applied_coupons
+        Resources::AppliedCoupon.new(self)
       end
 
-      def taxes
-        Lago::Api::Resources::Tax.new(self)
-      end
-
-      def wallets
-        Lago::Api::Resources::Wallet.new(self)
-      end
-
-      def wallet_transactions
-        Lago::Api::Resources::WalletTransaction.new(self)
-      end
-
-      def webhooks
-        Lago::Api::Resources::Webhook.new(self)
-      end
-
-      def webhook_endpoints
-        Lago::Api::Resources::WebhookEndpoint.new(self)
+      def billable_metrics
+        Resources::BillableMetric.new(self)
       end
 
       def billing_entities
-        Lago::Api::Resources::BillingEntity.new(self)
+        Resources::BillingEntity.new(self)
       end
 
-      def activity_logs
-        Lago::Api::Resources::ActivityLog.new(self)
+      def coupons
+        Resources::Coupon.new(self)
+      end
+
+      def credit_notes
+        Resources::CreditNote.new(self)
+      end
+
+      def customers
+        Resources::Customer.new(self)
+      end
+
+      def events
+        Resources::Event.new(self)
+      end
+
+      def fees
+        Resources::Fee.new(self)
+      end
+
+      def invoices
+        Resources::Invoice.new(self)
+      end
+
+      def organizations
+        Resources::Organization.new(self)
+      end
+
+      def plans
+        Resources::Plan.new(self)
+      end
+
+      def subscriptions
+        Resources::Subscription.new(self)
+      end
+
+      def taxes
+        Resources::Tax.new(self)
+      end
+
+      def wallet_transactions
+        Resources::WalletTransaction.new(self)
+      end
+
+      def wallets
+        Resources::Wallet.new(self)
+      end
+
+      def webhook_endpoints
+        Resources::WebhookEndpoint.new(self)
+      end
+
+      def webhooks
+        Resources::Webhook.new(self)
       end
     end
   end
