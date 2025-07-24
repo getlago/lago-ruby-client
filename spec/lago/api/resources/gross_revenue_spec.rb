@@ -15,45 +15,54 @@ RSpec.describe Lago::Api::Resources::GrossRevenue do
     }.to_json
   end
 
-  describe '#get_all' do
-    let(:gross_revenues_response) { load_fixture('gross_revenue_index') }
+  [
+    ['when using resource', -> { described_class.new(client) }],
+    ['when using client', -> { client.gross_revenues }],
+  ].each do |resource_name, resource_block|
+    context resource_name do
+      subject(:resource, &resource_block)
 
-    context 'when there is no options' do
-      before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/gross_revenue')
-          .to_return(body: gross_revenues_response, status: 200)
-      end
+      describe '#get_all' do
+        let(:gross_revenues_response) { load_fixture('gross_revenue_index') }
 
-      it 'returns gross revenue' do
-        response = resource.get_all
+        context 'when there is no options' do
+          before do
+            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/gross_revenue')
+              .to_return(body: gross_revenues_response, status: 200)
+          end
 
-        expect(response['gross_revenues'].first['currency']).to eq('EUR')
-        expect(response['gross_revenues'].first['amount_cents']).to eq(100)
-      end
-    end
+          it 'returns gross revenue' do
+            response = resource.get_all
 
-    context 'when options are present' do
-      before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/gross_revenue?currency=EUR')
-          .to_return(body: gross_revenues_response, status: 200)
-      end
+            expect(response['gross_revenues'].first['currency']).to eq('EUR')
+            expect(response['gross_revenues'].first['amount_cents']).to eq(100)
+          end
+        end
 
-      it 'returns gross revenue' do
-        response = resource.get_all({ currency: 'EUR' })
+        context 'when options are present' do
+          before do
+            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/gross_revenue?currency=EUR')
+              .to_return(body: gross_revenues_response, status: 200)
+          end
 
-        expect(response['gross_revenues'].first['currency']).to eq('EUR')
-        expect(response['gross_revenues'].first['amount_cents']).to eq(100)
-      end
-    end
+          it 'returns gross revenue' do
+            response = resource.get_all({ currency: 'EUR' })
 
-    context 'when there is an issue' do
-      before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/analytics/gross_revenue')
-          .to_return(body: error_response, status: 422)
-      end
+            expect(response['gross_revenues'].first['currency']).to eq('EUR')
+            expect(response['gross_revenues'].first['amount_cents']).to eq(100)
+          end
+        end
 
-      it 'raises an error' do
-        expect { resource.get_all }.to raise_error Lago::Api::HttpError
+        context 'when there is an issue' do
+          before do
+            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/gross_revenue')
+              .to_return(body: error_response, status: 422)
+          end
+
+          it 'raises an error' do
+            expect { resource.get_all }.to raise_error Lago::Api::HttpError
+          end
+        end
       end
     end
   end

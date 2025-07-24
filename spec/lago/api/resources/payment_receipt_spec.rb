@@ -18,82 +18,91 @@ RSpec.describe Lago::Api::Resources::PaymentReceipt do
     }.to_json
   end
 
-  describe '#get_all' do
-    let(:payment_receipts_response) do
-      {
-        'payment_receipts' => [JSON.parse(payment_receipt_response)['payment_receipt']],
-        'meta': {
-          'current_page' => 1,
-          'next_page' => 2,
-          'prev_page' => nil,
-          'total_pages' => 7,
-          'total_count' => 63,
-        },
-      }.to_json
-    end
+  [
+    ['when using resource', -> { described_class.new(client) }],
+    ['when using client', -> { client.payment_receipts }],
+  ].each do |resource_name, resource_block|
+    context resource_name do
+      subject(:resource, &resource_block)
 
-    context 'when there is no options' do
-      before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/payment_receipts')
-          .to_return(body: payment_receipts_response, status: 200)
+      describe '#get_all' do
+        let(:payment_receipts_response) do
+          {
+            'payment_receipts' => [JSON.parse(payment_receipt_response)['payment_receipt']],
+            'meta': {
+              'current_page' => 1,
+              'next_page' => 2,
+              'prev_page' => nil,
+              'total_pages' => 7,
+              'total_count' => 63,
+            },
+          }.to_json
+        end
+
+        context 'when there is no options' do
+          before do
+            stub_request(:get, 'https://api.getlago.com/api/v1/payment_receipts')
+              .to_return(body: payment_receipts_response, status: 200)
+          end
+
+          it 'returns payment receipts on the first page' do
+            response = resource.get_all
+
+            expect(response['payment_receipts'].first['lago_id']).to eq(payment_receipt_id)
+            expect(response['meta']['current_page']).to eq(1)
+          end
+        end
+
+        context 'when options are present' do
+          before do
+            stub_request(:get, 'https://api.getlago.com/api/v1/payment_receipts?per_page=2&page=1')
+              .to_return(body: payment_receipts_response, status: 200)
+          end
+
+          it 'returns payment receipts on selected page' do
+            response = resource.get_all({ per_page: 2, page: 1 })
+
+            expect(response['payment_receipts'].first['lago_id']).to eq(payment_receipt_id)
+            expect(response['meta']['current_page']).to eq(1)
+          end
+        end
+
+        context 'when there is an issue' do
+          before do
+            stub_request(:get, 'https://api.getlago.com/api/v1/payment_receipts')
+              .to_return(body: error_response, status: 422)
+          end
+
+          it 'raises an error' do
+            expect { resource.get_all }.to raise_error(Lago::Api::HttpError)
+          end
+        end
       end
 
-      it 'returns payment receipts on the first page' do
-        response = resource.get_all
+      describe '#get' do
+        context 'when the request is successful' do
+          before do
+            stub_request(:get, "https://api.getlago.com/api/v1/payment_receipts/#{payment_receipt_id}")
+              .to_return(body: payment_receipt_response, status: 200)
+          end
 
-        expect(response['payment_receipts'].first['lago_id']).to eq(payment_receipt_id)
-        expect(response['meta']['current_page']).to eq(1)
-      end
-    end
+          it 'returns the payment receipt' do
+            response = resource.get(payment_receipt_id)
 
-    context 'when options are present' do
-      before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/payment_receipts?per_page=2&page=1')
-          .to_return(body: payment_receipts_response, status: 200)
-      end
+            expect(response['lago_id']).to eq(payment_receipt_id)
+          end
+        end
 
-      it 'returns payment receipts on selected page' do
-        response = resource.get_all({ per_page: 2, page: 1 })
+        context 'when there is an issue' do
+          before do
+            stub_request(:get, "https://api.getlago.com/api/v1/payment_receipts/#{payment_receipt_id}")
+              .to_return(body: error_response, status: 422)
+          end
 
-        expect(response['payment_receipts'].first['lago_id']).to eq(payment_receipt_id)
-        expect(response['meta']['current_page']).to eq(1)
-      end
-    end
-
-    context 'when there is an issue' do
-      before do
-        stub_request(:get, 'https://api.getlago.com/api/v1/payment_receipts')
-          .to_return(body: error_response, status: 422)
-      end
-
-      it 'raises an error' do
-        expect { resource.get_all }.to raise_error(Lago::Api::HttpError)
-      end
-    end
-  end
-
-  describe '#get' do
-    context 'when the request is successful' do
-      before do
-        stub_request(:get, "https://api.getlago.com/api/v1/payment_receipts/#{payment_receipt_id}")
-          .to_return(body: payment_receipt_response, status: 200)
-      end
-
-      it 'returns the payment receipt' do
-        response = resource.get(payment_receipt_id)
-
-        expect(response['lago_id']).to eq(payment_receipt_id)
-      end
-    end
-
-    context 'when there is an issue' do
-      before do
-        stub_request(:get, "https://api.getlago.com/api/v1/payment_receipts/#{payment_receipt_id}")
-          .to_return(body: error_response, status: 422)
-      end
-
-      it 'raises an error' do
-        expect { resource.get(payment_receipt_id) }.to raise_error(Lago::Api::HttpError)
+          it 'raises an error' do
+            expect { resource.get(payment_receipt_id) }.to raise_error(Lago::Api::HttpError)
+          end
+        end
       end
     end
   end

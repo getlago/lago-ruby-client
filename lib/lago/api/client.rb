@@ -68,6 +68,10 @@ module Lago
         Resources::AddOn.new(self)
       end
 
+      def api_logs
+        Resources::ApiLog.new(self)
+      end
+
       def applied_coupons
         Resources::AppliedCoupon.new(self)
       end
@@ -100,12 +104,44 @@ module Lago
         Resources::Fee.new(self)
       end
 
+      def gross_revenues
+        Resources::GrossRevenue.new(self)
+      end
+
+      def invoice_collections
+        Resources::InvoiceCollection.new(self)
+      end
+
+      def invoiced_usages
+        Resources::InvoicedUsage.new(self)
+      end
+
       def invoices
         Resources::Invoice.new(self)
       end
 
+      def mrrs
+        Resources::Mrr.new(self)
+      end
+
       def organizations
         Resources::Organization.new(self)
+      end
+
+      def overdue_balances
+        Resources::OverdueBalance.new(self)
+      end
+
+      def payment_receipts
+        Resources::PaymentReceipt.new(self)
+      end
+
+      def payment_requests
+        Resources::PaymentRequest.new(self)
+      end
+
+      def payments
+        Resources::Payment.new(self)
       end
 
       def plans

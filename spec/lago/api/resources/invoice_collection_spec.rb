@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Lago::Api::Resources::OverdueBalance do
+RSpec.describe Lago::Api::Resources::InvoiceCollection do
   subject(:resource) { described_class.new(client) }
 
   let(:client) { Lago::Api::Client.new }
@@ -17,45 +17,45 @@ RSpec.describe Lago::Api::Resources::OverdueBalance do
 
   [
     ['when using resource', -> { described_class.new(client) }],
-    ['when using client', -> { client.overdue_balances }],
+    ['when using client', -> { client.invoice_collections }],
   ].each do |resource_name, resource_block|
     context resource_name do
       subject(:resource, &resource_block)
 
       describe '#get_all' do
-        let(:overdue_balances_response) { load_fixture('overdue_balance_index') }
+        let(:invoice_collections_response) { load_fixture('invoice_collection_index') }
 
         context 'when there is no options' do
           before do
-            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/overdue_balance')
-              .to_return(body: overdue_balances_response, status: 200)
+            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoice_collection')
+              .to_return(body: invoice_collections_response, status: 200)
           end
 
-          it 'returns overdue balance' do
+          it 'returns gross revenue' do
             response = resource.get_all
 
-            expect(response['overdue_balances'].first['currency']).to eq('EUR')
-            expect(response['overdue_balances'].first['amount_cents']).to eq(100)
+            expect(response['invoice_collections'].first['currency']).to eq('EUR')
+            expect(response['invoice_collections'].first['amount_cents']).to eq(100)
           end
         end
 
         context 'when options are present' do
           before do
-            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/overdue_balance?currency=EUR')
-              .to_return(body: overdue_balances_response, status: 200)
+            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoice_collection?currency=EUR')
+              .to_return(body: invoice_collections_response, status: 200)
           end
 
-          it 'returns overdue balance' do
+          it 'returns invoice collection' do
             response = resource.get_all({ currency: 'EUR' })
 
-            expect(response['overdue_balances'].first['currency']).to eq('EUR')
-            expect(response['overdue_balances'].first['amount_cents']).to eq(100)
+            expect(response['invoice_collections'].first['currency']).to eq('EUR')
+            expect(response['invoice_collections'].first['amount_cents']).to eq(100)
           end
         end
 
         context 'when there is an issue' do
           before do
-            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/overdue_balance')
+            stub_request(:get, 'https://api.getlago.com/api/v1/analytics/invoice_collection')
               .to_return(body: error_response, status: 422)
           end
 
