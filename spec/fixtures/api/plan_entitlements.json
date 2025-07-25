@@ -1,0 +1,58 @@
+{
+  "entitlements": [
+    {
+      "code": "seats",
+      "name": "Number of seats",
+      "description": "Number of users of the account",
+      "privileges": [
+        {
+          "code": "max_admins",
+          "name": "Max Admins",
+          "value_type": "integer",
+          "config": {},
+          "value": 3
+        },
+        {
+          "code": "max",
+          "name": "Maximum",
+          "value_type": "integer",
+          "config": {},
+          "value": 99
+        }
+      ]
+    },
+    {
+      "code": "analytics_api",
+      "name": "Analytics API",
+      "description": "Access to all analytics data via REST API",
+      "privileges": []
+    },
+    {
+      "code": "salesforce",
+      "name": "Salesforce Integration",
+      "description": null,
+      "privileges": []
+    },
+    {
+      "code": "sso",
+      "name": "SSO",
+      "description": null,
+      "privileges": [
+        {
+          "code": "provider",
+          "name": "Provider Name",
+          "value_type": "select",
+          "config": {
+            "select_options": [
+              "okta",
+              "ad",
+              "google",
+              "custom"
+            ]
+          },
+          "value": "okta"
+        }
+      ]
+    }
+  ]
+}

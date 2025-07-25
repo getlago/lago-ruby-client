@@ -33,6 +33,18 @@ module Lago
         handle_response(response)
       end
 
+      def patch(path = uri.path, identifier:, body:)
+        uri_path = identifier.nil? ? path : "#{path}/#{URI.encode_www_form_component(identifier)}"
+        response = http_client.send_request(
+          'PATCH',
+          uri_path,
+          prepare_payload(body),
+          headers
+        )
+
+        handle_response(response)
+      end
+
       def get(path = uri.path, identifier:)
         uri_path = identifier.nil? ? path : "#{path}/#{URI.encode_www_form_component(identifier)}"
         response = http_client.send_request(
