@@ -25,6 +25,35 @@ RSpec.describe Lago::Api::Resources::PaymentRequest do
     context resource_name do
       subject(:resource, &resource_block)
 
+      describe '#get' do
+        context 'when payment request is successfully fetched' do
+          before do
+            stub_request(:get, "https://api.getlago.com/api/v1/payment_requests/#{payment_request_id}")
+              .to_return(body: payment_request_response, status: 200)
+          end
+
+          it 'returns a payment request' do
+            payment_request = resource.get(payment_request_id)
+
+            expect(payment_request.lago_id).to eq(payment_request_id)
+            expect(payment_request.amount_cents).to eq(19_955)
+            expect(payment_request.customer.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+            expect(payment_request.invoices.first.lago_id).to eq('f8e194df-5d90-4382-b146-c881d2c67f28')
+          end
+        end
+
+        context 'when payment request is not found' do
+          before do
+            stub_request(:get, "https://api.getlago.com/api/v1/payment_requests/#{payment_request_id}")
+              .to_return(body: error_response, status: 422)
+          end
+
+          it 'raises an error' do
+            expect { resource.get(payment_request_id) }.to raise_error Lago::Api::HttpError
+          end
+        end
+      end
+
       describe '#get_all' do
         let(:payment_requests_response) do
           {
