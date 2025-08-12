@@ -8,7 +8,8 @@ FactoryBot.define do
     granted_credits { '100' }
     applies_to do
       {
-        fee_types: %w[charge]
+        fee_types: %w[charge],
+        billable_metric_codes: %w[bm1]
       }
     end
     recurring_transaction_rules do
