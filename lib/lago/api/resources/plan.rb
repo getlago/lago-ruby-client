@@ -14,6 +14,46 @@ module Lago
           'plan'
         end
 
+        def get_entitlements(plan_code)
+          response = connection.get(entitlements_uri(plan_code), identifier: nil)
+          JSON.parse(response.to_json, object_class: OpenStruct).entitlements
+        end
+
+        def create_entitlements(plan_code, params)
+          response = connection.post(
+            whitelist_entitlements_params(params),
+            entitlements_uri(plan_code),
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).entitlements
+        end
+
+        def update_entitlements(plan_code, params)
+          response = connection.patch(
+            entitlements_uri(plan_code),
+            identifier: nil,
+            body: whitelist_entitlements_params(params),
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).entitlements
+        end
+
+        def get_entitlement(plan_code, feature_code)
+          response = connection.get(entitlements_uri(plan_code, feature_code), identifier: nil)
+          JSON.parse(response.to_json, object_class: OpenStruct).entitlement
+        end
+
+        def delete_entitlement(plan_code, feature_code)
+          response = connection.destroy(entitlements_uri(plan_code, feature_code), identifier: nil)
+          JSON.parse(response.to_json, object_class: OpenStruct).entitlement
+        end
+
+        def delete_entitlement_privilege(plan_code, feature_code, privilege_code)
+          response = connection.destroy(
+            entitlements_uri(plan_code, feature_code, "privileges/#{privilege_code}"),
+            identifier: nil,
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).entitlement
+        end
+
         def whitelist_params(params)
           result_hash = {
             name: params[:name],
@@ -93,6 +133,21 @@ module Lago
           end
 
           processed_usage_thresholds
+        end
+
+        def whitelist_entitlements_params(params)
+          {
+            entitlements: params,
+          }
+        end
+
+        private
+
+        def entitlements_uri(plan_code, feature_code = nil, action = nil)
+          url = "#{client.base_api_url}#{api_resource}/#{plan_code}/entitlements"
+          url += "/#{feature_code}" if feature_code
+          url += "/#{action}" if action
+          URI(url)
         end
       end
     end
