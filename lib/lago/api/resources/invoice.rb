@@ -140,7 +140,7 @@ module Lago
               :tax_codes,
               :invoice_display_name,
               :from_datetime,
-              :to_datetime
+              :to_datetime,
             )
 
             processed_fees << result unless result.empty?
