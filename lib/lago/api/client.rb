@@ -102,6 +102,10 @@ module Lago
         Resources::Event.new(self)
       end
 
+      def features
+        Resources::Feature.new(self)
+      end
+
       def fees
         Resources::Fee.new(self)
       end
