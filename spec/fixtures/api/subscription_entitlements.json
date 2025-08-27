@@ -1,0 +1,70 @@
+{
+  "entitlements": [
+    {
+      "code": "seats",
+      "name": "Number of seats",
+      "description": "Number of users of the account",
+      "privileges": [
+        {
+          "code": "max_admins",
+          "name": "Max Admins",
+          "value_type": "integer",
+          "config": {},
+          "value": 3,
+          "plan_value": 3,
+          "override_value": null
+        },
+        {
+          "code": "max",
+          "name": "Maximum",
+          "value_type": "integer",
+          "config": {},
+          "value": 99,
+          "plan_value": 20,
+          "override_value": 99
+        }
+      ],
+      "overrides": {
+        "max": 99
+      }
+    },
+    {
+      "code": "analytics_api",
+      "name": "Analytics API",
+      "description": "Access to all analytics data via REST API",
+      "privileges": [],
+      "overrides": {}
+    },
+    {
+      "code": "salesforce",
+      "name": "Salesforce Integration",
+      "description": null,
+      "privileges": [],
+      "overrides": {}
+    },
+    {
+      "code": "sso",
+      "name": "SSO",
+      "description": null,
+      "privileges": [
+        {
+          "code": "provider",
+          "name": "Provider Name",
+          "value_type": "select",
+          "config": {
+            "select_options": [
+              "okta",
+              "ad",
+              "google",
+              "custom"
+            ]
+          },
+          "value": "okta",
+          "plan_value": "okta",
+          "override_value": null
+        }
+      ],
+      "overrides": {}
+    }
+  ]
+} 

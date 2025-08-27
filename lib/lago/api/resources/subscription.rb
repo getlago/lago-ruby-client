@@ -35,6 +35,33 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).lifetime_usage
         end
 
+        def get_entitlements(external_subscription_id)
+          response = connection.get(entitlements_uri(external_subscription_id), identifier: nil)
+          JSON.parse(response.to_json, object_class: OpenStruct).entitlements
+        end
+
+        def update_entitlements(external_subscription_id, params)
+          response = connection.patch(
+            entitlements_uri(external_subscription_id),
+            identifier: nil,
+            body: whitelist_entitlements_update_params(params),
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def delete_entitlement(external_subscription_id, feature_code)
+          response = connection.destroy(entitlements_uri(external_subscription_id, feature_code), identifier: nil)
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def delete_entitlement_privilege(external_subscription_id, entitlement_code, privilege_code)
+          response = connection.destroy(
+            entitlements_uri(external_subscription_id, entitlement_code, "privileges/#{privilege_code}"),
+            identifier: nil,
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def get_alert(external_subscription_id, code)
           response = connection.get(alert_uri(external_subscription_id, code), identifier: nil)
           JSON.parse(response.to_json, object_class: OpenStruct).alert
@@ -119,7 +146,20 @@ module Lago
           end
         end
 
+        def whitelist_entitlements_update_params(params)
+          {
+            entitlements: params,
+          }
+        end
+
         private
+
+        def entitlements_uri(external_subscription_id, feature_code = nil, action = nil)
+          url = "#{client.base_api_url}#{api_resource}/#{external_subscription_id}/entitlements"
+          url += "/#{feature_code}" if feature_code
+          url += "/#{action}" if action
+          URI(url)
+        end
 
         def alert_uri(external_subscription_id, code = nil)
           URI("#{client.base_api_url}#{api_resource}/#{external_subscription_id}/alerts#{code ? "/#{code}" : ''}")

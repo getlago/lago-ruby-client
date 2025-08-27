@@ -202,4 +202,144 @@ RSpec.describe Lago::Api::Resources::Plan do
       end
     end
   end
+
+  describe '#get_entitlements' do
+    let(:json_response) { load_fixture('plan_entitlements') }
+    let(:plan_code) { 'plan_123' }
+
+    context 'when entitlements are successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/entitlements")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns entitlements' do
+        entitlements = resource.get_entitlements(plan_code)
+
+        expect(entitlements).to be_an(Array)
+        expect(entitlements.map(&:code)).to eq %w[seats analytics_api salesforce sso]
+      end
+    end
+  end
+
+  describe '#create_entitlements' do
+    let(:plan_code) { 'plan_123' }
+    let(:params) do
+      {
+        seats: {
+          root: true,
+        },
+      }
+    end
+    let(:response_body) { { entitlements: { worked: true } }.to_json }
+
+    context 'when entitlements are successfully created' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/plans/#{plan_code}/entitlements")
+          .with(body: { entitlements: params })
+          .to_return(body: response_body, status: 200)
+      end
+
+      it 'returns response' do
+        response = resource.create_entitlements(plan_code, params)
+
+        expect(response.worked).to be true
+      end
+    end
+  end
+
+  describe '#update_entitlements' do
+    let(:plan_code) { 'plan_123' }
+    let(:params) do
+      {
+        seats: {
+          root: true,
+        },
+      }
+    end
+    let(:response_body) { { entitlements: { worked: true } }.to_json }
+
+    context 'when entitlements are successfully updated' do
+      before do
+        stub_request(:patch, "https://api.getlago.com/api/v1/plans/#{plan_code}/entitlements")
+          .with(body: { entitlements: params })
+          .to_return(body: response_body, status: 200)
+      end
+
+      it 'returns response' do
+        response = resource.update_entitlements(plan_code, params)
+
+        expect(response.worked).to be true
+      end
+    end
+  end
+
+  describe '#get_entitlement' do
+    let(:plan_code) { 'plan_123' }
+    let(:feature_code) { 'seats' }
+    let(:json_response) { { entitlement: { worked: true } }.to_json }
+
+    context 'when entitlement is successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/entitlements/#{feature_code}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns entitlement' do
+        response = resource.get_entitlement(plan_code, feature_code)
+
+        expect(response.worked).to be true
+      end
+    end
+  end
+
+  describe '#delete_entitlement' do
+    let(:plan_code) { 'plan_123' }
+    let(:feature_code) { 'seats' }
+    let(:response_body) { { entitlement: { worked: true } }.to_json }
+
+    context 'when entitlement is successfully deleted' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/entitlements/#{feature_code}")
+          .to_return(body: response_body, status: 200)
+      end
+
+      it 'returns response' do
+        response = resource.delete_entitlement(plan_code, feature_code)
+
+        expect(response.worked).to be true
+      end
+    end
+
+    context 'when entitlement deletion fails' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/entitlements/#{feature_code}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.delete_entitlement(plan_code, feature_code) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#delete_entitlement_privilege' do
+    let(:plan_code) { 'plan_123' }
+    let(:entitlement_code) { 'seats' }
+    let(:privilege_code) { 'max_admins' }
+    let(:response_body) { { entitlement: { worked: true } }.to_json }
+
+    context 'when entitlement privilege is successfully deleted' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/entitlements/#{entitlement_code}/privileges/#{privilege_code}")
+          .to_return(body: response_body, status: 200)
+      end
+
+      it 'returns response' do
+        response = resource.delete_entitlement_privilege(plan_code, entitlement_code, privilege_code)
+
+        expect(response.worked).to be true
+      end
+    end
+  end
 end

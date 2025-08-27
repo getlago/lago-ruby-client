@@ -531,4 +531,108 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
     end
   end
+
+  describe '#get_entitlements' do
+    let(:json_response) { load_fixture('subscription_entitlements') }
+    let(:entitlements_response) { JSON.parse(json_response) }
+    let(:external_subscription_id) { 'sub_123' }
+
+    context 'when entitlements are successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns entitlements' do
+        entitlements = resource.get_entitlements(external_subscription_id)
+
+        expect(entitlements).to be_an(Array)
+        expect(entitlements.map(&:code)).to eq %w[seats analytics_api salesforce sso]
+      end
+    end
+
+    context 'when entitlements are not found' do
+      let(:not_found_response) do
+        {
+          'status' => 404,
+          'error' => 'Not Found',
+          'code' => 'subscription_not_found',
+        }.to_json
+      end
+
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements")
+          .to_return(body: not_found_response, status: 404)
+      end
+
+      it 'raises an error' do
+        expect { resource.get_entitlements(external_subscription_id) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#delete_entitlement' do
+    let(:external_subscription_id) { 'sub_123' }
+    let(:feature_code) { 'seats' }
+    let(:response_body) { { worked: true }.to_json }
+
+    context 'when entitlement is successfully deleted' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements/#{feature_code}")
+          .to_return(body: response_body, status: 200)
+      end
+
+      it 'returns response' do
+        response = resource.delete_entitlement(external_subscription_id, feature_code)
+
+        expect(response.worked).to be true
+      end
+    end
+  end
+
+  describe '#update_entitlements' do
+    let(:external_subscription_id) { 'sub_123' }
+    let(:params) do
+      {
+        seats: {
+          root: true,
+        },
+      }
+    end
+    let(:response_body) { { worked: true }.to_json }
+
+    context 'when entitlements are successfully updated' do
+      before do
+        stub_request(:patch, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements")
+          .with(body: { entitlements: params })
+          .to_return(body: response_body, status: 200)
+      end
+
+      it 'returns response' do
+        response = resource.update_entitlements(external_subscription_id, params)
+
+        expect(response.worked).to be true
+      end
+    end
+  end
+
+  describe '#delete_entitlement_privilege' do
+    let(:external_subscription_id) { 'sub_123' }
+    let(:entitlement_code) { 'seats' }
+    let(:privilege_code) { 'max_admins' }
+    let(:response_body) { { worked: true }.to_json }
+
+    context 'when entitlement privilege is successfully deleted' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements/#{entitlement_code}/privileges/#{privilege_code}")
+          .to_return(body: response_body, status: 200)
+      end
+
+      it 'returns response' do
+        response = resource.delete_entitlement_privilege(external_subscription_id, entitlement_code, privilege_code)
+
+        expect(response.worked).to be true
+      end
+    end
+  end
 end

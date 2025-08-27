@@ -11,6 +11,7 @@ require 'lago/api/resources/coupon'
 require 'lago/api/resources/credit_note'
 require 'lago/api/resources/customer'
 require 'lago/api/resources/event'
+require 'lago/api/resources/feature'
 require 'lago/api/resources/fee'
 require 'lago/api/resources/gross_revenue'
 require 'lago/api/resources/invoice'
@@ -99,6 +100,10 @@ module Lago
 
       def events
         Resources::Event.new(self)
+      end
+
+      def features
+        Resources::Feature.new(self)
       end
 
       def fees
