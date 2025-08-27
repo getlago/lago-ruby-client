@@ -54,22 +54,6 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def remove_entitlement(external_subscription_id, feature_code)
-          response = connection.post(
-            {},
-            entitlements_uri(external_subscription_id, feature_code, 'remove'),
-          )
-          JSON.parse(response.to_json, object_class: OpenStruct)
-        end
-
-        def restore_entitlement(external_subscription_id, feature_code)
-          response = connection.post(
-            {},
-            entitlements_uri(external_subscription_id, feature_code, 'restore'),
-          )
-          JSON.parse(response.to_json, object_class: OpenStruct)
-        end
-
         def delete_entitlement_privilege(external_subscription_id, entitlement_code, privilege_code)
           response = connection.destroy(
             entitlements_uri(external_subscription_id, entitlement_code, "privileges/#{privilege_code}"),

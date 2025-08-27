@@ -590,44 +590,6 @@ RSpec.describe Lago::Api::Resources::Subscription do
     end
   end
 
-  describe '#remove_entitlement' do
-    let(:external_subscription_id) { 'sub_123' }
-    let(:feature_code) { 'analytics_api' }
-    let(:response_body) { { worked: true }.to_json }
-
-    context 'when entitlement is successfully removed' do
-      before do
-        stub_request(:post, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements/#{feature_code}/remove")
-          .to_return(body: response_body, status: 200)
-      end
-
-      it 'returns response' do
-        response = resource.remove_entitlement(external_subscription_id, feature_code)
-
-        expect(response.worked).to be true
-      end
-    end
-  end
-
-  describe '#restore_entitlement' do
-    let(:external_subscription_id) { 'sub_123' }
-    let(:feature_code) { 'sso' }
-    let(:response_body) { { worked: true }.to_json }
-
-    context 'when entitlement is successfully restored' do
-      before do
-        stub_request(:post, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements/#{feature_code}/restore")
-          .to_return(body: response_body, status: 200)
-      end
-
-      it 'returns response' do
-        response = resource.restore_entitlement(external_subscription_id, feature_code)
-
-        expect(response.worked).to be true
-      end
-    end
-  end
-
   describe '#update_entitlements' do
     let(:external_subscription_id) { 'sub_123' }
     let(:params) do
