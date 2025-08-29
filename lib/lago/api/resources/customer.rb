@@ -23,6 +23,15 @@ module Lago
           connection.get(uri, identifier: nil)
         end
 
+        def projected_usage(external_customer_id, external_subscription_id, apply_taxes: nil)
+          query_params = { external_subscription_id: external_subscription_id }
+          query_params[:apply_taxes] = apply_taxes unless apply_taxes.nil?
+          query_string = URI.encode_www_form(query_params)
+
+          uri = URI("#{client.base_api_url}#{api_resource}/#{external_customer_id}/projected_usage?#{query_string}")
+          connection.get(uri, identifier: nil)
+        end
+
         def past_usage(external_customer_id, external_subscription_id, options = {})
           uri = URI(
             "#{client.base_api_url}#{api_resource}/#{external_customer_id}/past_usage",
