@@ -14,6 +14,7 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
           'lago_id' => 'this-is-lago-id',
           'lago_wallet_id' => factory_wallet_transaction.wallet_id,
           'amount' => factory_wallet_transaction.paid_credits,
+          'name' => factory_wallet_transaction.name,
           'status' => 'pending',
           'transaction_status' => 'purchased',
           'transaction_type' => 'inbound',
@@ -25,6 +26,7 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
           'lago_id' => 'this-is-lago-id2',
           'lago_wallet_id' => factory_wallet_transaction.wallet_id,
           'amount' => factory_wallet_transaction.granted_credits,
+          'name' => factory_wallet_transaction.name,
           'status' => 'settled',
           'transaction_status' => 'purchased',
           'transaction_type' => 'inbound',
@@ -44,10 +46,25 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
   end
 
   describe '#create' do
-    let(:params) { factory_wallet_transaction.to_h }
+    let(:params) do
+      {
+        wallet_id: "123",
+        name: "Transaction Name",
+        paid_credits: "100",
+        granted_credits: "100",
+        voided_credits: "0",
+        extra_param: "extra_value"
+      }
+    end
     let(:body) do
       {
-        'wallet_transaction' => factory_wallet_transaction.to_h
+        'wallet_transaction' => {
+          "wallet_id" => "123",
+          "name" => "Transaction Name",
+          "paid_credits" => "100",
+          "granted_credits" => "100",
+          "voided_credits" => "0"
+        }
       }
     end
 
@@ -63,6 +80,7 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
 
         expect(wallet_transactions.first.lago_id).to eq('this-is-lago-id')
         expect(wallet_transactions.last.lago_id).to eq('this-is-lago-id2')
+        expect(wallet_transactions).to all(have_attributes(name: 'Transaction Name'))
       end
     end
 

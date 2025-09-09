@@ -4,5 +4,6 @@ FactoryBot.define do
     paid_credits { '100' }
     granted_credits { '100' }
     voided_credits { '0' }
+    name { 'Transaction Name' }
   end
 end
