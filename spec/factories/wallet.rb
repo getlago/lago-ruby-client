@@ -22,7 +22,8 @@ FactoryBot.define do
           started_at: nil,
           expiration_at: '2026-12-31T23:59:59Z',
           threshold_credits: '0',
-          method: 'fixed'
+          method: 'fixed',
+          transaction_name: 'Recurring Transaction Rule'
         },
       ]
     end

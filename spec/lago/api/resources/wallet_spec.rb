@@ -34,14 +34,35 @@ RSpec.describe Lago::Api::Resources::Wallet do
     let(:params) { factory_wallet.to_h }
     let(:body) do
       {
-        'wallet' => factory_wallet.to_h,
+        'wallet' => {
+          'external_customer_id' => '12345',
+          'rate_amount' => '1',
+          'name' => 'wallet name',
+          'paid_credits' => '100',
+          'granted_credits' => '100',
+          'expiration_at' => '2022-07-07T23:59:59Z',
+          'recurring_transaction_rules' => [
+            {
+              'paid_credits' => '105',
+              'granted_credits' => '105',
+              'threshold_credits' => '0',
+              'trigger' => 'interval',
+              'interval' => 'monthly',
+              'method' => 'fixed',
+              'started_at' => nil,
+              'expiration_at' => '2026-12-31T23:59:59Z',
+              'transaction_name' => 'Recurring Transaction Rule'
+            }
+          ],
+          'applies_to' => { 'fee_types' => ['charge'], 'billable_metric_codes' => ['bm1'] }
+        }
       }
     end
 
     context 'when wallet is successfully created' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
-          .with(body: body)
+          .with(body:)
           .to_return(body: response, status: 200)
       end
 
@@ -53,6 +74,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
         expect(wallet.expiration_at).to eq(factory_wallet.expiration_at)
         expect(wallet.recurring_transaction_rules.first.trigger).to eq('interval')
         expect(wallet.recurring_transaction_rules.first.interval).to eq('monthly')
+        expect(wallet.recurring_transaction_rules.first.transaction_name).to eq('Recurring Transaction Rule')
         expect(wallet.recurring_transaction_rules.first.expiration_at).to eq(
           factory_wallet.recurring_transaction_rules.first[:expiration_at]
         )
@@ -75,11 +97,32 @@ RSpec.describe Lago::Api::Resources::Wallet do
   end
 
   describe '#update' do
-    let(:params) { { name: 'new-name' } }
+    let(:params) { factory_wallet.to_h }
     let(:id) { 'id' }
     let(:body) do
       {
-        'wallet' => { name: 'new-name' },
+        'wallet' => {
+          'external_customer_id' => '12345',
+          'rate_amount' => '1',
+          'name' => 'wallet name',
+          'paid_credits' => '100',
+          'granted_credits' => '100',
+          'expiration_at' => '2022-07-07T23:59:59Z',
+          'recurring_transaction_rules' => [
+            {
+              'paid_credits' => '105',
+              'granted_credits' => '105',
+              'threshold_credits' => '0',
+              'trigger' => 'interval',
+              'interval' => 'monthly',
+              'method' => 'fixed',
+              'started_at' => nil,
+              'expiration_at' => '2026-12-31T23:59:59Z',
+              'transaction_name' => 'Recurring Transaction Rule'
+            }
+          ],
+          'applies_to' => { 'fee_types' => ['charge'], 'billable_metric_codes' => ['bm1'] }
+        }
       }
     end
 
