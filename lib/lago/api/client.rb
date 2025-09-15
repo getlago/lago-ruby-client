@@ -10,6 +10,14 @@ require 'lago/api/resources/billing_entity'
 require 'lago/api/resources/coupon'
 require 'lago/api/resources/credit_note'
 require 'lago/api/resources/customer'
+require 'lago/api/resources/customers/base'
+require 'lago/api/resources/customers/applied_coupon'
+require 'lago/api/resources/customers/credit_note'
+require 'lago/api/resources/customers/invoice'
+require 'lago/api/resources/customers/payment'
+require 'lago/api/resources/customers/payment_request'
+require 'lago/api/resources/customers/subscription'
+require 'lago/api/resources/customers/wallet'
 require 'lago/api/resources/event'
 require 'lago/api/resources/feature'
 require 'lago/api/resources/fee'
@@ -96,6 +104,34 @@ module Lago
 
       def customers
         Resources::Customer.new(self)
+      end
+
+      def customer_applied_coupons(resource_id)
+        Resources::Customers::AppliedCoupon.new(self, resource_id)
+      end
+
+      def customer_credit_notes(resource_id)
+        Resources::Customers::CreditNote.new(self, resource_id)
+      end
+
+      def customer_invoices(resource_id)
+        Resources::Customers::Invoice.new(self, resource_id)
+      end
+
+      def customer_payments(resource_id)
+        Resources::Customers::Payment.new(self, resource_id)
+      end
+
+      def customer_payment_requests(resource_id)
+        Resources::Customers::PaymentRequest.new(self, resource_id)
+      end
+
+      def customer_subscriptions(resource_id)
+        Resources::Customers::Subscription.new(self, resource_id)
+      end
+
+      def customer_wallets(resource_id)
+        Resources::Customers::Wallet.new(self, resource_id)
       end
 
       def events
