@@ -62,7 +62,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
     context 'when wallet is successfully created' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
-          .with(body:)
+          .with(body: body)
           .to_return(body: response, status: 200)
       end
 
