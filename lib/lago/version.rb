@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Lago
-  VERSION = '1.33.1'
+  VERSION = '1.33.3'
 end
