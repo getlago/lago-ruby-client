@@ -15,23 +15,24 @@ module Lago
         end
 
         def whitelist_params(params)
-          result_hash = {
-            external_customer_id: params[:external_customer_id],
-            rate_amount: params[:rate_amount],
-            name: params[:name],
-            paid_credits: params[:paid_credits],
-            granted_credits: params[:granted_credits],
-            currency: params[:currency],
-            expiration_at: params[:expiration_at],
-            transaction_metadata: params[:transaction_metadata],
-            invoice_requires_successful_payment: params[:invoice_requires_successful_payment],
-          }.compact
+          result_hash = params.compact.slice(
+            :external_customer_id,
+            :rate_amount,
+            :name,
+            :paid_credits,
+            :granted_credits,
+            :currency,
+            :expiration_at,
+            :transaction_metadata,
+            :invoice_requires_successful_payment,
+            :transaction_name,
+          )
 
           recurring_rules = whitelist_recurring_rules(params[:recurring_transaction_rules])
-          result_hash[:recurring_transaction_rules] = recurring_rules unless recurring_rules.empty?
+          result_hash[:recurring_transaction_rules] = recurring_rules if recurring_rules.any?
 
           applies_to = whitelist_applies_to(params[:applies_to])
-          result_hash[:applies_to] = applies_to unless applies_to.empty?
+          result_hash[:applies_to] = applies_to if applies_to.any?
 
           { root_name => result_hash }
         end

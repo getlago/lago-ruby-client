@@ -31,7 +31,12 @@ RSpec.describe Lago::Api::Resources::Wallet do
   end
 
   describe '#create' do
-    let(:params) { factory_wallet.to_h }
+    let(:params) do
+      factory_wallet.to_h.merge(
+        transaction_name: 'wallet transaction name',
+        transaction_metadata: [{ 'key' => 'key', 'value' => 'value' }]
+      )
+    end
     let(:body) do
       {
         'wallet' => {
@@ -41,6 +46,8 @@ RSpec.describe Lago::Api::Resources::Wallet do
           'paid_credits' => '100',
           'granted_credits' => '100',
           'expiration_at' => '2022-07-07T23:59:59Z',
+          'transaction_name' => 'wallet transaction name',
+          'transaction_metadata' => [{ 'key' => 'key', 'value' => 'value' }],
           'recurring_transaction_rules' => [
             {
               'paid_credits' => '105',
