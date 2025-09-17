@@ -52,7 +52,8 @@ module Lago
               :started_at,
               :expiration_at,
               :target_ongoing_balance,
-              :transaction_metadata
+              :transaction_metadata,
+              :transaction_name
             )
 
             processed_rules << result unless result.empty?
