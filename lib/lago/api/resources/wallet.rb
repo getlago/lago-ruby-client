@@ -26,6 +26,8 @@ module Lago
             :transaction_metadata,
             :invoice_requires_successful_payment,
             :transaction_name,
+            :paid_top_up_min_amount_cents,
+            :paid_top_up_max_amount_cents
           )
 
           recurring_rules = whitelist_recurring_rules(params[:recurring_transaction_rules])
@@ -54,7 +56,8 @@ module Lago
               :expiration_at,
               :target_ongoing_balance,
               :transaction_metadata,
-              :transaction_name
+              :transaction_name,
+              :ignore_paid_top_up_limits
             )
 
             processed_rules << result unless result.empty?
