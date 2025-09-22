@@ -25,6 +25,7 @@ module Lago
             :expiration_at,
             :transaction_metadata,
             :invoice_requires_successful_payment,
+            :ignore_paid_top_up_limits_on_creation,
             :transaction_name,
             :paid_top_up_min_amount_cents,
             :paid_top_up_max_amount_cents
