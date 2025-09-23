@@ -38,7 +38,7 @@ module Lago
               :voided_credits,
               :invoice_requires_successful_payment,
               :ignore_paid_top_up_limits,
-              :metadata
+              :metadata,
             )
           }
         end
