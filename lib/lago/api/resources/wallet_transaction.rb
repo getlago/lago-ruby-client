@@ -30,15 +30,16 @@ module Lago
 
         def whitelist_params(params)
           {
-            'wallet_transaction' => {
-              wallet_id: params[:wallet_id],
-              name: params[:name],
-              paid_credits: params[:paid_credits],
-              granted_credits: params[:granted_credits],
-              voided_credits: params[:voided_credits],
-              invoice_requires_successful_payment: params[:invoice_requires_successful_payment],
-              metadata: params[:metadata],
-            }.compact
+            'wallet_transaction' => params.compact.slice(
+              :wallet_id,
+              :name,
+              :paid_credits,
+              :granted_credits,
+              :voided_credits,
+              :invoice_requires_successful_payment,
+              :ignore_paid_top_up_limits,
+              :metadata,
+            )
           }
         end
       end
