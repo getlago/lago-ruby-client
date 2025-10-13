@@ -16,11 +16,11 @@ This is a ruby wrapper for Lago API
 
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add lago-ruby-client
+    bundle add lago-ruby-client
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install lago-ruby-client
+    gem install lago-ruby-client
 
 ## Usage
 
@@ -44,28 +44,68 @@ For detailed usage, refer to the [lago API reference](https://getlago.com/docs/a
 
 ## Development
 
+### Docker Compose
+
+To simplify the development process, you can use the `docker-compose.yml` to run tests and lint the code.
+
+```bash
+docker compose up -d
+```
+
+This will boot a Lago instance (to run integration tests) and a container with the Lago Ruby Client code.
+
 ### Install the dependencies
 
 ```bash
 bundle install
 ```
 
-### Run tests
+This is not necessary if you use the Docker Compose file, as it will install the dependencies for you.
+
+### Testing
+
+The repository includes two types of tests:
+
+1. Unit tests which tests the Ruby code itself
+2. Integration tests which tests the Ruby code against a running Lago instance.
+
+    To run these tests, you need to set the `INTEGRATION_TESTS_ENABLED` environment variable to `true` and provide the `TEST_LAGO_API_URL` and `TEST_LAGO_API_KEY` environment variables. These variables are set by default when using the Docker Compose file.
+
+#### Running the tests
 
 ```bash
 bundle exec rspec
+INTEGRATION_TESTS_ENABLED=true TEST_LAGO_API_URL=http://lago:3000 TEST_LAGO_API_KEY=123456 bundle exec rspec
 ```
 
-### Run the linter
+or with Docker Compose:
+
+```bash
+docker compose exec client bundle exec rspec
+```
+
+### Linting
 
 ```bash
 bundle exec rubocop
+```
+
+or with Docker Compose:
+
+```bash
+docker compose exec client bundle exec rubocop
 ```
 
 To format the code, run:
 
 ```bash
 bundle exec rubocop -a # or -A
+```
+
+or with Docker Compose:
+
+```bash
+docker compose exec client bundle exec rubocop -a # or -A
 ```
 
 ## Documentation
