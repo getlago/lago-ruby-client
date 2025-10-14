@@ -3,10 +3,10 @@ inherit_from: .rubocop_todo.yml
 require:
   - rubocop-rspec
   - rubocop-performance
-  - rubocop-rails
   - rubocop-thread_safety
 
 AllCops:
+  TargetRubyVersion: 3.1
   DisplayStyleGuide: true
 
 Layout/BlockAlignment:
@@ -140,18 +140,6 @@ Naming/PredicateName:
 
 Performance/CaseWhenSplat:
   Enabled: true
-
-Rails/InverseOf:
-  Description: 'Checks for associations where the inverse cannot be determined automatically.'
-  Enabled: false
-
-Rails/HttpStatus:
-  Description: 'Enforces use of symbolic or numeric value to describe HTTP status.'
-  Enabled: false
-
-Rails/HasManyOrHasOneDependent:
-  Description: 'Forces a "dependent" options for has_one and has_many rails relations.'
-  Enabled: false
 
 RSpec/ExampleLength:
   Description: 'Checks for long examples.'

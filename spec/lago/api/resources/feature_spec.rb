@@ -25,7 +25,7 @@ RSpec.describe Lago::Api::Resources::Feature do
     context 'when feature is successfully created' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/features')
-          .with(body: body)
+          .with(body:)
           .to_return(body: response, status: 200)
       end
 
@@ -48,7 +48,7 @@ RSpec.describe Lago::Api::Resources::Feature do
     context 'when feature is successfully updated' do
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/features/#{params[:code]}")
-          .with(body: body)
+          .with(body:)
           .to_return(body: response, status: 200)
       end
 
