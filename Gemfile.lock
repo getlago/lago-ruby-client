@@ -48,7 +48,6 @@ GEM
     prism (1.4.0)
     public_suffix (5.0.1)
     racc (1.8.1)
-    rack (3.1.18)
     rainbow (3.1.1)
     rake (13.0.6)
     regexp_parser (2.10.0)
@@ -85,11 +84,6 @@ GEM
     rubocop-performance (1.23.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-rails (2.29.1)
-      activesupport (>= 4.2.0)
-      rack (>= 1.1)
-      rubocop (>= 1.52.0, < 2.0)
-      rubocop-ast (>= 1.31.1, < 2.0)
     rubocop-rspec (3.4.0)
       rubocop (~> 1.61)
     rubocop-thread_safety (0.6.0)
@@ -119,7 +113,6 @@ DEPENDENCIES
   rspec (~> 3.0)
   rubocop (~> 1.21)
   rubocop-performance
-  rubocop-rails
   rubocop-rspec
   rubocop-thread_safety
   webmock
