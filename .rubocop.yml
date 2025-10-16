@@ -141,6 +141,11 @@ Naming/PredicateName:
 Performance/CaseWhenSplat:
   Enabled: true
 
+RSpec/DescribeClass:
+  Enabled: true
+  Exclude:
+    - 'spec/integration/**/*'
+
 RSpec/ExampleLength:
   Description: 'Checks for long examples.'
   Enabled: false
@@ -154,6 +159,11 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/NestedGroups:
   Enabled: false
+
+RSpec/NoExpectationExample:
+  Enabled: false
+  AllowedPatterns:
+    - '^test_'
 
 Style/BlockDelimiters:
   Description: >-

@@ -7,10 +7,13 @@ require 'webmock/rspec'
 require 'ostruct'
 
 require_relative 'support/fixture_helper'
+require_relative 'support/integration_helper'
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include FixtureHelper
+
+  IntegrationHelper.configure(config)
 
   config.before(:suite) do
     FactoryBot.find_definitions
