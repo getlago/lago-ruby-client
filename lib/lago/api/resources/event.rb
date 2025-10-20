@@ -28,7 +28,8 @@ module Lago
           uri = URI("#{client.base_api_url}#{api_resource}/batch")
 
           payload = whitelist_batch_params(params)
-          connection.post(payload, uri)
+          response = connection.post(payload, uri)
+          JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
         def estimate_fees(params)
