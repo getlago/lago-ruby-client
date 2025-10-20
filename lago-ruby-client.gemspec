@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency('jwt')
   spec.add_dependency('openssl')
+  spec.add_dependency('ostruct')
 
   spec.add_development_dependency('bigdecimal')
   spec.add_development_dependency('debug', '>= 1.0.0')

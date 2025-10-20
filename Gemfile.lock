@@ -4,6 +4,7 @@ PATH
     lago-ruby-client (1.33.4)
       jwt
       openssl
+      ostruct
 
 GEM
   remote: https://rubygems.org/
@@ -41,6 +42,7 @@ GEM
     mutex_m (0.3.0)
     observer (0.1.2)
     openssl (3.3.0)
+    ostruct (0.6.3)
     parallel (1.27.0)
     parser (3.3.8.0)
       ast (~> 2.4.1)
