@@ -9,6 +9,20 @@ RSpec.describe Lago::Api::Resources::Event do
 
   let(:event_response) { load_fixture('event') }
 
+  def expect_to_match_fixture(event)
+    expect(event.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+    expect(event.lago_id).to eq '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    expect(event.transaction_id).to eq '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    expect(event.lago_customer_id).to eq '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    expect(event.code).to eq 'bm_code'
+    expect(event.timestamp).to eq '2022-04-29T08:59:51.998Z'
+    expect(event.precise_total_amount_cents).to be_nil
+    expect(event.properties.custom_field).to eq 12
+    expect(event.lago_subscription_id).to eq '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    expect(event.external_subscription_id).to eq '1a901a90-1a90-1a90-1a90-1a901a901a90'
+    expect(event.created_at).to eq '2022-04-29T08:59:51Z'
+  end
+
   describe '#create' do
     let(:params) { create(:event).to_h }
 
@@ -21,8 +35,7 @@ RSpec.describe Lago::Api::Resources::Event do
 
       it 'returns true' do
         event = resource.create(params)
-
-        expect(event.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+        expect_to_match_fixture(event)
       end
     end
 
@@ -38,25 +51,45 @@ RSpec.describe Lago::Api::Resources::Event do
       it 'returns true' do
         event = resource.create(params)
 
-        expect(event.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+        expect_to_match_fixture(event)
       end
     end
   end
 
   describe '#batch_create' do
     let(:params) { build(:batch_event).to_h }
+    let(:events_response) { load_fixture('events') }
 
     context 'when event is successfully processed' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/events/batch')
           .with(body: params)
-          .to_return(body: '', status: 200)
+          .to_return(body: events_response, status: 200)
       end
 
       it 'returns true' do
         response = resource.batch_create(params)
 
-        expect(response).to be true
+        expect(response.events.count).to eq(1)
+        expect_to_match_fixture(response.events.first)
+      end
+    end
+  end
+
+  describe '#get_all' do
+    let(:events_response) { load_fixture('events') }
+
+    context 'when events are successfully fetched' do
+      before do
+        stub_request(:get, 'https://api.getlago.com/api/v1/events')
+          .to_return(body: events_response, status: 200)
+      end
+
+      it 'returns a list of events' do
+        response = resource.get_all
+
+        expect(response.events.count).to eq(1)
+        expect_to_match_fixture(response.events.first)
       end
     end
   end
@@ -73,7 +106,7 @@ RSpec.describe Lago::Api::Resources::Event do
       it 'returns the matching event if it exists' do
         response = resource.get(event_id)
 
-        expect(response.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+        expect_to_match_fixture(response)
       end
     end
 

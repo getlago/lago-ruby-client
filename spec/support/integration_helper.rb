@@ -82,7 +82,7 @@ module IntegrationHelper
   }.freeze
 
   def create_customer(params: {}, presets: [])
-    external_id = "ruby-#{Time.now.strftime('%Y-%m-%dT%H-%M-%S-%L')}"
+    external_id = unique_id
     create_params = {
       external_id: "ExternalID #{external_id}",
       firstname: "Firstname #{external_id}",
@@ -99,5 +99,73 @@ module IntegrationHelper
     create_params.merge!(params)
 
     client.customers.create(create_params)
+  end
+
+  BILLABLE_METRIC_PRESETS = {
+    sum_agg: {
+      aggregation_type: 'sum_agg',
+      field_name: 'value',
+    },
+    count_agg: {
+      aggregation_type: 'count_agg',
+    },
+    unique_count_agg: {
+      aggregation_type: 'unique_count_agg',
+      field_name: 'value',
+    },
+  }.freeze
+  def create_billable_metric(params: {}, presets: [])
+    create_params = {}
+    presets.each do |preset|
+      raise "Preset #{preset} not found" unless BILLABLE_METRIC_PRESETS.key?(preset.to_sym)
+
+      create_params.merge!(BILLABLE_METRIC_PRESETS[preset])
+    end
+    create_params.merge!(params)
+
+    agg_type = create_params[:aggregation_type]
+    create_params[:name] = "#{agg_type} | #{unique_id}"
+    create_params[:code] = "#{agg_type}-#{unique_id}"
+
+    client.billable_metrics.create(create_params)
+  end
+
+  def create_plan(params: {}, presets: [])
+    create_params = {}
+    presets.each do |preset|
+      raise "Preset #{preset} not found" unless PLAN_PRESETS.key?(preset.to_sym)
+
+      create_params.merge!(PLAN_PRESETS[preset])
+    end
+    create_params.merge!(params)
+
+    create_params[:name] = "Plan | #{unique_id}"
+    create_params[:code] = "plan-#{unique_id}"
+    create_params[:interval] ||= 'monthly'
+    create_params[:amount_cents] ||= 1000
+    create_params[:amount_currency] ||= 'EUR'
+    create_params[:trial_period] ||= 0
+    create_params[:pay_in_advance] ||= false
+    create_params[:bill_charges_monthly] ||= false
+    create_params[:charges] ||= []
+    create_params[:minimum_commitment] ||= {}
+    create_params[:taxes] ||= []
+
+    client.plans.create(create_params)
+  end
+
+  def create_subscription(plan_code:, external_customer_id:, params: {})
+    create_params = {
+      plan_code:,
+      external_customer_id:,
+      external_id: "sub-#{unique_id}",
+    }
+    create_params.merge!(params)
+
+    client.subscriptions.create(create_params)
+  end
+
+  def unique_id
+    "ruby-#{Time.now.strftime('%Y-%m-%dT%H-%M-%S-%L')}"
   end
 end
