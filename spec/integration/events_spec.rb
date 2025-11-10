@@ -17,7 +17,7 @@ RSpec.describe 'Lago::Api::Client#events', :integration do
         ],
       },
     )
-    customer = create_customer(presets: [:french])
+    customer = create_customer(presets: [:french], context: 'event-create')
     subscription = create_subscription(external_customer_id: customer.external_id, plan_code: plan.code)
     [billable_metric.code, subscription.external_id]
   end

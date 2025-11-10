@@ -81,8 +81,8 @@ module IntegrationHelper
     },
   }.freeze
 
-  def create_customer(params: {}, presets: [])
-    external_id = unique_id
+  def create_customer(params: {}, presets: [], context: nil)
+    external_id = unique_id(context)
     create_params = {
       external_id: "ExternalID #{external_id}",
       firstname: "Firstname #{external_id}",
@@ -165,7 +165,19 @@ module IntegrationHelper
     client.subscriptions.create(create_params)
   end
 
-  def unique_id
-    "ruby-#{Time.now.strftime('%Y-%m-%dT%H-%M-%S-%L')}"
+  def unique_id(context = nil)
+    unique_id = "ruby-#{Time.now.strftime('%Y-%m-%dT%H-%M-%S-%L')}"
+    unique_id += "-#{context}" if context
+    unique_id
+  end
+
+  def customer_unique_id(customer)
+    customer.name.split(' ').last
+  end
+
+  def unique_id_regex(context = nil)
+    unique_id = 'ruby-\\d{4}-\\d{2}-\\d{2}T\\d{2}-\\d{2}-\\d{2}-\\d{3}'
+    unique_id += "-#{context}" if context
+    Regexp.new(unique_id)
   end
 end
