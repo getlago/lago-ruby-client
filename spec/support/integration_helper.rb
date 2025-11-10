@@ -180,4 +180,10 @@ module IntegrationHelper
     unique_id += "-#{context}" if context
     Regexp.new(unique_id)
   end
+
+  def wait_until(timeout = 10)
+    Timeout.timeout(timeout) do
+      sleep 0.01 until yield
+    end
+  end
 end
