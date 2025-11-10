@@ -19,6 +19,10 @@ module IntegrationHelper
     ENV['INTEGRATION_TESTS_ENABLED'] == 'true'
   end
 
+  def self.premium_license?
+    ENV['INTEGRATION_TESTS_PREMIUM_LICENSE'] == 'true'
+  end
+
   def self.configure(config)
     config.include IntegrationHelper, :integration
 
@@ -26,6 +30,8 @@ module IntegrationHelper
       config.filter_run_excluding :integration
       return
     end
+
+    config.filter_run_excluding :premium unless premium_license?
 
     api_url = ENV['TEST_LAGO_API_URL']
     api_key = ENV['TEST_LAGO_API_KEY']
@@ -173,6 +179,14 @@ module IntegrationHelper
     customer.external_id.split('-').last
   end
 
+<<<<<<< HEAD
+||||||| parent of 2c4fc34 (test: Add wallet, credit note and invoice integration tests)
+=======
+  def unique_id_regex
+    /ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}/
+  end
+
+>>>>>>> 2c4fc34 (test: Add wallet, credit note and invoice integration tests)
   def wait_until(timeout = 10)
     Timeout.timeout(timeout) do
       sleep 0.01 until yield

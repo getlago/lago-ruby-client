@@ -27,6 +27,7 @@ services:
       TEST_LAGO_API_KEY: ${TEST_LAGO_API_KEY:-123456}
       TEST_LAGO_API_URL: ${TEST_LAGO_API_URL:-http://lago:3000}
       INTEGRATION_TESTS_ENABLED: ${INTEGRATION_TESTS_ENABLED:-true}
+      INTEGRATION_TESTS_PREMIUM_LICENSE: ${INTEGRATION_TESTS_PREMIUM_LICENSE:-false}
     depends_on:
       lago:
         condition: service_healthy
