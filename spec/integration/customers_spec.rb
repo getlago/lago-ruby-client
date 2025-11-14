@@ -3,6 +3,127 @@
 require 'spec_helper'
 
 RSpec.describe 'Lago::Api::Client#customers', :integration do
+  describe '#create' do
+    it 'creates and upserts a customer' do
+      customer = create_customer(
+        params: {
+          address_line1: '123 Main St',
+          address_line2: 'Apt 1',
+          city: 'London',
+          country: 'GB',
+          currency: 'GBP',
+          customer_type: 'company',
+          external_salesforce_id: 'salesforce-id-123',
+          legal_number: '1234567890',
+          logo_url: 'https://example.com/logo.png',
+          metadata: [{ key: 'is_synced', value: 'false' }],
+          net_payment_term: 10,
+          phone: '+1234567890',
+          state: 'London',
+          tax_identification_number: '1234567890',
+          url: 'https://example.com',
+          zipcode: 'SW1A 1AA',
+          shipping_address: {
+            address_line1: '124 Main St',
+            address_line2: 'Apt 2',
+            city: 'New York',
+            country: 'US',
+            state: 'NY',
+            zipcode: '10001',
+          },
+          billing_configuration: {
+            document_locale: 'de',
+          },
+        },
+      )
+
+      fetched_customer = client.customers.get(customer.external_id)
+
+      [customer, fetched_customer].each do |c|
+        expect(c.account_type).to eq 'customer'
+        expect(c.address_line1).to eq '123 Main St'
+        expect(c.address_line2).to eq 'Apt 1'
+        expect(c.applicable_invoice_custom_sections).to eq []
+        expect(c.applicable_timezone).to be_present
+        expect(c.billing_entity_code).to eq 'hooli'
+        expect(c.city).to eq 'London'
+        expect(c.country).to eq 'GB'
+        expect(c.created_at).not_to be_nil
+        expect(c.currency).to eq 'GBP'
+        expect(c.customer_type).to eq 'company'
+        expect(c.email).to match(/^yohan\+ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}@getlago\.com$/)
+        expect(c.external_id).to match(/^ExternalID ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
+        expect(c.external_salesforce_id).to be_nil # TODO: fix this
+        expect(c.finalize_zero_amount_invoice).to eq 'inherit'
+        expect(c.firstname).to match(/^Firstname ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
+        expect(c.integration_customers).to eq []
+        expect(c.lago_id).not_to be_nil
+        expect(c.lastname).to match(/^Lastname ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
+        expect(c.legal_name).to match(/^LegalName ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
+        expect(c.legal_number).to eq '1234567890'
+        expect(c.logo_url).to eq 'https://example.com/logo.png'
+        expect(c.name).to match(/^Name \| ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
+        expect(c.net_payment_term).to eq 10
+        expect(c.phone).to eq '+1234567890'
+        expect(c.sequential_id).to be_a(Integer)
+        expect(c.skip_invoice_custom_sections).to be false
+        expect(c.slug).to match(/^HOO-\w{4}-\d{3}$/)
+        expect(c.state).to eq 'London'
+        expect(c.tax_identification_number).to eq '1234567890'
+        expect(c.taxes).to eq []
+        expect(c.timezone).to be_nil # premium feature
+        expect(c.updated_at).not_to be_nil
+        expect(c.url).to eq 'https://example.com'
+        expect(c.zipcode).to eq 'SW1A 1AA'
+
+        shipping_address = c.shipping_address
+        expect(shipping_address.address_line1).to eq '124 Main St'
+        expect(shipping_address.address_line2).to eq 'Apt 2'
+        expect(shipping_address.city).to eq 'New York'
+        expect(shipping_address.country).to eq 'US'
+        expect(shipping_address.state).to eq 'NY'
+        expect(shipping_address.zipcode).to eq '10001'
+
+        billing_configuration = c.billing_configuration
+        expect(billing_configuration.invoice_grace_period).to be_nil # premium feature
+        expect(billing_configuration.payment_provider).to be_nil
+        expect(billing_configuration.payment_provider_code).to be_nil
+        expect(billing_configuration.document_locale).to eq 'de'
+
+        metadata = c.metadata
+        expect(metadata.count).to eq 1
+
+        first_metadata = metadata.first
+        expect(first_metadata.key).to eq 'is_synced'
+        expect(first_metadata.value).to eq 'false'
+        expect(first_metadata.display_in_invoice).to be false
+        expect(first_metadata.created_at).not_to be_nil
+        expect(first_metadata.lago_id).not_to be_nil
+      end
+
+      updated_customer = client.customers.create(
+        external_id: customer.external_id,
+        address_line1: '133 Main St',
+        address_line2: 'Apt 3',
+        shipping_address: {
+          address_line1: '134 Main St',
+          address_line2: 'Apt 4',
+        },
+      )
+
+      expect(updated_customer.lago_id).to eq customer.lago_id
+
+      fetched_updated_customer = client.customers.get(updated_customer.external_id)
+
+      [updated_customer, fetched_updated_customer].each do |c|
+        expect(c.address_line1).to eq '133 Main St'
+        expect(c.address_line2).to eq 'Apt 3'
+        expect(c.shipping_address.address_line1).to eq '134 Main St'
+        expect(c.shipping_address.address_line2).to eq 'Apt 4'
+      end
+    end
+  end
+
   describe '#get_all' do
     context 'without filters' do
       before_all_integration_tests do
