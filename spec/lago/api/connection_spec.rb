@@ -46,6 +46,16 @@ RSpec.describe Lago::Api::Connection do
     end
   end
 
+  describe '#patch' do
+    let(:identifier) { 'gid://app/Customer/12 34' }
+
+    it 'encodes the identifier' do
+      stub_request(:patch, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F12%2034')
+
+      connection.patch(identifier: identifier, body: nil)
+    end
+  end
+
   describe '#destroy' do
     let(:identifier) { 'gid://app/Customer/12 34' }
 
