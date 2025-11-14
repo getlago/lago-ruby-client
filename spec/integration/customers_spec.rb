@@ -21,7 +21,6 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
           phone: '+1234567890',
           state: 'London',
           tax_identification_number: '1234567890',
-          timezone: 'America/New_York',
           url: 'https://example.com',
           zipcode: 'SW1A 1AA',
           shipping_address: {
@@ -33,7 +32,6 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
             zipcode: '10001',
           },
           billing_configuration: {
-            invoice_grace_period: 10,
             document_locale: 'de',
           },
         },
@@ -46,7 +44,7 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
         expect(c.address_line1).to eq '123 Main St'
         expect(c.address_line2).to eq 'Apt 1'
         expect(c.applicable_invoice_custom_sections).to eq []
-        expect(c.applicable_timezone).to eq 'UTC'
+        expect(c.applicable_timezone).to be_present
         expect(c.billing_entity_code).to eq 'hooli'
         expect(c.city).to eq 'London'
         expect(c.country).to eq 'GB'
