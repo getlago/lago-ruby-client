@@ -1,13 +1,21 @@
 # frozen_string_literal: true
 
 require 'debug'
+require 'pry-byebug'
 require 'factory_bot'
 require 'lago-ruby-client'
 require 'webmock/rspec'
 require 'ostruct'
-
+require 'httplog'
 require_relative 'support/fixture_helper'
 require_relative 'support/integration_helper'
+
+HttpLog.configure do |config|
+  config.enabled = true
+
+  FileUtils.mkdir_p('log')
+  config.logger = Logger.new('log/httplog.log')
+end
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
@@ -28,4 +36,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.filter_run_when_matching :focus
 end

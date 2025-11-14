@@ -27,56 +27,32 @@ RSpec.describe Lago::Api::Connection do
   end
 
   describe '#get' do
-    let(:identifier) { 'gid://app/Customer/1234' }
-
-    before do
-      stub_request(:get, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F1234')
-
-      allow(URI).to receive(:encode_www_form_component)
-        .with(identifier)
-        .and_return('gid:%2F%2Fapp%2FCustomer%2F1234')
-
-      connection.get(identifier: identifier)
-    end
+    let(:identifier) { 'gid://app/Customer/12 34' }
 
     it 'encodes the identifier' do
-      expect(URI).to have_received(:encode_www_form_component).with(identifier)
+      stub_request(:get, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F12%2034')
+
+      connection.get(identifier: identifier)
     end
   end
 
   describe '#put' do
-    let(:identifier) { 'gid://app/Customer/1234' }
-
-    before do
-      stub_request(:put, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F1234')
-
-      allow(URI).to receive(:encode_www_form_component)
-        .with(identifier)
-        .and_return('gid:%2F%2Fapp%2FCustomer%2F1234')
-
-      connection.put(identifier: identifier, body: nil)
-    end
+    let(:identifier) { 'gid://app/Customer/12 34' }
 
     it 'encodes the identifier' do
-      expect(URI).to have_received(:encode_www_form_component).with(identifier)
+      stub_request(:put, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F12%2034')
+
+      connection.put(identifier: identifier, body: nil)
     end
   end
 
   describe '#destroy' do
-    let(:identifier) { 'gid://app/Customer/1234' }
-
-    before do
-      stub_request(:delete, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F1234')
-
-      allow(URI).to receive(:encode_www_form_component)
-        .with(identifier)
-        .and_return('gid:%2F%2Fapp%2FCustomer%2F1234')
-
-      connection.destroy(identifier: identifier)
-    end
+    let(:identifier) { 'gid://app/Customer/12 34' }
 
     it 'encodes the identifier' do
-      expect(URI).to have_received(:encode_www_form_component).with(identifier)
+      stub_request(:delete, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F12%2034')
+
+      connection.destroy(identifier: identifier)
     end
   end
 end
