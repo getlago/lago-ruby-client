@@ -168,4 +168,14 @@ module IntegrationHelper
   def unique_id
     "ruby-#{Time.now.strftime('%Y-%m-%dT%H-%M-%S-%L')}"
   end
+
+  def customer_unique_id(customer)
+    customer.external_id.split('-').last
+  end
+
+  def wait_until(timeout = 10)
+    Timeout.timeout(timeout) do
+      sleep 0.01 until yield
+    end
+  end
 end
