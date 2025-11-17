@@ -205,16 +205,16 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
         expect(customers.count).to be >= 3
         first_customer = customers.first
         expect(first_customer.lago_id).not_to be_nil
-        expect(first_customer.external_id).to match(/^ExternalID ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(first_customer.name).to match(/^Name \| ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(first_customer.firstname).to match(/^Firstname ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(first_customer.lastname).to match(/^Lastname ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(first_customer.email).to match(/^yohan\+ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}@getlago\.com$/)
+        expect(first_customer.external_id).to match(/^ExternalID #{unique_id_regex}$/)
+        expect(first_customer.name).to match(/^Name \| #{unique_id_regex}$/)
+        expect(first_customer.firstname).to match(/^Firstname #{unique_id_regex}$/)
+        expect(first_customer.lastname).to match(/^Lastname #{unique_id_regex}$/)
+        expect(first_customer.email).to match(/^yohan\+#{unique_id_regex}@getlago\.com$/)
         expect(first_customer.country).to eq('GB')
         expect(first_customer.state).to eq('London')
         expect(first_customer.zipcode).to eq('SW1A 1AA')
         expect(first_customer.currency).to eq('GBP')
-        expect(first_customer.legal_name).to match(/^LegalName ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
+        expect(first_customer.legal_name).to match(/^LegalName #{unique_id_regex}$/)
         expect(first_customer.legal_number).to be_nil
         expect(first_customer.customer_type).to be_nil
         expect(first_customer.tax_identification_number).to be_nil
@@ -224,16 +224,16 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
 
         second_customer = customers[1]
         expect(second_customer.lago_id).not_to be_nil
-        expect(second_customer.external_id).to match(/^ExternalID ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(second_customer.name).to match(/^Name \| ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(second_customer.firstname).to match(/^Firstname ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(second_customer.lastname).to match(/^Lastname ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(second_customer.email).to match(/^yohan\+ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}@getlago\.com$/)
+        expect(second_customer.external_id).to match(/^ExternalID #{unique_id_regex}$/)
+        expect(second_customer.name).to match(/^Name \| #{unique_id_regex}$/)
+        expect(second_customer.firstname).to match(/^Firstname #{unique_id_regex}$/)
+        expect(second_customer.lastname).to match(/^Lastname #{unique_id_regex}$/)
+        expect(second_customer.email).to match(/^yohan\+#{unique_id_regex}@getlago\.com$/)
         expect(second_customer.country).to eq('FR')
         expect(second_customer.state).to eq('Paris')
         expect(second_customer.zipcode).to eq('75001')
         expect(second_customer.currency).to eq('EUR')
-        expect(second_customer.legal_name).to match(/^LegalName ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
+        expect(second_customer.legal_name).to match(/^LegalName #{unique_id_regex}$/)
         expect(second_customer.legal_number).to match(/^FR1234567890$/)
         expect(second_customer.customer_type).to be_nil
         expect(second_customer.tax_identification_number).to be_nil
@@ -247,16 +247,16 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
 
         third_customer = customers[2]
         expect(third_customer.lago_id).not_to be_nil
-        expect(third_customer.external_id).to match(/^ExternalID ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(third_customer.name).to match(/^Name \| ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(third_customer.firstname).to match(/^Firstname ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(third_customer.lastname).to match(/^Lastname ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(third_customer.email).to match(/^yohan\+ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}@getlago\.com$/)
+        expect(third_customer.external_id).to match(/^ExternalID #{unique_id_regex}$/)
+        expect(third_customer.name).to match(/^Name \| #{unique_id_regex}$/)
+        expect(third_customer.firstname).to match(/^Firstname #{unique_id_regex}$/)
+        expect(third_customer.lastname).to match(/^Lastname #{unique_id_regex}$/)
+        expect(third_customer.email).to match(/^yohan\+#{unique_id_regex}@getlago\.com$/)
         expect(third_customer.country).to eq('US')
         expect(third_customer.state).to eq('CA')
         expect(third_customer.zipcode).to eq('94101')
         expect(third_customer.currency).to eq('USD')
-        expect(third_customer.legal_name).to match(/^LegalName ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
+        expect(third_customer.legal_name).to match(/^LegalName #{unique_id_regex}$/)
         expect(third_customer.legal_number).to match(/^US1234567890$/)
         expect(third_customer.customer_type).to eq('company')
         expect(third_customer.tax_identification_number).to eq('US1234567890')

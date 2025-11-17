@@ -91,13 +91,12 @@ module Lago
         end
 
         def whitelist_params(params)
-          result = {
-            payment_status: params[:payment_status],
-            net_payment_term: params[:net_payment_term],
-          }
+          result = params.slice(:payment_status, :net_payment_term)
 
-          metadata = whitelist_metadata(params[:metadata])
-          result[:metadata] = metadata unless metadata.empty?
+          if params.key?(:metadata)
+            metadata = whitelist_metadata(params[:metadata])
+            result[:metadata] = metadata
+          end
 
           { root_name => result }
         end
@@ -106,9 +105,13 @@ module Lago
           processed_metadata = []
 
           metadata.each do |m|
-            result = (m || {}).slice(:id, :key, :value)
+            raise ArgumentError, "metadata item must be a hash" unless m.is_a?(Hash)
 
-            processed_metadata << result unless result.empty?
+            result = m.slice(:id, :key, :value)
+            raise ArgumentError, "metadata must have key" unless result.key?(:key)
+            raise ArgumentError, "metadata must have value" unless result.key?(:value)
+
+            processed_metadata << result
           end
 
           processed_metadata
