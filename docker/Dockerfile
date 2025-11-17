@@ -1,6 +1,6 @@
 FROM ruby:3.4-alpine
 
-RUN apk add --no-cache build-base git openssl-dev
+RUN apk add --no-cache build-base git openssl-dev linux-headers
 
 WORKDIR /app
 
