@@ -47,6 +47,18 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
     expect(wallet.terminated_at).to be_nil
   end
 
+  def assert_wallet_attributes_with_updated_balance(wallet, **attributes)
+    assert_wallet_attributes(
+      wallet,
+      credits_balance: '10.0',
+      balance_cents: 2000,
+      ongoing_balance_cents: 2000,
+      credits_ongoing_balance: '10.0',
+      last_balance_sync_at: be_present,
+      **attributes,
+    )
+  end
+
   def wait_for_balance_update(wallet_id)
     wallet = nil
     wait_until do
@@ -73,34 +85,25 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
       wait_for_balance_update(wallet.lago_id) # avoid race condition
 
       updated_wallet = client.wallets.update({ name: "Updated Wallet #{customer_unique_id(customer)}" }, wallet.lago_id)
-      assert_wallet_attributes(
+      assert_wallet_attributes_with_updated_balance(
         updated_wallet,
         name: "Updated Wallet #{customer_unique_id(customer)}",
-        credits_balance: '10.0',
-        balance_cents: 2000,
-        ongoing_balance_cents: 2000,
-        credits_ongoing_balance: '10.0',
-        last_balance_sync_at: be_present,
       )
     end
   end
 
   describe '#get' do
     let(:customer) { create_customer(presets: [:us]) }
-    let(:wallet) { create_wallet(customer) }
+    let(:wallet_id) { create_wallet(customer).lago_id }
+
+    before do
+      wait_for_balance_update(wallet_id)
+    end
 
     it 'gets a wallet' do
-      # Wait for balance to be updated
-      updated_wallet = wait_for_balance_update(wallet.lago_id)
+      wallet = client.wallets.get(wallet_id)
 
-      assert_wallet_attributes(
-        updated_wallet,
-        credits_balance: '10.0',
-        balance_cents: 2000,
-        ongoing_balance_cents: 2000,
-        credits_ongoing_balance: '10.0',
-        last_balance_sync_at: be_present,
-      )
+      assert_wallet_attributes_with_updated_balance(wallet, name: "Test Wallet #{customer_unique_id(customer)}")
     end
   end
 
@@ -108,7 +111,8 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
     let(:customer) { create_customer(presets: [:us]) }
 
     before do
-      create_wallet(customer)
+      wallet = create_wallet(customer)
+      wait_for_balance_update(wallet.lago_id)
     end
 
     it 'gets all wallets' do
@@ -123,13 +127,18 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
 
       expect(result.wallets.count).to eq 1
       wallet = result.wallets.first
-      assert_wallet_attributes(wallet, name: "Test Wallet #{customer_unique_id(customer)}")
+      assert_wallet_attributes_with_updated_balance(wallet, name: "Test Wallet #{customer_unique_id(customer)}")
     end
   end
 
   describe '#destroy' do
     let(:customer) { create_customer(presets: [:us]) }
     let(:wallet) { create_wallet(customer) }
+
+    before do
+      # ensures there's no race condition
+      wait_for_balance_update(wallet.lago_id)
+    end
 
     it 'deletes a wallet' do
       client.wallets.destroy(wallet.lago_id)
