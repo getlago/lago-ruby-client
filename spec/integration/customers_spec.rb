@@ -33,6 +33,8 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
           },
           billing_configuration: {
             document_locale: 'de',
+            subscription_invoice_issuing_date_anchor: 'current_period_end',
+            subscription_invoice_issuing_date_adjustment: 'keep_anchor',
           },
         },
       )
@@ -89,6 +91,8 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
         expect(billing_configuration.payment_provider).to be_nil
         expect(billing_configuration.payment_provider_code).to be_nil
         expect(billing_configuration.document_locale).to eq 'de'
+        expect(billing_configuration.subscription_invoice_issuing_date_anchor).to eq 'current_period_end'
+        expect(billing_configuration.subscription_invoice_issuing_date_adjustment).to eq 'keep_anchor'
 
         metadata = c.metadata
         expect(metadata.count).to eq 1
