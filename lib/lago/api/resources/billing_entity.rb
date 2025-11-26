@@ -76,7 +76,7 @@ module Lago
         end
 
         def whitelist_update_params(params)
-          result_params = whitelist_create_params(params).dup
+          result_params = whitelist_create_params(params).dup[root_name]
 
           result_params.delete(:code)
           result_params[:tax_codes] = params[:tax_codes] if params.key?(:tax_codes)
