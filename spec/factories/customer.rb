@@ -27,6 +27,8 @@ FactoryBot.define do
     billing_configuration do
       {
         invoice_grace_period: 3,
+        subscription_invoice_issuing_date_anchor: 'current_period_end',
+        subscription_invoice_issuing_date_adjustment: 'keep_anchor',
         payment_provider: 'stripe',
         payment_provider_code: 'stripe-eu-1',
         provider_customer_id: 'cus_123456',

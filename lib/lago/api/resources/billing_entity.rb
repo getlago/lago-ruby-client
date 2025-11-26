@@ -69,6 +69,8 @@ module Lago
           (billing_params || {}).slice(
             :invoice_footer,
             :invoice_grace_period,
+            :subscription_invoice_issuing_date_anchor,
+            :subscription_invoice_issuing_date_adjustment,
             :document_locale,
           )
         end

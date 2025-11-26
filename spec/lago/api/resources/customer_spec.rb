@@ -37,6 +37,8 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect(customer.net_payment_term).to eq(nil)
         expect(customer.tax_identification_number).to eq('EU123456789')
         expect(customer.billing_configuration.invoice_grace_period).to eq(3)
+        expect(customer.billing_configuration.subscription_invoice_issuing_date_anchor).to eq("current_period_end")
+        expect(customer.billing_configuration.subscription_invoice_issuing_date_adjustment).to eq("keep_anchor")
         expect(customer.billing_configuration.provider_customer_id).to eq('cus_12345')
         expect(customer.billing_configuration.provider_payment_methods).to eq(['card'])
         expect(customer.shipping_address.city).to eq('Woodland Hills')
