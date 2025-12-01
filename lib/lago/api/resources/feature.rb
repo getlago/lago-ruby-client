@@ -29,10 +29,9 @@ module Lago
               code: privilege[:code],
               name: privilege[:name],
               value_type: privilege[:value_type],
-              config: {
-                select_options: privilege[:config][:select_options],
-              },
-            }
+            }.tap do |h|
+              h[:config] = { select_options: privilege[:config][:select_options] } if privilege[:config]
+            end
           end
         end
       end
