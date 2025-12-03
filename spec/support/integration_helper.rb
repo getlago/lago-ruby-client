@@ -113,6 +113,14 @@ module IntegrationHelper
       aggregation_type: 'unique_count_agg',
       field_name: 'value',
     },
+    filters: {
+      filters: [
+        {
+          key: 'region',
+          values: %w[us fr],
+        },
+      ],
+    },
   }.freeze
   def create_billable_metric(params: {}, presets: [])
     create_params = {}
