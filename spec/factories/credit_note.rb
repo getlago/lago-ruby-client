@@ -5,6 +5,7 @@ FactoryBot.define do
     invoice_id { '1a901a90-1a90-1a90-1a90-1a901a901a90' }
     reason { 'duplicated_charge' }
     items { build_list(:create_credit_note_item, 2).map(&:to_h) }
+    metadata { { 'foo' => 'bar', 'baz' => 'qux' } }
   end
 
   factory :create_credit_note_item, class: OpenStruct do
@@ -14,6 +15,7 @@ FactoryBot.define do
 
   factory :update_credit_note, class: OpenStruct do
     refund_status { 'pending' }
+    metadata { { 'foo' => 'qux' } }
   end
 
   factory :estimate_credit_note, class: OpenStruct do

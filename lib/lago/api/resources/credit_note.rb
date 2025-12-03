@@ -27,7 +27,14 @@ module Lago
             result_hash[:items] = items unless items.empty?
           end
 
+          metadata = whitelist_metadata(params[:metadata])
+          result_hash[:metadata] = metadata if metadata
+
           { root_name => result_hash }
+        end
+
+        def whitelist_metadata(metadata)
+          metadata&.to_h&.transform_keys(&:to_s)&.transform_values { |v| v&.to_s }
         end
 
         def whitelist_items(items)
@@ -77,6 +84,36 @@ module Lago
           end
 
           { root_name => result_hash }
+        end
+
+        def replace_metadata(credit_note_id, metadata)
+          path = "/api/v1/credit_notes/#{credit_note_id}/metadata"
+          payload = { metadata: whitelist_metadata(metadata) }
+          response = connection.post(payload, path)
+
+          response['metadata']
+        end
+
+        def merge_metadata(credit_note_id, metadata)
+          path = "/api/v1/credit_notes/#{credit_note_id}/metadata"
+          payload = { metadata: whitelist_metadata(metadata) }
+          response = connection.patch(path, identifier: nil, body: payload)
+
+          response['metadata']
+        end
+
+        def delete_all_metadata(credit_note_id)
+          path = "/api/v1/credit_notes/#{credit_note_id}/metadata"
+          response = connection.destroy(path, identifier: nil)
+
+          response['metadata']
+        end
+
+        def delete_metadata_key(credit_note_id, key)
+          path = "/api/v1/credit_notes/#{credit_note_id}/metadata/#{key}"
+          response = connection.destroy(path, identifier: nil)
+
+          response['metadata']
         end
       end
     end

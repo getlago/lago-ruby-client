@@ -43,6 +43,10 @@
           "events_count": 4
         }
       }
-    ]
+    ],
+    "metadata": {
+      "foo": "bar",
+      "baz": "qux"
+    }
   }
 }
