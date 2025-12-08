@@ -181,6 +181,10 @@ module IntegrationHelper
     customer.external_id.split('-').last
   end
 
+  def unique_id_regex
+    /ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}/
+  end
+
   def wait_until(timeout = 10)
     Timeout.timeout(timeout) do
       sleep 0.01 until yield

@@ -91,6 +91,17 @@ RSpec.describe Lago::Api::Resources::Invoice do
         expect(invoice.metadata.first.key).to eq('key')
         expect(invoice.metadata.first.value).to eq('value')
       end
+
+      context 'with only payment_status' do
+        let(:params) { { payment_status: 'succeeded' } }
+
+        it 'returns invoice' do
+          invoice = resource.update(params, invoice_id)
+
+          expect(invoice.lago_id).to eq(invoice_id)
+          expect(invoice.payment_status).to eq('succeeded')
+        end
+      end
     end
 
     context 'when invoice is NOT successfully updated' do
@@ -102,6 +113,30 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
       it 'raises an error' do
         expect { resource.update(params, invoice_id) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+
+    context 'when metadata item is not a hash' do
+      let(:params) { { metadata: ['invalid'] } }
+
+      it 'raises an ArgumentError' do
+        expect { resource.update(params, invoice_id) }.to raise_error(ArgumentError, 'metadata item must be a hash')
+      end
+    end
+
+    context 'when metadata item is missing key' do
+      let(:params) { { metadata: [{ value: 'value' }] } }
+
+      it 'raises an ArgumentError' do
+        expect { resource.update(params, invoice_id) }.to raise_error(ArgumentError, 'metadata must have key')
+      end
+    end
+
+    context 'when metadata item is missing value' do
+      let(:params) { { metadata: [{ key: 'key' }] } }
+
+      it 'raises an ArgumentError' do
+        expect { resource.update(params, invoice_id) }.to raise_error(ArgumentError, 'metadata must have value')
       end
     end
   end
