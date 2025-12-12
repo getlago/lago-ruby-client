@@ -99,7 +99,7 @@ module Lago
       def handle_response(response)
         raise_error(response) unless RESPONSE_SUCCESS_CODES.include?(response.code.to_i)
 
-        response.body.empty? ? true : JSON.parse(response.body)
+        response.body.empty? || JSON.parse(response.body)
       rescue JSON::ParserError
         response.body
       end
