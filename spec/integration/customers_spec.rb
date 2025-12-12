@@ -35,6 +35,7 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
             document_locale: 'de',
           },
         },
+        presets: [:with_searchable_attributes],
       )
 
       fetched_customer = client.customers.get(customer.external_id)
@@ -133,7 +134,7 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
             customer_type: 'company',
             metadata: [{ key: 'is_synced', value: 'false' }],
           },
-          presets: [:us],
+          presets: [:us, :with_searchable_attributes],
         )
         @fr_customer = create_customer(
           params: {
@@ -142,7 +143,7 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
               { key: 'last_synced_at', value: '2025-01-01' },
             ],
           },
-          presets: [:french],
+          presets: [:french, :with_searchable_attributes],
         )
 
         @gb_customer = create_customer(
@@ -152,6 +153,7 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
             zipcode: 'SW1A 1AA',
             currency: 'GBP',
           },
+          presets: [:with_searchable_attributes],
         )
       end
 

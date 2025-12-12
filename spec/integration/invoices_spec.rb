@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe 'Lago::Api::Client#invoices', :integration do
   before_all_integration_tests do
-    @customer = create_customer(presets: [:us])
+    @customer = create_customer(presets: [:us, :with_searchable_attributes])
     @add_on = client.add_ons.create(
       external_customer_id: customer.external_id,
       name: "Test Add-On #{unique_id}",
@@ -206,7 +206,7 @@ RSpec.describe 'Lago::Api::Client#invoices', :integration do
 
   describe '#get_all' do
     before_all_integration_tests do
-      @other_customer = create_customer(presets: [:french])
+      @other_customer = create_customer(presets: [:french, :with_searchable_attributes])
       @other_customer_invoice = create_one_off_invoice(customer: other_customer)
 
       @invoice1 = create_one_off_invoice(

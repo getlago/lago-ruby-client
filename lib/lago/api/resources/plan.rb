@@ -106,6 +106,7 @@ module Lago
               :regroup_paid_fees,
               :invoice_display_name,
               :min_amount_cents,
+              :prorated,
               :properties,
               :filters,
               :tax_codes,
