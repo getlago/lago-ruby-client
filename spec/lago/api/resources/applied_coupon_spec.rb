@@ -147,7 +147,7 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
         'applied_coupon' => {
           'lago_id' => lago_id,
           'lago_coupon_id' => 'b7ab2926-1de8-4428-9bcd-779314ac129b',
-          'external_customer_id' => factory_applied_coupon.external_customer_id,
+          'external_customer_id' => external_customer_id,
           'lago_customer_id' => '99a6094e-199b-4101-896a-54e927ce7bd7',
           'frequency' => factory_applied_coupon.frequency,
           'amount_cents' => 123,
@@ -158,6 +158,7 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
         },
       }.to_json
     end
+    let(:external_customer_id) { factory_applied_coupon.external_customer_id }
 
     context 'when applied coupon is successfully destroyed' do
       before do
@@ -171,6 +172,21 @@ RSpec.describe Lago::Api::Resources::AppliedCoupon do
         applied_coupon = resource.destroy(factory_applied_coupon.external_customer_id, lago_id)
 
         expect(applied_coupon.external_customer_id).to eq(factory_applied_coupon.external_customer_id)
+      end
+    end
+
+    context 'when customer id contains special characters' do
+      let(:external_customer_id) { 'customer+id/with special@chars' }
+
+      before do
+        stub_request(
+          :delete,
+          "https://api.getlago.com/api/v1/customers/customer+id%2Fwith%20special@chars/applied_coupons/#{lago_id}",
+        ).to_return(body: response, status: 200)
+      end
+
+      it 'escapes the customer id in the request URL' do
+        resource.destroy(external_customer_id, lago_id)
       end
     end
 
