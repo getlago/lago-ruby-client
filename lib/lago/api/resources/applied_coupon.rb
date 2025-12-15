@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'cgi'
+
 require 'lago/api/resources/base'
 
 module Lago
@@ -15,7 +17,7 @@ module Lago
         end
 
         def destroy(external_customer_id, applied_coupon_id)
-          path = "/api/v1/customers/#{external_customer_id}/applied_coupons"
+          path = "/api/v1/customers/#{CGI.escapeURIComponent(external_customer_id)}/applied_coupons"
           response = connection.destroy(path, identifier: applied_coupon_id)[root_name]
 
           JSON.parse(response.to_json, object_class: OpenStruct)
