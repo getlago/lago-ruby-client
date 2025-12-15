@@ -79,22 +79,31 @@ module IntegrationHelper
       legal_number: 'US1234567890',
       timezone: 'America/New_York',
     },
+    with_searchable_attributes: lambda do |params|
+      external_id = params[:external_id]
+      params.merge!(
+        external_id: "ExternalID #{external_id}",
+        firstname: "Firstname #{external_id}",
+        lastname: "Lastname #{external_id}",
+        name: "Name | #{external_id}",
+        email: "yohan+#{external_id}@getlago.com",
+        legal_name: "LegalName #{external_id}",
+      )
+    end,
   }.freeze
 
   def create_customer(params: {}, presets: [])
     external_id = unique_id
-    create_params = {
-      external_id: "ExternalID #{external_id}",
-      firstname: "Firstname #{external_id}",
-      lastname: "Lastname #{external_id}",
-      name: "Name | #{external_id}",
-      email: "yohan+#{external_id}@getlago.com",
-      legal_name: "LegalName #{external_id}",
-    }
+    create_params = { external_id:, name: external_id }
     presets.each do |preset|
       raise "Preset #{preset} not found" unless CUSTOMER_PRESETS.key?(preset.to_sym)
 
-      create_params.merge!(CUSTOMER_PRESETS[preset])
+      if CUSTOMER_PRESETS[preset].respond_to?(:call)
+        CUSTOMER_PRESETS[preset].call(create_params)
+      else
+        create_params.merge!(CUSTOMER_PRESETS[preset])
+
+      end
     end
     create_params.merge!(params)
 
@@ -136,6 +145,17 @@ module IntegrationHelper
     create_params[:code] = "#{agg_type}-#{unique_id}"
 
     client.billable_metrics.create(create_params)
+  end
+
+  def create_tax(params: {})
+    create_params = {
+      name: "Tax | #{unique_id}",
+      code: "tax-#{unique_id}",
+      rate: 10.0,
+    }
+    create_params.merge!(params)
+
+    client.taxes.create(create_params)
   end
 
   def create_plan(params: {}, presets: [])
