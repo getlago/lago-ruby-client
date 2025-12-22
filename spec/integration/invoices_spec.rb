@@ -457,4 +457,15 @@ RSpec.describe 'Lago::Api::Client#invoices', :integration do
       expect(invoice.metadata.length).to eq 0
     end
   end
+
+  describe '#lose_dispute' do
+    let(:invoice) { create_one_off_invoice }
+
+    it 'marks the invoice as dispute lost' do
+      result = client.invoices.lose_dispute(invoice.lago_id)
+
+      expect(result.lago_id).to eq invoice.lago_id
+      expect(result.payment_dispute_lost_at).to be_present
+    end
+  end
 end
