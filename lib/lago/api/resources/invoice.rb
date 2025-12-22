@@ -54,7 +54,7 @@ module Lago
 
         def lose_dispute(invoice_id)
           path = "/api/v1/invoices/#{invoice_id}/lose_dispute"
-          response = connection.put(path, identifier: nil, body: {})
+          response = connection.post({}, path)
 
           JSON.parse(response.to_json, object_class: OpenStruct).invoice
         end

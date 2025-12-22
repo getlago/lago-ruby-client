@@ -297,7 +297,7 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
   describe '#lose_dispute' do
     before do
-      stub_request(:put, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/lose_dispute")
+      stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/lose_dispute")
         .with(body: {}).to_return(body: invoice_response, status: 200)
     end
 
