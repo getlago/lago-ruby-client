@@ -86,6 +86,14 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).alerts
         end
 
+        def fixed_charges(external_subscription_id)
+          uri = URI(
+            "#{client.base_api_url}#{api_resource}/#{external_subscription_id}/fixed_charges",
+          )
+          response = connection.get(uri, identifier: nil)
+          JSON.parse(response.to_json, object_class: OpenStruct).fixed_charges
+        end
+
         def create_alert(external_subscription_id, params)
           response = connection.post(
             whitelist_alert_create_params(params),

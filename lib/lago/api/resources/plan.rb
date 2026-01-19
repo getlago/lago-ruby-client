@@ -66,6 +66,7 @@ module Lago
             trial_period: params[:trial_period],
             pay_in_advance: params[:pay_in_advance],
             bill_charges_monthly: params[:bill_charges_monthly],
+            bill_fixed_charges_monthly: params[:bill_fixed_charges_monthly],
             tax_codes: params[:tax_codes],
             cascade_updates: params[:cascade_updates],
           }.compact
@@ -80,6 +81,10 @@ module Lago
 
           whitelist_usage_thresholds(params[:usage_thresholds]).tap do |usage_thresholds|
             result_hash[:usage_thresholds] = usage_thresholds unless usage_thresholds.empty?
+          end
+
+          whitelist_fixed_charges(params[:fixed_charges]).tap do |fixed_charges|
+            result_hash[:fixed_charges] = fixed_charges unless fixed_charges.empty?
           end
 
           { root_name => result_hash }
@@ -134,6 +139,30 @@ module Lago
           end
 
           processed_usage_thresholds
+        end
+
+        def whitelist_fixed_charges(fixed_charges)
+          processed_fixed_charges = []
+
+          fixed_charges&.each do |fc|
+            result = (fc || {}).slice(
+              :id,
+              :add_on_id,
+              :charge_model,
+              :code,
+              :invoice_display_name,
+              :units,
+              :pay_in_advance,
+              :prorated,
+              :properties,
+              :tax_codes,
+              :apply_units_immediately,
+            )
+
+            processed_fixed_charges << result unless result.empty?
+          end
+
+          processed_fixed_charges
         end
 
         def whitelist_entitlements_params(params)

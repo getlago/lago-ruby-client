@@ -44,9 +44,15 @@ RSpec.describe Lago::Api::Resources::Plan do
         expect(plan.name).to eq(plan_name)
         expect(plan.invoice_display_name).to eq(plan_dsplay_name)
         expect(plan.taxes.map(&:code)).to eq(tax_codes)
+        expect(plan.bill_fixed_charges_monthly).to be(true)
 
         expect(plan.minimum_commitment.invoice_display_name).to eq(minimum_commitment.invoice_display_name)
         expect(plan.minimum_commitment.taxes.map(&:code)).to eq(tax_codes)
+
+        expect(plan.fixed_charges).to be_an(Array)
+        expect(plan.fixed_charges.first.lago_id).to eq('fc901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(plan.fixed_charges.first.charge_model).to eq('standard')
+        expect(plan.fixed_charges.first.invoice_display_name).to eq('Setup Fee')
       end
     end
 

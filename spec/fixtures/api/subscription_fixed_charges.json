@@ -1,0 +1,61 @@
+{
+  "fixed_charges": [
+    {
+      "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
+      "lago_add_on_id": "2b902b90-2b90-2b90-2b90-2b902b902b90",
+      "invoice_display_name": "Setup Fee",
+      "add_on_code": "setup_fee",
+      "created_at": "2022-07-01T14:47:14Z",
+      "code": "fixed_setup",
+      "charge_model": "standard",
+      "pay_in_advance": true,
+      "prorated": false,
+      "properties": {
+        "amount": "500"
+      },
+      "units": 1,
+      "lago_parent_id": null,
+      "taxes": [
+        {
+          "lago_id": "b7ab2926-1de8-4428-9bcd-779314ac129b",
+          "name": "tax_name",
+          "code": "tax_code",
+          "rate": 15.0,
+          "description": "tax_desc",
+          "applied_to_organization": false,
+          "created_at": "2022-04-29T08:59:51Z"
+        }
+      ]
+    },
+    {
+      "lago_id": "3c903c90-3c90-3c90-3c90-3c903c903c90",
+      "lago_add_on_id": "4d904d90-4d90-4d90-4d90-4d904d904d90",
+      "invoice_display_name": "Platform Fee",
+      "add_on_code": "platform_fee",
+      "created_at": "2022-07-01T14:47:14Z",
+      "code": "fixed_platform",
+      "charge_model": "graduated",
+      "pay_in_advance": false,
+      "prorated": true,
+      "properties": {
+        "graduated_ranges": [
+          {
+            "from_value": 0,
+            "to_value": 10,
+            "flat_amount": "100",
+            "per_unit_amount": "10"
+          },
+          {
+            "from_value": 11,
+            "to_value": null,
+            "flat_amount": "50",
+            "per_unit_amount": "5"
+          }
+        ]
+      },
+      "units": 5,
+      "lago_parent_id": null,
+      "taxes": []
+    }
+  ]
+}

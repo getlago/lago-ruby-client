@@ -12,6 +12,7 @@ FactoryBot.define do
     amount_currency { 'EUR' }
     trial_period { 2 }
     bill_charges_monthly { false }
+    bill_fixed_charges_monthly { true }
     charges do
       [
         {
@@ -30,6 +31,21 @@ FactoryBot.define do
         invoice_display_name: 'Minimum commitment (C1)',
         amount_cents: 100,
       }
+    end
+    fixed_charges do
+      [
+        {
+          add_on_id: 'ao901a90-1a90-1a90-1a90-1a901a901a90',
+          charge_model: 'standard',
+          code: 'fixed_setup',
+          invoice_display_name: 'Setup Fee',
+          units: 1,
+          pay_in_advance: true,
+          prorated: false,
+          properties: { amount: '500' },
+          tax_codes: ['tax_code'],
+        },
+      ]
     end
   end
 end
