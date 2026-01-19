@@ -13,6 +13,7 @@
       "trial_period": 3.0,
       "pay_in_advance": true,
       "bill_charges_monthly": null,
+      "bill_fixed_charges_monthly": true,
       "charges": [
         {
           "lago_id": "51c1e851-5be6-4343-a0ee-39a81d8b4ee1",
@@ -59,6 +60,25 @@
       "taxes": [
         {
           "code": "tax_code"
+        }
+      ],
+      "fixed_charges": [
+        {
+          "lago_id": "fc901a90-1a90-1a90-1a90-1a901a901a90",
+          "lago_add_on_id": "ao901a90-1a90-1a90-1a90-1a901a901a90",
+          "invoice_display_name": "Setup Fee",
+          "add_on_code": "setup_fee",
+          "created_at": "2022-07-01T14:47:14Z",
+          "code": "fixed_setup",
+          "charge_model": "standard",
+          "pay_in_advance": true,
+          "prorated": false,
+          "properties": {
+            "amount": "500"
+          },
+          "units": 1,
+          "lago_parent_id": null,
+          "taxes": []
         }
       ]
     },

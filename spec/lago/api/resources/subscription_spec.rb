@@ -532,6 +532,49 @@ RSpec.describe Lago::Api::Resources::Subscription do
     end
   end
 
+  describe '#fixed_charges' do
+    let(:json_response) { load_fixture('subscription_fixed_charges') }
+    let(:fixed_charges_response) { JSON.parse(json_response) }
+    let(:external_subscription_id) { 'sub_123' }
+
+    context 'when fixed charges are successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/fixed_charges")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns fixed charges' do
+        fixed_charges = resource.fixed_charges(external_subscription_id)
+
+        expect(fixed_charges).to be_an(Array)
+        expect(fixed_charges.length).to eq(2)
+        expect(fixed_charges.first.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(fixed_charges.first.charge_model).to eq('standard')
+        expect(fixed_charges.first.invoice_display_name).to eq('Setup Fee')
+        expect(fixed_charges.first.properties.amount).to eq('500')
+      end
+    end
+
+    context 'when subscription is not found' do
+      let(:not_found_response) do
+        {
+          'status' => 404,
+          'error' => 'Not Found',
+          'code' => 'subscription_not_found',
+        }.to_json
+      end
+
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/fixed_charges")
+          .to_return(body: not_found_response, status: 404)
+      end
+
+      it 'raises an error' do
+        expect { resource.fixed_charges(external_subscription_id) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
   describe '#get_entitlements' do
     let(:json_response) { load_fixture('subscription_entitlements') }
     let(:entitlements_response) { JSON.parse(json_response) }
