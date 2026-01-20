@@ -53,6 +53,9 @@ RSpec.describe Lago::Api::Resources::Plan do
         expect(plan.fixed_charges.first.lago_id).to eq('fc901a90-1a90-1a90-1a90-1a901a901a90')
         expect(plan.fixed_charges.first.charge_model).to eq('standard')
         expect(plan.fixed_charges.first.invoice_display_name).to eq('Setup Fee')
+
+        expect(plan.metadata.foo).to eq('bar')
+        expect(plan.metadata.baz).to eq('qux')
       end
     end
 

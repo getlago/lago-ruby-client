@@ -13,6 +13,7 @@ FactoryBot.define do
     trial_period { 2 }
     bill_charges_monthly { false }
     bill_fixed_charges_monthly { true }
+    metadata { { 'foo' => 'bar', 'baz' => 'qux' } }
     charges do
       [
         {

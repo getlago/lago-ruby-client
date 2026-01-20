@@ -87,6 +87,9 @@ module Lago
             result_hash[:fixed_charges] = fixed_charges unless fixed_charges.empty?
           end
 
+          metadata = whitelist_metadata(params[:metadata])
+          result_hash[:metadata] = metadata if metadata
+
           { root_name => result_hash }
         end
 
@@ -163,6 +166,10 @@ module Lago
           end
 
           processed_fixed_charges
+        end
+
+        def whitelist_metadata(metadata)
+          metadata&.to_h&.transform_keys(&:to_s)&.transform_values { |v| v&.to_s }
         end
 
         def whitelist_entitlements_params(params)
