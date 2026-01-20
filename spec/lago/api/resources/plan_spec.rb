@@ -351,4 +351,70 @@ RSpec.describe Lago::Api::Resources::Plan do
       end
     end
   end
+
+  describe '#replace_metadata' do
+    let(:metadata) { { 'foo' => 'bar', 'baz' => 'qux' } }
+    let(:metadata_response) { { metadata: metadata }.to_json }
+
+    before do
+      stub_request(:post, "https://api.getlago.com/api/v1/plans/#{plan_code}/metadata")
+        .with(body: { metadata: metadata })
+        .to_return(body: metadata_response, status: 200)
+    end
+
+    it 'returns metadata hash' do
+      response = resource.replace_metadata(plan_code, metadata)
+
+      expect(response).to eq(metadata)
+    end
+  end
+
+  describe '#merge_metadata' do
+    let(:metadata) { { 'foo' => 'qux' } }
+    let(:metadata_response) { { metadata: metadata }.to_json }
+
+    before do
+      stub_request(:patch, "https://api.getlago.com/api/v1/plans/#{plan_code}/metadata")
+        .with(body: { metadata: metadata })
+        .to_return(body: metadata_response, status: 200)
+    end
+
+    it 'returns metadata hash' do
+      response = resource.merge_metadata(plan_code, metadata)
+
+      expect(response).to eq(metadata)
+    end
+  end
+
+  describe '#delete_all_metadata' do
+    let(:metadata_response) { { metadata: nil }.to_json }
+
+    before do
+      stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/metadata")
+        .to_return(body: metadata_response, status: 200)
+    end
+
+    it 'returns nil metadata' do
+      response = resource.delete_all_metadata(plan_code)
+
+      expect(response).to be_nil
+    end
+  end
+
+  describe '#delete_metadata_key' do
+    let(:key) { 'foo' }
+    let(:remaining_metadata) { { 'baz' => 'qux' } }
+    let(:metadata_response) { { metadata: remaining_metadata }.to_json }
+
+    before do
+      stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/metadata/#{key}")
+        .to_return(body: metadata_response, status: 200)
+    end
+
+    it 'returns remaining metadata hash' do
+      response = resource.delete_metadata_key(plan_code, key)
+
+      expect(response).to eq(remaining_metadata)
+    end
+  end
 end
