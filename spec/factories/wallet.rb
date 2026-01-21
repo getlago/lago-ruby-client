@@ -6,6 +6,7 @@ FactoryBot.define do
     rate_amount { '1' }
     paid_credits { '100' }
     granted_credits { '100' }
+    metadata { { 'foo' => 'bar', 'baz' => 'qux' } }
     applies_to do
       {
         fee_types: %w[charge],

@@ -37,6 +37,9 @@ module Lago
           applies_to = whitelist_applies_to(params[:applies_to])
           result_hash[:applies_to] = applies_to if applies_to.any?
 
+          metadata = whitelist_metadata(params[:metadata])
+          result_hash[:metadata] = metadata if metadata
+
           { root_name => result_hash }
         end
 
@@ -69,6 +72,40 @@ module Lago
 
         def whitelist_applies_to(applies_to_params)
           (applies_to_params || {}).slice(:fee_types, :billable_metric_codes)
+        end
+
+        def whitelist_metadata(metadata)
+          metadata&.to_h&.transform_keys(&:to_s)&.transform_values { |v| v&.to_s }
+        end
+
+        def replace_metadata(wallet_id, metadata)
+          path = "/api/v1/wallets/#{wallet_id}/metadata"
+          payload = { metadata: whitelist_metadata(metadata) }
+          response = connection.post(payload, path)
+
+          response['metadata']
+        end
+
+        def merge_metadata(wallet_id, metadata)
+          path = "/api/v1/wallets/#{wallet_id}/metadata"
+          payload = { metadata: whitelist_metadata(metadata) }
+          response = connection.patch(path, identifier: nil, body: payload)
+
+          response['metadata']
+        end
+
+        def delete_all_metadata(wallet_id)
+          path = "/api/v1/wallets/#{wallet_id}/metadata"
+          response = connection.destroy(path, identifier: nil)
+
+          response['metadata']
+        end
+
+        def delete_metadata_key(wallet_id, key)
+          path = "/api/v1/wallets/#{wallet_id}/metadata/#{key}"
+          response = connection.destroy(path, identifier: nil)
+
+          response['metadata']
         end
       end
     end
