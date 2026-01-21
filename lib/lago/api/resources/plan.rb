@@ -87,6 +87,9 @@ module Lago
             result_hash[:fixed_charges] = fixed_charges unless fixed_charges.empty?
           end
 
+          metadata = whitelist_metadata(params[:metadata])
+          result_hash[:metadata] = metadata if metadata
+
           { root_name => result_hash }
         end
 
@@ -165,10 +168,44 @@ module Lago
           processed_fixed_charges
         end
 
+        def whitelist_metadata(metadata)
+          metadata&.to_h&.transform_keys(&:to_s)&.transform_values { |v| v&.to_s }
+        end
+
         def whitelist_entitlements_params(params)
           {
             entitlements: params,
           }
+        end
+
+        def replace_metadata(plan_code, metadata)
+          path = "/api/v1/plans/#{plan_code}/metadata"
+          payload = { metadata: whitelist_metadata(metadata) }
+          response = connection.post(payload, path)
+
+          response['metadata']
+        end
+
+        def merge_metadata(plan_code, metadata)
+          path = "/api/v1/plans/#{plan_code}/metadata"
+          payload = { metadata: whitelist_metadata(metadata) }
+          response = connection.patch(path, identifier: nil, body: payload)
+
+          response['metadata']
+        end
+
+        def delete_all_metadata(plan_code)
+          path = "/api/v1/plans/#{plan_code}/metadata"
+          response = connection.destroy(path, identifier: nil)
+
+          response['metadata']
+        end
+
+        def delete_metadata_key(plan_code, key)
+          path = "/api/v1/plans/#{plan_code}/metadata/#{key}"
+          response = connection.destroy(path, identifier: nil)
+
+          response['metadata']
         end
 
         private
