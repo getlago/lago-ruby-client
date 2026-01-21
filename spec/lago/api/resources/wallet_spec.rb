@@ -61,7 +61,8 @@ RSpec.describe Lago::Api::Resources::Wallet do
               'transaction_name' => 'Recurring Transaction Rule'
             }
           ],
-          'applies_to' => { 'fee_types' => ['charge'], 'billable_metric_codes' => ['bm1'] }
+          'applies_to' => { 'fee_types' => ['charge'], 'billable_metric_codes' => ['bm1'] },
+          'metadata' => { 'foo' => 'bar', 'baz' => 'qux' }
         }
       }
     end
@@ -128,7 +129,8 @@ RSpec.describe Lago::Api::Resources::Wallet do
               'transaction_name' => 'Recurring Transaction Rule'
             }
           ],
-          'applies_to' => { 'fee_types' => ['charge'], 'billable_metric_codes' => ['bm1'] }
+          'applies_to' => { 'fee_types' => ['charge'], 'billable_metric_codes' => ['bm1'] },
+          'metadata' => { 'foo' => 'bar', 'baz' => 'qux' }
         }
       }
     end
