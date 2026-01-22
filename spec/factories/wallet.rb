@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :wallet, class: OpenStruct do
     name { 'wallet name' }
+    priority { 30 }
     external_customer_id { '12345' }
     expiration_at { '2022-07-07T23:59:59Z' }
     rate_amount { '1' }

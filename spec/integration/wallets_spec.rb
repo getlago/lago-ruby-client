@@ -8,6 +8,7 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
     client.wallets.create(
       external_customer_id: customer.external_id,
       name:,
+      priority: 30,
       rate_amount: 2,
       granted_credits: '10.0',
       paid_credits: '20.0',
@@ -40,7 +41,7 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
     expect(wallet.ongoing_usage_balance_cents).to eq attributes[:ongoing_usage_balance_cents] || 0
     expect(wallet.paid_top_up_max_amount_cents).to be_nil
     expect(wallet.paid_top_up_min_amount_cents).to be_nil
-    expect(wallet.priority).to eq 50
+    expect(wallet.priority).to eq 30
     expect(wallet.rate_amount).to eq '2.0'
     expect(wallet.recurring_transaction_rules).to eq []
     expect(wallet.status).to eq 'active'
@@ -55,6 +56,7 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
       ongoing_balance_cents: 2000,
       credits_ongoing_balance: '10.0',
       last_balance_sync_at: be_present,
+
       **attributes,
     )
   end
