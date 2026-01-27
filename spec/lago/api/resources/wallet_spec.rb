@@ -103,6 +103,43 @@ RSpec.describe Lago::Api::Resources::Wallet do
         expect { resource.create(params) }.to raise_error Lago::Api::HttpError
       end
     end
+
+    context 'when transaction_priority is provided' do
+      let(:params_with_priority) do
+        {
+          external_customer_id: '12345',
+          rate_amount: '1',
+          name: 'wallet name',
+          paid_credits: '100',
+          granted_credits: '100',
+          transaction_priority: 5
+        }
+      end
+      let(:body_with_priority) do
+        {
+          'wallet' => {
+            'external_customer_id' => '12345',
+            'rate_amount' => '1',
+            'name' => 'wallet name',
+            'paid_credits' => '100',
+            'granted_credits' => '100',
+            'transaction_priority' => 5
+          }
+        }
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
+          .with(body: body_with_priority)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'includes transaction_priority in the request' do
+        wallet = resource.create(params_with_priority)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
+      end
+    end
   end
 
   describe '#update' do
