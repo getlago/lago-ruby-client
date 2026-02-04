@@ -8,6 +8,7 @@ RSpec.describe Lago::Api::Resources::CreditNote do
   let(:client) { Lago::Api::Client.new }
 
   let(:credit_note_response) { load_fixture('credit_note') }
+  let(:credit_note_with_customer_response) { load_fixture('credit_note_with_customer') }
   let(:credit_note_id) { JSON.parse(credit_note_response)['credit_note']['lago_id'] }
 
   let(:not_found_response) do
@@ -33,10 +34,10 @@ RSpec.describe Lago::Api::Resources::CreditNote do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/credit_notes')
           .with(body: { credit_note: params })
-          .to_return(body: credit_note_response, status: 200)
+          .to_return(body: credit_note_with_customer_response, status: 200)
       end
 
-      it 'returns a credit_note' do
+      it 'returns a credit note with customer data' do
         response = resource.create(params)
 
         expect(response.lago_id).to eq(credit_note_id)
@@ -63,10 +64,10 @@ RSpec.describe Lago::Api::Resources::CreditNote do
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/credit_notes/#{credit_note_id}")
           .with(body: { credit_note: params })
-          .to_return(body: credit_note_response, status: 200)
+          .to_return(body: credit_note_with_customer_response, status: 200)
       end
 
-      it 'returns credit note' do
+      it 'returns credit note with customer data' do
         response = resource.update(params, credit_note_id)
 
         expect(response.lago_id).to eq(credit_note_id)
@@ -90,10 +91,10 @@ RSpec.describe Lago::Api::Resources::CreditNote do
     context 'when credit note is successfully fetched' do
       before do
         stub_request(:get, "https://api.getlago.com/api/v1/credit_notes/#{credit_note_id}")
-          .to_return(body: credit_note_response, status: 200)
+          .to_return(body: credit_note_with_customer_response, status: 200)
       end
 
-      it 'returns a credit note' do
+      it 'returns a credit note with customer data' do
         result = resource.get(credit_note_id)
 
         expect(result.lago_id).to eq(credit_note_id)
@@ -158,10 +159,10 @@ RSpec.describe Lago::Api::Resources::CreditNote do
     before do
       stub_request(:put, "https://api.getlago.com/api/v1/credit_notes/#{credit_note_id}/void")
         .with(body: {})
-        .to_return(body: credit_note_response, status: 200)
+        .to_return(body: credit_note_with_customer_response, status: 200)
     end
 
-    it 'returns a credit_note' do
+    it 'returns a credit note with customer data' do
       response = resource.void(credit_note_id)
 
       expect(response.lago_id).to eq(credit_note_id)
