@@ -5,6 +5,8 @@ FactoryBot.define do
     external_customer_id { '5eb02857-a71e-4ea2-bcf9-57d8885990ba' }
     external_id { '1232857-a71e-4ea2-bcf9-57d8885990ba' }
     plan_code { 'eartha lynch' }
+    plan_amount_cents { 10_000 }
+    plan_amount_currency { 'USD' }
     status { 'active' }
     billing_time { 'calendar' }
     started_at { '2022-05-05T12:27:30Z' }

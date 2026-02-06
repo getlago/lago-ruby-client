@@ -62,6 +62,8 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
         expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
+        expect(subscription.plan_amount_cents).to eq(factory_subscription.plan_amount_cents)
+        expect(subscription.plan_amount_currency).to eq(factory_subscription.plan_amount_currency)
         expect(subscription.status).to eq(factory_subscription.status)
         expect(subscription.external_id).to eq(factory_subscription.external_id)
         expect(subscription.subscription_at).to eq(factory_subscription.subscription_at)
@@ -217,6 +219,8 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
         expect(response['subscriptions'].first['lago_id']).to eq(factory_subscription.lago_id)
         expect(response['subscriptions'].first['external_id']).to eq(factory_subscription.external_id)
+        expect(response['subscriptions'].first['plan_amount_cents']).to eq(factory_subscription.plan_amount_cents)
+        expect(response['subscriptions'].first['plan_amount_currency']).to eq(factory_subscription.plan_amount_currency)
         expect(response['meta']['current_page']).to eq(1)
       end
     end
