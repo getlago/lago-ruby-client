@@ -19,6 +19,7 @@ module Lago
             :external_customer_id,
             :rate_amount,
             :name,
+            :code,
             :priority,
             :paid_credits,
             :granted_credits,

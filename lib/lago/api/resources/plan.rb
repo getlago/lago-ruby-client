@@ -119,6 +119,7 @@ module Lago
               :filters,
               :tax_codes,
               :applied_pricing_unit,
+              :accepts_target_wallet,
             )
 
             processed_charges << result unless result.empty?
