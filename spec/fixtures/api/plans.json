@@ -26,6 +26,7 @@
           "pay_in_advance": true,
           "invoiceable": true,
           "invoice_display_name": "Charge 1",
+          "accepts_target_wallet": false,
           "properties": {
             "amount": "0.22",
             "pricing_group_keys": ["agent_name"]
