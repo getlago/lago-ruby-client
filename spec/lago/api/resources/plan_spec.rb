@@ -49,7 +49,7 @@ RSpec.describe Lago::Api::Resources::Plan do
         expect(plan.minimum_commitment.invoice_display_name).to eq(minimum_commitment.invoice_display_name)
         expect(plan.minimum_commitment.taxes.map(&:code)).to eq(tax_codes)
 
-        expect(plan.charges.first.accepts_target_wallet).to be(true)
+        expect(plan.charges.first.accepts_target_wallet).to be(false)
 
         expect(plan.fixed_charges).to be_an(Array)
         expect(plan.fixed_charges.first.lago_id).to eq('fc901a90-1a90-1a90-1a90-1a901a901a90')

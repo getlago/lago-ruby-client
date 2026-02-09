@@ -23,7 +23,7 @@ FactoryBot.define do
           invoiceable: true,
           invoice_display_name: 'Charge 1',
           min_amount_cents: 0,
-          accepts_target_wallet: true,
+          accepts_target_wallet: false,
           properties: { amount: '0.22' },
         },
       ]
