@@ -285,4 +285,10 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
       end
     end
   end
+
+  describe "#metadata" do
+    it "returns Lago::Api::Resources::Customers::Wallets::Metadata" do
+      expect(subject.metadata).to be_kind_of(Lago::Api::Resources::Customers::Wallets::Metadata)
+    end
+  end
 end
