@@ -69,6 +69,40 @@ RSpec.describe Lago::Api::Resources::Invoice do
         expect { resource.create(params) }.to raise_error(Lago::Api::HttpError)
       end
     end
+
+    context 'when payment_method is provided' do
+      let(:params) do
+        {
+          external_customer_id: '_ID_',
+          currency: 'EUR',
+          net_payment_term: 0,
+          skip_psp: true,
+          fees: [
+            {
+              add_on_code: '123',
+              description: 'desc',
+              tax_codes: [tax.code],
+            }
+          ],
+          payment_method: {
+            payment_method_type: 'provider',
+            payment_method_id: 'pm-inv-123',
+          }
+        }
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices')
+          .with(body: { invoice: params })
+          .to_return(body: invoice_response, status: 200)
+      end
+
+      it 'returns invoice' do
+        invoice = resource.create(params)
+
+        expect(invoice.lago_id).to eq(invoice_id)
+      end
+    end
   end
 
   describe '#update' do
@@ -310,16 +344,41 @@ RSpec.describe Lago::Api::Resources::Invoice do
   end
 
   describe '#retry_payment' do
-    before do
-      stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/retry_payment")
-        .with(body: {})
-        .to_return(body: '', status: 200)
+    context 'without payment_method' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/retry_payment")
+          .with(body: {})
+          .to_return(body: '', status: 200)
+      end
+
+      it 'returns true' do
+        result = resource.retry_payment(invoice_id)
+
+        expect(result).to eq(true)
+      end
     end
 
-    it 'returns invoice' do
-      result = resource.retry_payment(invoice_id)
+    context 'with payment_method' do
+      let(:payment_method_params) do
+        {
+          payment_method: {
+            payment_method_type: 'provider',
+            payment_method_id: 'pm-retry-123',
+          },
+        }
+      end
 
-      expect(result).to eq(true)
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/invoices/#{invoice_id}/retry_payment")
+          .with(body: payment_method_params)
+          .to_return(body: '', status: 200)
+      end
+
+      it 'returns true' do
+        result = resource.retry_payment(invoice_id, payment_method_params)
+
+        expect(result).to eq(true)
+      end
     end
   end
 

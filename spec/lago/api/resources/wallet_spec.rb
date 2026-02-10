@@ -103,6 +103,125 @@ RSpec.describe Lago::Api::Resources::Wallet do
         expect { resource.create(params) }.to raise_error Lago::Api::HttpError
       end
     end
+
+    context 'when payment_method is provided' do
+      let(:params_with_pm) do
+        params.merge(
+          payment_method: {
+            payment_method_type: 'provider',
+            payment_method_id: 'pm-wallet-123',
+          },
+        )
+      end
+      let(:body_with_pm) do
+        body['wallet']['payment_method'] = {
+          'payment_method_type' => 'provider',
+          'payment_method_id' => 'pm-wallet-123',
+        }
+        body
+      end
+      let(:response_with_pm) do
+        {
+          'wallet' => {
+            'lago_id' => 'this-is-lago-id',
+            'lago_customer_id' => factory_wallet.id,
+            'name' => factory_wallet.name,
+            'expiration_at' => factory_wallet.expiration_at,
+            'balance_cents' => 10_000,
+            'rate_amount' => factory_wallet.rate_amount,
+            'created_at' => '2022-04-29T08:59:51Z',
+            'recurring_transaction_rules' => factory_wallet.recurring_transaction_rules,
+            'applies_to' => factory_wallet.applies_to,
+            'payment_method' => {
+              'payment_method_type' => 'provider',
+              'payment_method_id' => 'pm-wallet-123',
+            },
+          }
+        }.to_json
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
+          .with(body: body_with_pm)
+          .to_return(body: response_with_pm, status: 200)
+      end
+
+      it 'returns a wallet with payment method' do
+        wallet = resource.create(params_with_pm)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
+        expect(wallet.payment_method.payment_method_type).to eq('provider')
+        expect(wallet.payment_method.payment_method_id).to eq('pm-wallet-123')
+      end
+    end
+
+    context 'when payment_method is provided in recurring_transaction_rules' do
+      let(:params_with_pm_rule) do
+        params.deep_merge(
+          recurring_transaction_rules: [
+            factory_wallet.recurring_transaction_rules.first.merge(
+              payment_method: {
+                payment_method_type: 'provider',
+                payment_method_id: 'pm-rule-123',
+              },
+            ),
+          ],
+        )
+      end
+      let(:body_with_pm_rule) do
+        body['wallet']['recurring_transaction_rules'].first['payment_method'] = {
+          'payment_method_type' => 'provider',
+          'payment_method_id' => 'pm-rule-123',
+        }
+        body
+      end
+      let(:response_with_pm_rule) do
+        {
+          'wallet' => {
+            'lago_id' => 'this-is-lago-id',
+            'lago_customer_id' => factory_wallet.id,
+            'name' => factory_wallet.name,
+            'expiration_at' => factory_wallet.expiration_at,
+            'balance_cents' => 10_000,
+            'rate_amount' => factory_wallet.rate_amount,
+            'created_at' => '2022-04-29T08:59:51Z',
+            'recurring_transaction_rules' => [
+              {
+                'paid_credits' => '105',
+                'granted_credits' => '105',
+                'threshold_credits' => '0',
+                'trigger' => 'interval',
+                'interval' => 'monthly',
+                'method' => 'fixed',
+                'started_at' => nil,
+                'expiration_at' => '2026-12-31T23:59:59Z',
+                'transaction_name' => 'Recurring Transaction Rule',
+                'payment_method' => {
+                  'payment_method_type' => 'provider',
+                  'payment_method_id' => 'pm-rule-123',
+                },
+              },
+            ],
+            'applies_to' => factory_wallet.applies_to,
+          }
+        }.to_json
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
+          .with(body: body_with_pm_rule)
+          .to_return(body: response_with_pm_rule, status: 200)
+      end
+
+      it 'returns a wallet with payment method on the recurring rule' do
+        wallet = resource.create(params_with_pm_rule)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
+        rule = wallet.recurring_transaction_rules.first
+        expect(rule.payment_method.payment_method_type).to eq('provider')
+        expect(rule.payment_method.payment_method_id).to eq('pm-rule-123')
+      end
+    end
   end
 
   describe '#update' do
@@ -161,6 +280,125 @@ RSpec.describe Lago::Api::Resources::Wallet do
 
       it 'raises an error' do
         expect { resource.update(params, id) }.to raise_error Lago::Api::HttpError
+      end
+    end
+
+    context 'when payment_method is provided' do
+      let(:params_with_pm) do
+        params.merge(
+          payment_method: {
+            payment_method_type: 'provider',
+            payment_method_id: 'pm-wallet-123',
+          },
+        )
+      end
+      let(:body_with_pm) do
+        body['wallet']['payment_method'] = {
+          'payment_method_type' => 'provider',
+          'payment_method_id' => 'pm-wallet-123',
+        }
+        body
+      end
+      let(:response_with_pm) do
+        {
+          'wallet' => {
+            'lago_id' => 'this-is-lago-id',
+            'lago_customer_id' => factory_wallet.id,
+            'name' => factory_wallet.name,
+            'expiration_at' => factory_wallet.expiration_at,
+            'balance_cents' => 10_000,
+            'rate_amount' => factory_wallet.rate_amount,
+            'created_at' => '2022-04-29T08:59:51Z',
+            'recurring_transaction_rules' => factory_wallet.recurring_transaction_rules,
+            'applies_to' => factory_wallet.applies_to,
+            'payment_method' => {
+              'payment_method_type' => 'provider',
+              'payment_method_id' => 'pm-wallet-123',
+            },
+          }
+        }.to_json
+      end
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/wallets/#{id}")
+          .with(body: body_with_pm)
+          .to_return(body: response_with_pm, status: 200)
+      end
+
+      it 'returns a wallet with payment method' do
+        wallet = resource.update(params_with_pm, id)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
+        expect(wallet.payment_method.payment_method_type).to eq('provider')
+        expect(wallet.payment_method.payment_method_id).to eq('pm-wallet-123')
+      end
+    end
+
+    context 'when payment_method is provided in recurring_transaction_rules' do
+      let(:params_with_pm_rule) do
+        params.merge(
+          recurring_transaction_rules: [
+            factory_wallet.recurring_transaction_rules.first.merge(
+              payment_method: {
+                payment_method_type: 'provider',
+                payment_method_id: 'pm-rule-123',
+              },
+            ),
+          ],
+        )
+      end
+      let(:body_with_pm_rule) do
+        body['wallet']['recurring_transaction_rules'].first['payment_method'] = {
+          'payment_method_type' => 'provider',
+          'payment_method_id' => 'pm-rule-123',
+        }
+        body
+      end
+      let(:response_with_pm_rule) do
+        {
+          'wallet' => {
+            'lago_id' => 'this-is-lago-id',
+            'lago_customer_id' => factory_wallet.id,
+            'name' => factory_wallet.name,
+            'expiration_at' => factory_wallet.expiration_at,
+            'balance_cents' => 10_000,
+            'rate_amount' => factory_wallet.rate_amount,
+            'created_at' => '2022-04-29T08:59:51Z',
+            'recurring_transaction_rules' => [
+              {
+                'paid_credits' => '105',
+                'granted_credits' => '105',
+                'threshold_credits' => '0',
+                'trigger' => 'interval',
+                'interval' => 'monthly',
+                'method' => 'fixed',
+                'started_at' => nil,
+                'expiration_at' => '2026-12-31T23:59:59Z',
+                'transaction_name' => 'Recurring Transaction Rule',
+                'payment_method' => {
+                  'payment_method_type' => 'provider',
+                  'payment_method_id' => 'pm-rule-123',
+                },
+              },
+            ],
+            'applies_to' => factory_wallet.applies_to,
+          }
+        }.to_json
+      end
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/wallets/#{id}")
+          .with(body: body_with_pm_rule)
+          .to_return(body: response_with_pm_rule, status: 200)
+      end
+
+      it 'returns a wallet with payment method on the recurring rule' do
+        wallet = resource.update(params_with_pm_rule, id)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
+        rule = wallet.recurring_transaction_rules.first
+        expect(rule.payment_method.payment_method_type).to eq('provider')
+        expect(rule.payment_method.payment_method_id).to eq('pm-rule-123')
       end
     end
   end

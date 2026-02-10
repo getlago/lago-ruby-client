@@ -95,6 +95,73 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
         expect { resource.create(params) }.to raise_error Lago::Api::HttpError
       end
     end
+
+    context 'when payment_method is provided' do
+      let(:params_with_pm) do
+        {
+          wallet_id: '123',
+          name: 'Transaction Name',
+          paid_credits: '100',
+          granted_credits: '100',
+          voided_credits: '0',
+          payment_method: {
+            payment_method_type: 'provider',
+            payment_method_id: 'pm-wt-123',
+          },
+        }
+      end
+      let(:body_with_pm) do
+        {
+          'wallet_transaction' => {
+            'wallet_id' => '123',
+            'name' => 'Transaction Name',
+            'paid_credits' => '100',
+            'granted_credits' => '100',
+            'voided_credits' => '0',
+            'payment_method' => {
+              'payment_method_type' => 'provider',
+              'payment_method_id' => 'pm-wt-123',
+            },
+          },
+        }
+      end
+      let(:response_with_pm) do
+        {
+          'wallet_transactions' => [
+            {
+              'lago_id' => 'this-is-lago-id',
+              'lago_wallet_id' => factory_wallet_transaction.wallet_id,
+              'amount' => factory_wallet_transaction.paid_credits,
+              'name' => factory_wallet_transaction.name,
+              'status' => 'pending',
+              'transaction_status' => 'purchased',
+              'transaction_type' => 'inbound',
+              'credit_amount' => factory_wallet_transaction.paid_credits,
+              'settled_at' => '2022-04-29T08:59:51Z',
+              'created_at' => '2022-04-29T08:59:51Z',
+              'payment_method' => {
+                'payment_method_type' => 'provider',
+                'payment_method_id' => 'pm-wt-123',
+              },
+            },
+          ],
+        }
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallet_transactions')
+          .with(body: body_with_pm)
+          .to_return(body: response_with_pm.to_json, status: 200)
+      end
+
+      it 'returns wallet_transactions with payment method' do
+        wallet_transactions = resource.create(params_with_pm)
+
+        expect(wallet_transactions.first.lago_id).to eq('this-is-lago-id')
+        expect(wallet_transactions.first.payment_method.payment_method_type).to eq('provider')
+        expect(wallet_transactions.first.payment_method.payment_method_id).to eq('pm-wt-123')
+      end
+    end
   end
 
   describe '#get_all' do

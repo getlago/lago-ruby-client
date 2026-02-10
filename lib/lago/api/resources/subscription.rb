@@ -103,18 +103,21 @@ module Lago
         end
 
         def whitelist_params(params)
-          {
-            root_name => {
-              external_customer_id: params[:external_customer_id],
-              plan_code: params[:plan_code],
-              name: params[:name],
-              external_id: params[:external_id],
-              billing_time: params[:billing_time],
-              subscription_at: params[:subscription_at],
-              ending_at: params[:ending_at],
-              plan_overrides: params[:plan_overrides],
-            }.compact,
-          }
+          result = {
+            external_customer_id: params[:external_customer_id],
+            plan_code: params[:plan_code],
+            name: params[:name],
+            external_id: params[:external_id],
+            billing_time: params[:billing_time],
+            subscription_at: params[:subscription_at],
+            ending_at: params[:ending_at],
+            plan_overrides: params[:plan_overrides],
+          }.compact
+
+          payment_method_params = whitelist_payment_method_params(params[:payment_method])
+          result[:payment_method] = payment_method_params if payment_method_params
+
+          { root_name => result }
         end
 
         def whitelist_lifetime_usage_params(params)
@@ -161,6 +164,10 @@ module Lago
         end
 
         private
+
+        def whitelist_payment_method_params(payment_method_param)
+          payment_method_param&.slice(:payment_method_type, :payment_method_id)
+        end
 
         def entitlements_uri(external_subscription_id, feature_code = nil, action = nil)
           url = "#{client.base_api_url}#{api_resource}/#{external_subscription_id}/entitlements"

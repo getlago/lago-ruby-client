@@ -29,18 +29,27 @@ module Lago
         end
 
         def whitelist_params(params)
-          {
-            'wallet_transaction' => params.compact.slice(
-              :wallet_id,
-              :name,
-              :paid_credits,
-              :granted_credits,
-              :voided_credits,
-              :invoice_requires_successful_payment,
-              :ignore_paid_top_up_limits,
-              :metadata,
-            )
-          }
+          result = params.compact.slice(
+            :wallet_id,
+            :name,
+            :paid_credits,
+            :granted_credits,
+            :voided_credits,
+            :invoice_requires_successful_payment,
+            :ignore_paid_top_up_limits,
+            :metadata,
+          )
+
+          payment_method_params = whitelist_payment_method_params(params[:payment_method])
+          result[:payment_method] = payment_method_params if payment_method_params
+
+          { 'wallet_transaction' => result }
+        end
+
+        private
+
+        def whitelist_payment_method_params(payment_method_param)
+          payment_method_param&.slice(:payment_method_type, :payment_method_id)
         end
       end
     end

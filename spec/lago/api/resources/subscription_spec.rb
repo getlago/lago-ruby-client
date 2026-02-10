@@ -83,6 +83,71 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect { resource.create(params) }.to raise_error Lago::Api::HttpError
       end
     end
+
+    context 'when payment_method is provided' do
+      let(:params_with_pm) do
+        params.merge(
+          payment_method: {
+            payment_method_type: 'provider',
+            payment_method_id: 'pm-id-123',
+          },
+        )
+      end
+      let(:body_with_pm) do
+        {
+          'subscription' => params.merge(
+            payment_method: {
+              payment_method_type: 'provider',
+              payment_method_id: 'pm-id-123',
+            },
+          ),
+        }
+      end
+      let(:response_with_pm) do
+        {
+          'subscription' => factory_subscription.to_h.merge(
+            payment_method: {
+              payment_method_type: 'provider',
+              payment_method_id: 'pm-id-123',
+            },
+          ),
+        }.to_json
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
+          .with(body: body_with_pm)
+          .to_return(body: response_with_pm, status: 200)
+      end
+
+      it 'returns subscription with payment_method' do
+        subscription = resource.create(params_with_pm)
+
+        expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)
+        expect(subscription.payment_method.payment_method_type).to eq('provider')
+        expect(subscription.payment_method.payment_method_id).to eq('pm-id-123')
+      end
+    end
+
+    context 'when payment_method is invalid' do
+      let(:params_with_invalid_pm) do
+        params.merge(
+          payment_method: {
+            payment_method_type: 'invalid_type',
+            payment_method_id: 'invalid-id',
+          },
+        )
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.create(params_with_invalid_pm) }.to raise_error Lago::Api::HttpError
+      end
+    end
   end
 
   describe '#delete' do
@@ -162,6 +227,68 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
       it 'raises an error' do
         expect { resource.update(params, '123') }.to raise_error Lago::Api::HttpError
+      end
+    end
+
+    context 'when payment_method is provided' do
+      let(:params_with_pm) do
+        {
+          name: 'new name',
+          payment_method: {
+            payment_method_type: 'provider',
+            payment_method_id: 'pm-id-123',
+          },
+        }
+      end
+      let(:body_with_pm) do
+        {
+          'subscription' => params_with_pm,
+        }
+      end
+      let(:response_with_pm) do
+        {
+          'subscription' => factory_subscription.to_h.merge(
+            payment_method: {
+              payment_method_type: 'provider',
+              payment_method_id: 'pm-id-123',
+            },
+          ),
+        }.to_json
+      end
+
+      before do
+        stub_request(:put, 'https://api.getlago.com/api/v1/subscriptions/123')
+          .with(body: body_with_pm)
+          .to_return(body: response_with_pm, status: 200)
+      end
+
+      it 'returns subscription with payment_method' do
+        subscription = resource.update(params_with_pm, '123')
+
+        expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)
+        expect(subscription.payment_method.payment_method_type).to eq('provider')
+        expect(subscription.payment_method.payment_method_id).to eq('pm-id-123')
+      end
+    end
+
+    context 'when payment_method is invalid' do
+      let(:params_with_invalid_pm) do
+        {
+          name: 'new name',
+          payment_method: {
+            payment_method_type: 'invalid_type',
+            payment_method_id: 'invalid-id',
+          },
+        }
+      end
+
+      before do
+        stub_request(:put, 'https://api.getlago.com/api/v1/subscriptions/123')
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.update(params_with_invalid_pm, '123') }.to raise_error Lago::Api::HttpError
       end
     end
   end
