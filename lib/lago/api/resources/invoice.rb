@@ -62,7 +62,7 @@ module Lago
         def retry_payment(invoice_id, params = {})
           path = "/api/v1/invoices/#{invoice_id}/retry_payment"
           payment_method_params = whitelist_payment_method_params(params[:payment_method])
-          payload = payment_method_params ? { payment_method: payment_method_params } : {}
+          payload = { payment_method: payment_method_params }.compact
 
           response = connection.post(payload, path)
 
@@ -132,7 +132,7 @@ module Lago
           result[:fees] = fees unless fees.empty?
 
           payment_method_params = whitelist_payment_method_params(params[:payment_method])
-          result[:payment_method] = payment_method_params if payment_method_params
+          result[:payment_method] = payment_method_params if payment_method_params.present?
 
           { root_name => result }
         end

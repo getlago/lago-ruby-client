@@ -120,7 +120,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
           .to_return(body: response_with_pm, status: 200)
       end
 
-      it 'returns subscription with payment_method' do
+      it 'returns subscription with payment_method', :aggregate_failures do
         subscription = resource.create(params_with_pm)
 
         expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)
@@ -262,7 +262,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
           .to_return(body: response_with_pm, status: 200)
       end
 
-      it 'returns subscription with payment_method' do
+      it 'returns subscription with payment_method', :aggregate_failures do
         subscription = resource.update(params_with_pm, '123')
 
         expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)

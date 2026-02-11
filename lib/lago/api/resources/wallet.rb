@@ -42,7 +42,7 @@ module Lago
           result_hash[:metadata] = metadata if metadata
 
           payment_method_params = whitelist_payment_method_params(params[:payment_method])
-          result_hash[:payment_method] = payment_method_params if payment_method_params
+          result_hash[:payment_method] = payment_method_params if payment_method_params.present?
 
           { root_name => result_hash }
         end
@@ -69,7 +69,7 @@ module Lago
             )
 
             payment_method_params = whitelist_payment_method_params(r[:payment_method])
-            result[:payment_method] = payment_method_params if payment_method_params
+            result[:payment_method] = payment_method_params if payment_method_params.present?
 
             processed_rules << result unless result.empty?
           end

@@ -41,7 +41,7 @@ module Lago
           )
 
           payment_method_params = whitelist_payment_method_params(params[:payment_method])
-          result[:payment_method] = payment_method_params if payment_method_params
+          result[:payment_method] = payment_method_params if payment_method_params.present?
 
           { 'wallet_transaction' => result }
         end

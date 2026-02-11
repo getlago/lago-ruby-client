@@ -7,19 +7,21 @@ RSpec.describe 'Lago::Api::Client#subscriptions', :integration do
   let(:plan) { create_plan }
 
   describe '#create' do
-    it 'creates a subscription' do
+    it 'creates a subscription', :aggregate_failures do
       subscription = create_subscription(
         external_customer_id: customer.external_id,
         plan_code: plan.code,
       )
 
+      expect(subscription).to have_attributes(
+        plan_code: plan.code,
+        external_customer_id: customer.external_id,
+        status: 'active',
+        billing_time: 'calendar',
+      )
       expect(subscription.external_id).to be_present
-      expect(subscription.plan_code).to eq(plan.code)
-      expect(subscription.external_customer_id).to eq(customer.external_id)
-      expect(subscription.status).to eq('active')
       expect(subscription.created_at).to be_present
       expect(subscription.started_at).to be_present
-      expect(subscription.billing_time).to eq('calendar')
     end
 
     context 'when payment_method is invalid' do
@@ -52,8 +54,10 @@ RSpec.describe 'Lago::Api::Client#subscriptions', :integration do
     it 'updates the subscription' do
       updated_subscription = client.subscriptions.update({ name: updated_name }, subscription.external_id)
 
-      expect(updated_subscription.name).to eq(updated_name)
-      expect(updated_subscription.external_id).to eq(subscription.external_id)
+      expect(updated_subscription).to have_attributes(
+        name: updated_name,
+        external_id: subscription.external_id,
+      )
     end
 
     context 'when payment_method is invalid' do

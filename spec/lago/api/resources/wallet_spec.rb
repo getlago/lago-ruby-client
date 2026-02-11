@@ -146,7 +146,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
           .to_return(body: response_with_pm, status: 200)
       end
 
-      it 'returns a wallet with payment method' do
+      it 'returns a wallet with payment method', :aggregate_failures do
         wallet = resource.create(params_with_pm)
 
         expect(wallet.lago_id).to eq('this-is-lago-id')
@@ -213,7 +213,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
           .to_return(body: response_with_pm_rule, status: 200)
       end
 
-      it 'returns a wallet with payment method on the recurring rule' do
+      it 'returns a wallet with payment method on the recurring rule', :aggregate_failures do
         wallet = resource.create(params_with_pm_rule)
 
         expect(wallet.lago_id).to eq('this-is-lago-id')
@@ -325,7 +325,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
           .to_return(body: response_with_pm, status: 200)
       end
 
-      it 'returns a wallet with payment method' do
+      it 'returns a wallet with payment method', :aggregate_failures do
         wallet = resource.update(params_with_pm, id)
 
         expect(wallet.lago_id).to eq('this-is-lago-id')
@@ -392,7 +392,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
           .to_return(body: response_with_pm_rule, status: 200)
       end
 
-      it 'returns a wallet with payment method on the recurring rule' do
+      it 'returns a wallet with payment method on the recurring rule', :aggregate_failures do
         wallet = resource.update(params_with_pm_rule, id)
 
         expect(wallet.lago_id).to eq('this-is-lago-id')

@@ -154,7 +154,7 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
           .to_return(body: response_with_pm.to_json, status: 200)
       end
 
-      it 'returns wallet_transactions with payment method' do
+      it 'returns wallet_transactions with payment method', :aggregate_failures do
         wallet_transactions = resource.create(params_with_pm)
 
         expect(wallet_transactions.first.lago_id).to eq('this-is-lago-id')
