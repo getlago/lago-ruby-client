@@ -16,8 +16,8 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
         currency: customer.currency,
         metadata: {
           key: 'value',
-        }
-      }
+        },
+      },
     )
   end
 
@@ -91,7 +91,7 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
       updated_wallet = client.customers.wallets.update(
         wallet.external_customer_id,
         wallet.code,
-        { name: "Updated Wallet #{customer_unique_id(customer)}" }
+        { name: "Updated Wallet #{customer_unique_id(customer)}" },
       )
       assert_wallet_attributes_with_updated_balance(
         updated_wallet,

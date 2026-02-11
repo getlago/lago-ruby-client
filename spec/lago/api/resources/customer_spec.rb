@@ -301,7 +301,7 @@ RSpec.describe Lago::Api::Resources::Customer do
 
   describe "#wallets" do
     it "returns Lago::Api::Resources::Customers::Wallets" do
-      expect(subject.wallets).to be_kind_of(Lago::Api::Resources::Customers::Wallets)
+      expect(subject.wallets).to be_a(Lago::Api::Resources::Customers::Wallets)
     end
   end
 end
