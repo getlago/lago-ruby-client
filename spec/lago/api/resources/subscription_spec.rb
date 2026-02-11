@@ -536,7 +536,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
     end
   end
 
-  describe '#batch_create_alerts' do
+  describe '#create_alerts' do
     let(:json_response) { load_fixture('subscription_alerts') }
     let(:alerts_response) { JSON.parse(json_response) }
     let(:external_subscription_id) { alerts_response['alerts'].first['external_subscription_id'] }
@@ -547,13 +547,13 @@ RSpec.describe Lago::Api::Resources::Subscription do
             code: 'alert1',
             name: 'First Alert',
             alert_type: 'current_usage_amount',
-            thresholds: [{code: 'warn', value: 1000}],
+            thresholds: [{ code: 'warn', value: 1000 }],
           },
           {
             code: 'alert2',
             alert_type: 'billable_metric_current_usage_amount',
             billable_metric_code: 'storage',
-            thresholds: [{value: 2000}],
+            thresholds: [{ value: 2000 }],
           },
         ],
       }
@@ -567,7 +567,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
 
       it 'returns alerts' do
-        alerts = resource.batch_create_alerts(external_subscription_id, params)
+        alerts = resource.create_alerts(external_subscription_id, params)
 
         expect(alerts.count).to eq(2)
         expect(alerts.first.external_subscription_id).to eq(external_subscription_id)
@@ -590,12 +590,12 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
 
       it 'raises an error' do
-        expect { resource.batch_create_alerts(external_subscription_id, params) }.to raise_error(Lago::Api::HttpError)
+        expect { resource.create_alerts(external_subscription_id, params) }.to raise_error(Lago::Api::HttpError)
       end
     end
   end
 
-  describe '#delete_all_alerts' do
+  describe '#delete_alerts' do
     let(:external_subscription_id) { 'sub-12345' }
 
     context 'when alerts are successfully deleted' do
@@ -605,7 +605,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
 
       it 'does not raise an error' do
-        expect { resource.delete_all_alerts(external_subscription_id) }.not_to raise_error
+        expect { resource.delete_alerts(external_subscription_id) }.not_to raise_error
       end
     end
 
@@ -624,7 +624,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
 
       it 'raises an error' do
-        expect { resource.delete_all_alerts(external_subscription_id) }.to raise_error(Lago::Api::HttpError)
+        expect { resource.delete_alerts(external_subscription_id) }.to raise_error(Lago::Api::HttpError)
       end
     end
   end

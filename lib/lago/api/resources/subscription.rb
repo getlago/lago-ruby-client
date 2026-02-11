@@ -102,7 +102,7 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).alert
         end
 
-        def batch_create_alerts(external_subscription_id, params)
+        def create_alerts(external_subscription_id, params)
           response = connection.post(
             whitelist_alert_batch_create_params(params),
             alert_uri(external_subscription_id),
@@ -110,7 +110,7 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).alerts
         end
 
-        def delete_all_alerts(external_subscription_id)
+        def delete_alerts(external_subscription_id)
           connection.destroy(alert_uri(external_subscription_id), identifier: nil)
         end
 
