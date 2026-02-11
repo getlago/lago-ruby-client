@@ -266,7 +266,7 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
       end
 
       it 'returns wallets on selected page' do
-        response = resource.get_all(customer_id, { per_page: 2, page: 1 })
+        response = resource.get_all(customer_id, per_page: 2, page: 1)
 
         expect(response['wallets'].first['lago_id']).to eq(wallet_id)
         expect(response['wallets'].first['status']).to eq('active')

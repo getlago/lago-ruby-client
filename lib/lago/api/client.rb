@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lago/api/resources/base'
+require 'lago/api/resources/nested'
 require 'lago/api/resources/activity_log'
 require 'lago/api/resources/add_on'
 require 'lago/api/resources/api_log'
