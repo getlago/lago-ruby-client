@@ -536,6 +536,99 @@ RSpec.describe Lago::Api::Resources::Subscription do
     end
   end
 
+  describe '#batch_create_alerts' do
+    let(:json_response) { load_fixture('subscription_alerts') }
+    let(:alerts_response) { JSON.parse(json_response) }
+    let(:external_subscription_id) { alerts_response['alerts'].first['external_subscription_id'] }
+    let(:params) do
+      {
+        alerts: [
+          {
+            code: 'alert1',
+            name: 'First Alert',
+            alert_type: 'current_usage_amount',
+            thresholds: [{code: 'warn', value: 1000}],
+          },
+          {
+            code: 'alert2',
+            alert_type: 'billable_metric_current_usage_amount',
+            billable_metric_code: 'storage',
+            thresholds: [{value: 2000}],
+          },
+        ],
+      }
+    end
+
+    context 'when alerts are successfully created' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/alerts")
+          .with(body: params)
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns alerts' do
+        alerts = resource.batch_create_alerts(external_subscription_id, params)
+
+        expect(alerts.count).to eq(2)
+        expect(alerts.first.external_subscription_id).to eq(external_subscription_id)
+      end
+    end
+
+    context 'when alert creation fails' do
+      let(:error_response) do
+        {
+          'status' => 422,
+          'error' => 'Unprocessable Entity',
+          'message' => 'Validation error on the record',
+        }.to_json
+      end
+
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/alerts")
+          .with(body: params)
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.batch_create_alerts(external_subscription_id, params) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#delete_all_alerts' do
+    let(:external_subscription_id) { 'sub-12345' }
+
+    context 'when alerts are successfully deleted' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/alerts")
+          .to_return(body: '', status: 200)
+      end
+
+      it 'does not raise an error' do
+        expect { resource.delete_all_alerts(external_subscription_id) }.not_to raise_error
+      end
+    end
+
+    context 'when subscription is not found' do
+      let(:not_found_response) do
+        {
+          'status' => 404,
+          'error' => 'Not Found',
+          'code' => 'subscription_not_found',
+        }.to_json
+      end
+
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/alerts")
+          .to_return(body: not_found_response, status: 404)
+      end
+
+      it 'raises an error' do
+        expect { resource.delete_all_alerts(external_subscription_id) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
   describe '#fixed_charges' do
     let(:json_response) { load_fixture('subscription_fixed_charges') }
     let(:fixed_charges_response) { JSON.parse(json_response) }
