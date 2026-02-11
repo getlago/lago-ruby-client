@@ -61,7 +61,12 @@ RSpec.describe Lago::Api::Resources::Customers::PaymentMethod do
 
         expect(response['payment_methods'].first).to have_attributes(
           lago_id: payment_method_id,
-          provider_method_id: 'pm_123456',
+          is_default: factory_payment_method.is_default,
+          payment_provider_code: factory_payment_method.payment_provider_code,
+          payment_provider_name: factory_payment_method.payment_provider_name,
+          payment_provider_type: factory_payment_method.payment_provider_type,
+          provider_method_id: factory_payment_method.provider_method_id,
+          created_at: factory_payment_method.created_at,
         )
         expect(response['meta']['current_page']).to eq(1)
       end
@@ -113,7 +118,12 @@ RSpec.describe Lago::Api::Resources::Customers::PaymentMethod do
 
         expect(payment_method).to have_attributes(
           lago_id: payment_method_id,
-          provider_method_id: 'pm_123456',
+          is_default: factory_payment_method.is_default,
+          payment_provider_code: factory_payment_method.payment_provider_code,
+          payment_provider_name: factory_payment_method.payment_provider_name,
+          payment_provider_type: factory_payment_method.payment_provider_type,
+          provider_method_id: factory_payment_method.provider_method_id,
+          created_at: factory_payment_method.created_at,
         )
       end
     end
@@ -154,6 +164,11 @@ RSpec.describe Lago::Api::Resources::Customers::PaymentMethod do
         expect(payment_method).to have_attributes(
           lago_id: payment_method_id,
           is_default: true,
+          payment_provider_code: factory_payment_method.payment_provider_code,
+          payment_provider_name: factory_payment_method.payment_provider_name,
+          payment_provider_type: factory_payment_method.payment_provider_type,
+          provider_method_id: factory_payment_method.provider_method_id,
+          created_at: factory_payment_method.created_at,
         )
       end
     end
