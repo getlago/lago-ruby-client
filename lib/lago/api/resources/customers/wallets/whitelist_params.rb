@@ -4,7 +4,7 @@ module Lago
   module Api
     module Resources
       module Customers
-        class Wallets < Lago::Api::Resources::Base
+        class Wallets < Lago::Api::Resources::Nested
           class WhitelistParams
             def initialize(params)
               @params = params

@@ -4,7 +4,7 @@ module Lago
   module Api
     module Resources
       module Customers
-        class Wallets < Lago::Api::Resources::Base
+        class Wallets < Lago::Api::Resources::Nested
           class Metadata < Base
             def api_resource(customer_id, wallet_code)
               "#{base_api_resource(customer_id, wallet_code)}/metadata"
