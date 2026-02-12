@@ -24,14 +24,6 @@ RSpec.describe Lago::Api::Resources::Customers::PaymentMethod do
   end
   let(:payment_method_id) { factory_payment_method.lago_id }
 
-  let(:error_response) do
-    {
-      'status' => 422,
-      'error' => 'Unprocessable Entity',
-      'message' => 'Validation error on the record',
-    }.to_json
-  end
-
   describe '#get_all' do
     let(:payment_methods_response) do
       {
@@ -90,7 +82,15 @@ RSpec.describe Lago::Api::Resources::Customers::PaymentMethod do
       end
     end
 
-    context 'when there is an issue' do
+    context 'when the customer external id is invalid' do
+      let(:error_response) do
+        {
+          'status' => 404,
+          'error' => 'Not Found',
+          'code' => 'customer_not_found',
+        }.to_json
+      end
+
       before do
         stub_request(:get, "#{base_url}/#{resource_id}/payment_methods")
           .to_return(body: error_response, status: 404)
@@ -128,10 +128,18 @@ RSpec.describe Lago::Api::Resources::Customers::PaymentMethod do
       end
     end
 
-    context 'when there is an issue' do
+    context 'when the payment method id is invalid' do
+      let(:error_response) do
+        {
+          'status' => 404,
+          'error' => 'Not Found',
+          'code' => 'payment_method_not_found',
+        }.to_json
+      end
+
       before do
         stub_request(:delete, "#{base_url}/#{resource_id}/payment_methods/#{payment_method_id}")
-          .to_return(body: error_response, status: 422)
+          .to_return(body: error_response, status: 404)
       end
 
       it 'raises an error' do
@@ -173,11 +181,19 @@ RSpec.describe Lago::Api::Resources::Customers::PaymentMethod do
       end
     end
 
-    context 'when there is an issue' do
+    context 'when the payment method id is invalid' do
+      let(:error_response) do
+        {
+          'status' => 404,
+          'error' => 'Not Found',
+          'code' => 'payment_method_not_found',
+        }.to_json
+      end
+
       before do
         stub_request(:put, "#{base_url}/#{resource_id}/payment_methods/#{payment_method_id}/set_as_default")
           .with(body: {})
-          .to_return(body: error_response, status: 422)
+          .to_return(body: error_response, status: 404)
       end
 
       it 'raises an error' do
