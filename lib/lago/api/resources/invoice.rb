@@ -59,9 +59,12 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).invoice
         end
 
-        def retry_payment(invoice_id)
+        def retry_payment(invoice_id, params = {})
           path = "/api/v1/invoices/#{invoice_id}/retry_payment"
-          response = connection.post({}, path)
+          payment_method_params = whitelist_payment_method_params(params[:payment_method])
+          payload = { payment_method: payment_method_params }.compact
+
+          response = connection.post(payload, path)
 
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
@@ -128,6 +131,9 @@ module Lago
           fees = whitelist_fees(params[:fees])
           result[:fees] = fees unless fees.empty?
 
+          payment_method_params = whitelist_payment_method_params(params[:payment_method])
+          result[:payment_method] = payment_method_params if payment_method_params.present?
+
           { root_name => result }
         end
 
@@ -160,6 +166,12 @@ module Lago
             refund_amount: params[:refund_amount],
             credit_amount: params[:credit_amount]
           }.compact
+        end
+
+        private
+
+        def whitelist_payment_method_params(payment_method_param)
+          payment_method_param&.slice(:payment_method_type, :payment_method_id)
         end
       end
     end

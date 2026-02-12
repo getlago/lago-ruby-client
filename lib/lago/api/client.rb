@@ -15,6 +15,7 @@ require 'lago/api/resources/customers/applied_coupon'
 require 'lago/api/resources/customers/credit_note'
 require 'lago/api/resources/customers/invoice'
 require 'lago/api/resources/customers/payment'
+require 'lago/api/resources/customers/payment_method'
 require 'lago/api/resources/customers/payment_request'
 require 'lago/api/resources/customers/subscription'
 require 'lago/api/resources/customers/wallet'
@@ -120,6 +121,10 @@ module Lago
 
       def customer_payments(resource_id)
         Resources::Customers::Payment.new(self, resource_id)
+      end
+
+      def customer_payment_methods(resource_id)
+        Resources::Customers::PaymentMethod.new(self, resource_id)
       end
 
       def customer_payment_requests(resource_id)

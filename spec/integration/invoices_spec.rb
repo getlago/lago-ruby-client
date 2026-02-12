@@ -458,6 +458,18 @@ RSpec.describe 'Lago::Api::Client#invoices', :integration do
     end
   end
 
+  describe '#retry_payment' do
+    let(:invoice) { create_one_off_invoice }
+
+    context 'without payment_method' do
+      it 'retries the payment' do
+        result = client.invoices.retry_payment(invoice.lago_id)
+
+        expect(result).to be_truthy
+      end
+    end
+  end
+
   describe '#lose_dispute' do
     let(:invoice) { create_one_off_invoice }
 
