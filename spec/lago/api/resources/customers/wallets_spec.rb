@@ -296,7 +296,7 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
 
   describe '#alerts' do
     it 'returns Lago::Api::Resources::Customers::Wallets::Alert' do
-      expect(subject.alerts).to be_a(Lago::Api::Resources::Customers::Wallets::Alert)
+      expect(resource.alerts).to be_a(Lago::Api::Resources::Customers::Wallets::Alert)
     end
   end
 end
