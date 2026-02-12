@@ -102,6 +102,29 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
         expect(invoice.lago_id).to eq(invoice_id)
       end
+
+      context 'when payment_method is invalid' do
+        let(:error_response) do
+          {
+            'status' => 422,
+            'error' => 'Unprocessable Entity',
+            'code' => 'validation_errors',
+            'error_details' => {
+              'payment_method' => ['invalid_payment_method'],
+            },
+          }.to_json
+        end
+
+        before do
+          stub_request(:post, 'https://api.getlago.com/api/v1/invoices')
+            .with(body: { invoice: params })
+            .to_return(body: error_response, status: 422)
+        end
+
+        it 'raises an error' do
+          expect { resource.create(params) }.to raise_error(Lago::Api::HttpError)
+        end
+      end
     end
   end
 

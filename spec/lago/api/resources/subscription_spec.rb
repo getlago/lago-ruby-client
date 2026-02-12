@@ -129,19 +129,32 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
     end
 
-    context 'when payment_method is invalid' do
+    context 'when payment_method_id is invalid' do
       let(:params_with_invalid_pm) do
         params.merge(
           payment_method: {
-            payment_method_type: 'invalid_type',
+            payment_method_type: 'provider',
             payment_method_id: 'invalid-id',
           },
         )
       end
+      let(:body_with_invalid_pm) do
+        {
+          'subscription' => params_with_invalid_pm,
+        }
+      end
+      let(:error_response) do
+        {
+          'status' => 404,
+          'error' => 'Not Found',
+          'code' => 'resource_not_found',
+        }.to_json
+      end
 
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
-          .to_return(body: error_response, status: 422)
+          .with(body: body_with_invalid_pm)
+          .to_return(body: error_response, status: 404)
       end
 
       it 'raises an error' do
@@ -271,19 +284,35 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
     end
 
-    context 'when payment_method is invalid' do
+    context 'when payment_method_id is invalid' do
       let(:params_with_invalid_pm) do
         {
           name: 'new name',
           payment_method: {
-            payment_method_type: 'invalid_type',
+            payment_method_type: 'provider',
             payment_method_id: 'invalid-id',
           },
         }
       end
+      let(:body_with_invalid_pm) do
+        {
+          'subscription' => params_with_invalid_pm,
+        }
+      end
+      let(:error_response) do
+        {
+          'status' => 422,
+          'error' => 'Unprocessable Entity',
+          'code' => 'validation_errors',
+          'error_details' => {
+            'payment_method' => ['invalid_payment_method'],
+          },
+        }.to_json
+      end
 
       before do
         stub_request(:put, 'https://api.getlago.com/api/v1/subscriptions/123')
+          .with(body: body_with_invalid_pm)
           .to_return(body: error_response, status: 422)
       end
 

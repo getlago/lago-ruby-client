@@ -161,6 +161,29 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
         expect(wallet_transactions.first.payment_method.payment_method_type).to eq('provider')
         expect(wallet_transactions.first.payment_method.payment_method_id).to eq('pm-wt-123')
       end
+
+      context 'when payment_method is invalid' do
+        let(:error_response) do
+          {
+            'status' => 422,
+            'error' => 'Unprocessable Entity',
+            'code' => 'validation_errors',
+            'error_details' => {
+              'payment_method' => ['invalid_payment_method'],
+            },
+          }.to_json
+        end
+
+        before do
+          stub_request(:post, 'https://api.getlago.com/api/v1/wallet_transactions')
+            .with(body: body_with_pm)
+            .to_return(body: error_response, status: 422)
+        end
+
+        it 'raises an error' do
+          expect { resource.create(params_with_pm) }.to raise_error Lago::Api::HttpError
+        end
+      end
     end
   end
 

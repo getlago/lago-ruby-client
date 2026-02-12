@@ -153,6 +153,29 @@ RSpec.describe Lago::Api::Resources::Wallet do
         expect(wallet.payment_method.payment_method_type).to eq('provider')
         expect(wallet.payment_method.payment_method_id).to eq('pm-wallet-123')
       end
+
+      context 'when payment_method is invalid' do
+        let(:error_response) do
+          {
+            'status' => 422,
+            'error' => 'Unprocessable Entity',
+            'code' => 'validation_errors',
+            'error_details' => {
+              'payment_method' => ['invalid_payment_method'],
+            },
+          }.to_json
+        end
+
+        before do
+          stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
+            .with(body: body_with_pm)
+            .to_return(body: error_response, status: 422)
+        end
+
+        it 'raises an error' do
+          expect { resource.create(params_with_pm) }.to raise_error Lago::Api::HttpError
+        end
+      end
     end
 
     context 'when payment_method is provided in recurring_transaction_rules' do
@@ -220,6 +243,29 @@ RSpec.describe Lago::Api::Resources::Wallet do
         rule = wallet.recurring_transaction_rules.first
         expect(rule.payment_method.payment_method_type).to eq('provider')
         expect(rule.payment_method.payment_method_id).to eq('pm-rule-123')
+      end
+
+      context 'when payment_method is invalid' do
+        let(:error_response) do
+          {
+            'status' => 422,
+            'error' => 'Unprocessable Entity',
+            'code' => 'validation_errors',
+            'error_details' => {
+              'payment_method' => ['invalid_payment_method'],
+            },
+          }.to_json
+        end
+
+        before do
+          stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
+            .with(body: body_with_pm_rule)
+            .to_return(body: error_response, status: 422)
+        end
+
+        it 'raises an error' do
+          expect { resource.create(params_with_pm_rule) }.to raise_error Lago::Api::HttpError
+        end
       end
     end
   end
@@ -332,6 +378,29 @@ RSpec.describe Lago::Api::Resources::Wallet do
         expect(wallet.payment_method.payment_method_type).to eq('provider')
         expect(wallet.payment_method.payment_method_id).to eq('pm-wallet-123')
       end
+
+      context 'when payment_method is invalid' do
+        let(:error_response) do
+          {
+            'status' => 422,
+            'error' => 'Unprocessable Entity',
+            'code' => 'validation_errors',
+            'error_details' => {
+              'payment_method' => ['invalid_payment_method'],
+            },
+          }.to_json
+        end
+
+        before do
+          stub_request(:put, "https://api.getlago.com/api/v1/wallets/#{id}")
+            .with(body: body_with_pm)
+            .to_return(body: error_response, status: 422)
+        end
+
+        it 'raises an error' do
+          expect { resource.update(params_with_pm, id) }.to raise_error Lago::Api::HttpError
+        end
+      end
     end
 
     context 'when payment_method is provided in recurring_transaction_rules' do
@@ -399,6 +468,29 @@ RSpec.describe Lago::Api::Resources::Wallet do
         rule = wallet.recurring_transaction_rules.first
         expect(rule.payment_method.payment_method_type).to eq('provider')
         expect(rule.payment_method.payment_method_id).to eq('pm-rule-123')
+      end
+
+      context 'when payment_method is invalid' do
+        let(:error_response) do
+          {
+            'status' => 422,
+            'error' => 'Unprocessable Entity',
+            'code' => 'validation_errors',
+            'error_details' => {
+              'payment_method' => ['invalid_payment_method'],
+            },
+          }.to_json
+        end
+
+        before do
+          stub_request(:put, "https://api.getlago.com/api/v1/wallets/#{id}")
+            .with(body: body_with_pm_rule)
+            .to_return(body: error_response, status: 422)
+        end
+
+        it 'raises an error' do
+          expect { resource.update(params_with_pm_rule, id) }.to raise_error Lago::Api::HttpError
+        end
       end
     end
   end
