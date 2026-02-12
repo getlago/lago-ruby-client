@@ -102,6 +102,18 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).alert
         end
 
+        def create_alerts(external_subscription_id, params)
+          response = connection.post(
+            whitelist_alert_batch_create_params(params),
+            alert_uri(external_subscription_id),
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).alerts
+        end
+
+        def delete_alerts(external_subscription_id)
+          connection.destroy(alert_uri(external_subscription_id), identifier: nil)
+        end
+
         def whitelist_params(params)
           {
             root_name => {
@@ -134,6 +146,20 @@ module Lago
               billable_metric_code: params[:billable_metric_code],
               thresholds: params[:thresholds],
             }.compact,
+          }
+        end
+
+        def whitelist_alert_batch_create_params(params)
+          {
+            alerts: (params[:alerts] || []).map do |alert|
+              {
+                alert_type: alert[:alert_type],
+                name: alert[:name],
+                code: alert[:code],
+                billable_metric_code: alert[:billable_metric_code],
+                thresholds: alert[:thresholds],
+              }.compact
+            end,
           }
         end
 
