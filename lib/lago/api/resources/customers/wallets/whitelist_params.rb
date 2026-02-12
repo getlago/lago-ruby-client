@@ -72,7 +72,7 @@ module Lago
               processed_rules
             end
 
-            def appliest_to(applies_to_params)
+            def applies_to(applies_to_params)
               (applies_to_params || {}).slice(:fee_types, :billable_metric_codes)
             end
 
