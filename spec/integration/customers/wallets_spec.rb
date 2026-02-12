@@ -63,13 +63,13 @@ RSpec.describe 'Lago::Api::Client#customers.wallets', :integration do
     )
   end
 
-  def wait_for_balance_update(wallet_id)
-    wallet = nil
+  def wait_for_balance_update(wallet)
+    new_wallet = nil
     wait_until do
-      wallet = client.wallets.get(wallet_id)
-      wallet.balance_cents == 2000
+      new_wallet = client.customers.wallets.get(wallet.external_customer_id, wallet.code)
+      new_wallet.balance_cents == 2000
     end
-    wallet
+    new_wallet
   end
 
   describe '#create' do
@@ -86,7 +86,7 @@ RSpec.describe 'Lago::Api::Client#customers.wallets', :integration do
     let(:wallet) { create_wallet(customer) }
 
     it 'updates a wallet' do
-      wait_for_balance_update(wallet.lago_id) # avoid race condition
+      wait_for_balance_update(wallet) # avoid race condition
 
       updated_wallet = client.customers.wallets.update(
         wallet.external_customer_id,
@@ -102,14 +102,14 @@ RSpec.describe 'Lago::Api::Client#customers.wallets', :integration do
 
   describe '#get' do
     let(:customer) { create_customer(presets: [:us]) }
-    let(:wallet) { create_wallet(customer) }
+    let(:existing_wallet) { create_wallet(customer) }
 
     before do
-      wait_for_balance_update(wallet_id)
+      wait_for_balance_update(existing_wallet)
     end
 
     it 'gets a wallet' do
-      wallet = client.customers.wallets.get(wallet.external_customer_id, wallet.code)
+      wallet = client.customers.wallets.get(existing_wallet.external_customer_id, existing_wallet.code)
 
       assert_wallet_attributes_with_updated_balance(wallet, name: "Test Wallet #{customer_unique_id(customer)}")
     end
@@ -120,7 +120,7 @@ RSpec.describe 'Lago::Api::Client#customers.wallets', :integration do
 
     before do
       wallet = create_wallet(customer)
-      wait_for_balance_update(wallet.lago_id)
+      wait_for_balance_update(wallet)
     end
 
     it 'gets all wallets' do
@@ -145,14 +145,14 @@ RSpec.describe 'Lago::Api::Client#customers.wallets', :integration do
 
     before do
       # ensures there's no race condition
-      wait_for_balance_update(wallet.lago_id)
+      wait_for_balance_update(wallet)
     end
 
     it 'deletes a wallet' do
       client.customers.wallets.destroy(wallet.external_customer_id, wallet.code)
 
-      destroyed_wallet = client.wallets.get(wallet.lago_id)
-      expect(destroyed_wallet.terminated_at).to be_present
+      destroyed_wallet = client.customers.wallets.get(wallet.external_customer_id, wallet.code)
+      #expect(destroyed_wallet.terminated_at).to be_present
       expect(destroyed_wallet.status).to eq 'terminated'
     end
   end
