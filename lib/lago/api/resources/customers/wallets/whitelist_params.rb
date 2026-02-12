@@ -26,7 +26,7 @@ module Lago
                 :ignore_paid_top_up_limits_on_creation,
                 :transaction_name,
                 :paid_top_up_min_amount_cents,
-                :paid_top_up_max_amount_cents
+                :paid_top_up_max_amount_cents,
               )
 
               recurring_rules = recurring_rules(params[:recurring_transaction_rules])
@@ -63,7 +63,7 @@ module Lago
                   :target_ongoing_balance,
                   :transaction_metadata,
                   :transaction_name,
-                  :ignore_paid_top_up_limits
+                  :ignore_paid_top_up_limits,
                 )
 
                 processed_rules << result unless result.empty?

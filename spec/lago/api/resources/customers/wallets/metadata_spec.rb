@@ -12,11 +12,11 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets::Metadata do
 
   describe '#replace' do
     let(:metadata) { { 'foo' => 'bar', 'baz' => 'qux' } }
-    let(:metadata_response) { { metadata: metadata }.to_json }
+    let(:metadata_response) { { metadata: }.to_json }
 
     before do
       stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets/#{wallet_code}/metadata")
-        .with(body: { metadata: metadata })
+        .with(body: { metadata: })
         .to_return(body: metadata_response, status: 200)
     end
 
@@ -29,11 +29,11 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets::Metadata do
 
   describe '#merge' do
     let(:metadata) { { 'foo' => 'qux' } }
-    let(:metadata_response) { { metadata: metadata }.to_json }
+    let(:metadata_response) { { metadata: }.to_json }
 
     before do
       stub_request(:patch, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets/#{wallet_code}/metadata")
-        .with(body: { metadata: metadata })
+        .with(body: { metadata: })
         .to_return(body: metadata_response, status: 200)
     end
 

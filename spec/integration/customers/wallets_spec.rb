@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe 'Lago::Api::Client#wallets', :integration do
+RSpec.describe 'Lago::Api::Client#customers.wallets', :integration do
   def create_wallet(customer)
     name = "Test Wallet #{customer_unique_id(customer)}"
     client.customers.wallets.create(
