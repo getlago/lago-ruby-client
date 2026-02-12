@@ -152,7 +152,7 @@ RSpec.describe 'Lago::Api::Client#customers.wallets', :integration do
       client.customers.wallets.destroy(wallet.external_customer_id, wallet.code)
 
       destroyed_wallet = client.customers.wallets.get(wallet.external_customer_id, wallet.code)
-      #expect(destroyed_wallet.terminated_at).to be_present
+      expect(destroyed_wallet.terminated_at).to be_present
       expect(destroyed_wallet.status).to eq 'terminated'
     end
   end
