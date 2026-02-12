@@ -79,7 +79,7 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
     context 'when wallet is successfully created' do
       before do
         stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets")
-          .with(body: body)
+          .with(body:)
           .to_return(body: response, status: 200)
       end
 
@@ -103,7 +103,7 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
     context 'when wallet failed to create' do
       before do
         stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets")
-          .with(body: body)
+          .with(body:)
           .to_return(body: error_response, status: 422)
       end
 
@@ -149,7 +149,7 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
     context 'when wallet is successfully updated' do
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets/#{code}")
-          .with(body: body)
+          .with(body:)
           .to_return(body: response, status: 200)
       end
 
@@ -164,7 +164,7 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
     context 'when wallet failed to update' do
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets/#{code}")
-          .with(body: body)
+          .with(body:)
           .to_return(body: error_response, status: 422)
       end
 
@@ -290,7 +290,7 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
 
   describe '#metadata' do
     it 'returns Lago::Api::Resources::Customers::Wallets::Metadata' do
-      expect(subject.metadata).to be_a(Lago::Api::Resources::Customers::Wallets::Metadata)
+      expect(resource.metadata).to be_a(Lago::Api::Resources::Customers::Wallets::Metadata)
     end
   end
 end
