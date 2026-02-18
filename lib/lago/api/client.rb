@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lago/api/resources/base'
+require 'lago/api/resources/nested'
 require 'lago/api/resources/activity_log'
 require 'lago/api/resources/add_on'
 require 'lago/api/resources/api_log'
@@ -18,6 +19,9 @@ require 'lago/api/resources/customers/payment'
 require 'lago/api/resources/customers/payment_request'
 require 'lago/api/resources/customers/subscription'
 require 'lago/api/resources/customers/wallet'
+require 'lago/api/resources/customers/wallets'
+require 'lago/api/resources/customers/wallets/base'
+require 'lago/api/resources/customers/wallets/metadata'
 require 'lago/api/resources/event'
 require 'lago/api/resources/feature'
 require 'lago/api/resources/fee'
