@@ -17,7 +17,7 @@ module Lago
           end
 
           def whitelist_params(params)
-            Wallets::WhitelistParams.new(params).whitelist
+            Wallets::WhitelistParams.new.wallet(params)
           end
 
           def metadata

@@ -6,19 +6,9 @@ module Lago
   module Api
     module Resources
       class Nested < Base
-        attr_reader :connection
-
         def initialize(client)
           super(client)
           @connection = Lago::Api::Connection.new(client.api_key, client.base_api_url)
-        end
-
-        def whitelist_update_params(params)
-          whitelist_params(params)
-        end
-
-        def whitelist_create_params(params)
-          whitelist_params(params)
         end
 
         def create(*parent_ids, params)
@@ -56,6 +46,18 @@ module Lago
           response = connection.get_all(options, path)
 
           JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        private
+
+        attr_reader :connection
+
+        def whitelist_update_params(params)
+          whitelist_params(params)
+        end
+
+        def whitelist_create_params(params)
+          whitelist_params(params)
         end
       end
     end

@@ -6,11 +6,7 @@ module Lago
       module Customers
         class Wallets < Lago::Api::Resources::Nested
           class WhitelistParams
-            def initialize(params)
-              @params = params
-            end
-
-            def whitelist
+            def wallet(params)
               result_hash = params.compact.slice(
                 :external_customer_id,
                 :rate_amount,
@@ -41,9 +37,13 @@ module Lago
               { 'wallet' => result_hash }
             end
 
-            private
+            def metadata(params)
+              return unless params
 
-            attr_reader :params
+              params.to_h.transform_keys(&:to_s).transform_values(&:to_s)
+            end
+
+            private
 
             def recurring_rules(rules)
               processed_rules = []
@@ -74,10 +74,6 @@ module Lago
 
             def applies_to(applies_to_params)
               (applies_to_params || {}).slice(:fee_types, :billable_metric_codes)
-            end
-
-            def metadata(metadata)
-              metadata&.to_h&.transform_keys(&:to_s)&.transform_values { |v| v&.to_s }
             end
           end
         end
