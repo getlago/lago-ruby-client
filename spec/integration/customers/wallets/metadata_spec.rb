@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe 'Lago::Api::Client#customers.wallets', :integration do
+RSpec.describe 'Lago::Api::Client#customers.wallets.metadata', :integration do
   let(:customer) { create_customer(presets: [:us]) }
   let(:wallet) do
     client.customers.wallets.create(
