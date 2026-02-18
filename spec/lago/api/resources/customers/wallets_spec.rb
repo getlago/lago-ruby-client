@@ -293,4 +293,10 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
       expect(resource.metadata).to be_a(Lago::Api::Resources::Customers::Wallets::Metadata)
     end
   end
+
+  describe '#alerts' do
+    it 'returns Lago::Api::Resources::Customers::Wallets::Alert' do
+      expect(resource.alerts).to be_a(Lago::Api::Resources::Customers::Wallets::Alert)
+    end
+  end
 end

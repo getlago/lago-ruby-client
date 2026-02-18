@@ -20,6 +20,10 @@ module Lago
             Wallets::WhitelistParams.new.wallet(params)
           end
 
+          def alerts
+            Wallets::Alert.new(client)
+          end
+
           def metadata
             Wallets::Metadata.new(client)
           end

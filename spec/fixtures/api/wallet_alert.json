@@ -1,0 +1,18 @@
+{
+  "alert": {
+    "external_customer_id": "customer-id-12345",
+    "code": "wallet_balance_alert",
+    "alert_type": "wallet_balance_amount",
+    "thresholds": [
+      {
+        "code": "warn",
+        "value": 10000
+      },
+      {
+        "code": "alert",
+        "value": 1000,
+        "recurring": true
+      }
+    ]
+  }
+}
