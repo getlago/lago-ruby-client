@@ -54,6 +54,117 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).entitlement
         end
 
+        # Charges
+        def get_all_charges(plan_code, options = {})
+          response = connection.get_all(options, charges_uri(plan_code))
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def get_charge(plan_code, charge_code)
+          response = connection.get(charges_uri(plan_code, charge_code), identifier: nil)
+          JSON.parse(response.to_json, object_class: OpenStruct).charge
+        end
+
+        def create_charge(plan_code, params)
+          response = connection.post(
+            whitelist_charge_params(params),
+            charges_uri(plan_code),
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).charge
+        end
+
+        def update_charge(plan_code, charge_code, params)
+          response = connection.put(
+            charges_uri(plan_code, charge_code),
+            identifier: nil,
+            body: whitelist_charge_params(params),
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).charge
+        end
+
+        def destroy_charge(plan_code, charge_code, params = {})
+          response = connection.destroy(
+            charges_uri(plan_code, charge_code),
+            identifier: nil,
+            options: params.empty? ? nil : params,
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).charge
+        end
+
+        # Fixed Charges
+        def get_all_fixed_charges(plan_code, options = {})
+          response = connection.get_all(options, fixed_charges_uri(plan_code))
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def get_fixed_charge(plan_code, fixed_charge_code)
+          response = connection.get(fixed_charges_uri(plan_code, fixed_charge_code), identifier: nil)
+          JSON.parse(response.to_json, object_class: OpenStruct).fixed_charge
+        end
+
+        def create_fixed_charge(plan_code, params)
+          response = connection.post(
+            whitelist_fixed_charge_params(params),
+            fixed_charges_uri(plan_code),
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).fixed_charge
+        end
+
+        def update_fixed_charge(plan_code, fixed_charge_code, params)
+          response = connection.put(
+            fixed_charges_uri(plan_code, fixed_charge_code),
+            identifier: nil,
+            body: whitelist_fixed_charge_params(params),
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).fixed_charge
+        end
+
+        def destroy_fixed_charge(plan_code, fixed_charge_code, params = {})
+          response = connection.destroy(
+            fixed_charges_uri(plan_code, fixed_charge_code),
+            identifier: nil,
+            options: params.empty? ? nil : params,
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).fixed_charge
+        end
+
+        # Charge Filters
+        def get_all_charge_filters(plan_code, charge_code, options = {})
+          response = connection.get_all(options, charge_filters_uri(plan_code, charge_code))
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def get_charge_filter(plan_code, charge_code, filter_id)
+          response = connection.get(charge_filters_uri(plan_code, charge_code, filter_id), identifier: nil)
+          JSON.parse(response.to_json, object_class: OpenStruct).filter
+        end
+
+        def create_charge_filter(plan_code, charge_code, params)
+          response = connection.post(
+            whitelist_charge_filter_params(params),
+            charge_filters_uri(plan_code, charge_code),
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).filter
+        end
+
+        def update_charge_filter(plan_code, charge_code, filter_id, params)
+          response = connection.put(
+            charge_filters_uri(plan_code, charge_code, filter_id),
+            identifier: nil,
+            body: whitelist_charge_filter_params(params),
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).filter
+        end
+
+        def destroy_charge_filter(plan_code, charge_code, filter_id, params = {})
+          response = connection.destroy(
+            charge_filters_uri(plan_code, charge_code, filter_id),
+            identifier: nil,
+            options: params.empty? ? nil : params,
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct).filter
+        end
+
         def whitelist_params(params)
           result_hash = {
             name: params[:name],
@@ -216,6 +327,76 @@ module Lago
           url += "/#{feature_code}" if feature_code
           url += "/#{action}" if action
           URI(url)
+        end
+
+        def charges_uri(plan_code, charge_code = nil)
+          url = "#{client.base_api_url}#{api_resource}/#{plan_code}/charges"
+          url += "/#{charge_code}" if charge_code
+          URI(url)
+        end
+
+        def fixed_charges_uri(plan_code, fixed_charge_code = nil)
+          url = "#{client.base_api_url}#{api_resource}/#{plan_code}/fixed_charges"
+          url += "/#{fixed_charge_code}" if fixed_charge_code
+          URI(url)
+        end
+
+        def charge_filters_uri(plan_code, charge_code, filter_id = nil)
+          url = "#{client.base_api_url}#{api_resource}/#{plan_code}/charges/#{charge_code}/filters"
+          url += "/#{filter_id}" if filter_id
+          URI(url)
+        end
+
+        def whitelist_charge_params(params)
+          {
+            charge: (params || {}).slice(
+              :billable_metric_id,
+              :code,
+              :invoice_display_name,
+              :charge_model,
+              :pay_in_advance,
+              :prorated,
+              :invoiceable,
+              :regroup_paid_fees,
+              :min_amount_cents,
+              :accepts_target_wallet,
+              :properties,
+              :filters,
+              :tax_codes,
+              :applied_pricing_unit,
+              :cascade_updates,
+            ),
+          }
+        end
+
+        def whitelist_fixed_charge_params(params)
+          {
+            fixed_charge: (params || {}).slice(
+              :add_on_id,
+              :add_on_code,
+              :code,
+              :invoice_display_name,
+              :charge_model,
+              :pay_in_advance,
+              :prorated,
+              :units,
+              :apply_units_immediately,
+              :properties,
+              :tax_codes,
+              :cascade_updates,
+            ),
+          }
+        end
+
+        def whitelist_charge_filter_params(params)
+          {
+            filter: (params || {}).slice(
+              :invoice_display_name,
+              :properties,
+              :values,
+              :cascade_updates,
+            ),
+          }
         end
       end
     end
