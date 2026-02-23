@@ -629,9 +629,110 @@ RSpec.describe Lago::Api::Resources::Subscription do
     end
   end
 
-  describe '#fixed_charges' do
+  # Charges
+
+  describe '#get_all_charges' do
+    let(:json_response) { load_fixture('subscription_charges') }
+    let(:external_subscription_id) { 'sub_123' }
+
+    context 'when charges are successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns charges with meta' do
+        response = resource.get_all_charges(external_subscription_id)
+
+        expect(response['charges'].first['lago_id']).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
+        expect(response['charges'].first['code']).to eq('charge_code')
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get_all_charges(external_subscription_id) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#get_charge' do
+    let(:json_response) { load_fixture('subscription_charge') }
+    let(:external_subscription_id) { 'sub_123' }
+    let(:charge_code) { 'charge_code' }
+
+    context 'when charge is successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns charge' do
+        charge = resource.get_charge(external_subscription_id, charge_code)
+
+        expect(charge.lago_id).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
+        expect(charge.code).to eq(charge_code)
+      end
+    end
+
+    context 'when charge is not found' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get_charge(external_subscription_id, charge_code) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#update_charge' do
+    let(:json_response) { load_fixture('subscription_charge') }
+    let(:external_subscription_id) { 'sub_123' }
+    let(:charge_code) { 'charge_code' }
+    let(:params) { { invoice_display_name: 'Updated Setup' } }
+
+    context 'when charge is successfully updated' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}")
+          .with(body: { charge: params })
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns charge' do
+        charge = resource.update_charge(external_subscription_id, charge_code, params)
+
+        expect(charge.lago_id).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
+        expect(charge.code).to eq(charge_code)
+      end
+    end
+
+    context 'when charge update fails' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}")
+          .with(body: { charge: params })
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.update_charge(external_subscription_id, charge_code, params)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  # Fixed Charges
+
+  describe '#get_all_fixed_charges' do
     let(:json_response) { load_fixture('subscription_fixed_charges') }
-    let(:fixed_charges_response) { JSON.parse(json_response) }
     let(:external_subscription_id) { 'sub_123' }
 
     context 'when fixed charges are successfully retrieved' do
@@ -640,15 +741,13 @@ RSpec.describe Lago::Api::Resources::Subscription do
           .to_return(body: json_response, status: 200)
       end
 
-      it 'returns fixed charges' do
-        fixed_charges = resource.fixed_charges(external_subscription_id)
+      it 'returns fixed charges with meta' do
+        response = resource.get_all_fixed_charges(external_subscription_id)
 
-        expect(fixed_charges).to be_an(Array)
-        expect(fixed_charges.length).to eq(2)
-        expect(fixed_charges.first.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
-        expect(fixed_charges.first.charge_model).to eq('standard')
-        expect(fixed_charges.first.invoice_display_name).to eq('Setup Fee')
-        expect(fixed_charges.first.properties.amount).to eq('500')
+        expect(response['fixed_charges'].first['lago_id']).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(response['fixed_charges'].first['charge_model']).to eq('standard')
+        expect(response['fixed_charges'].first['invoice_display_name']).to eq('Setup Fee')
+        expect(response['meta']['current_page']).to eq(1)
       end
     end
 
@@ -667,7 +766,259 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
 
       it 'raises an error' do
-        expect { resource.fixed_charges(external_subscription_id) }.to raise_error(Lago::Api::HttpError)
+        expect { resource.get_all_fixed_charges(external_subscription_id) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#get_fixed_charge' do
+    let(:json_response) { load_fixture('subscription_fixed_charge') }
+    let(:external_subscription_id) { 'sub_123' }
+    let(:fixed_charge_code) { 'fixed_setup' }
+
+    context 'when fixed charge is successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/fixed_charges/#{fixed_charge_code}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns fixed charge' do
+        fixed_charge = resource.get_fixed_charge(external_subscription_id, fixed_charge_code)
+
+        expect(fixed_charge.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(fixed_charge.code).to eq(fixed_charge_code)
+      end
+    end
+
+    context 'when fixed charge is not found' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/fixed_charges/#{fixed_charge_code}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.get_fixed_charge(external_subscription_id, fixed_charge_code)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#update_fixed_charge' do
+    let(:json_response) { load_fixture('subscription_fixed_charge') }
+    let(:external_subscription_id) { 'sub_123' }
+    let(:fixed_charge_code) { 'fixed_setup' }
+    let(:params) { { invoice_display_name: 'Updated Setup Fee' } }
+
+    context 'when fixed charge is successfully updated' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/fixed_charges/#{fixed_charge_code}")
+          .with(body: { fixed_charge: params })
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns fixed charge' do
+        fixed_charge = resource.update_fixed_charge(external_subscription_id, fixed_charge_code, params)
+
+        expect(fixed_charge.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(fixed_charge.code).to eq(fixed_charge_code)
+      end
+    end
+
+    context 'when fixed charge update fails' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/fixed_charges/#{fixed_charge_code}")
+          .with(body: { fixed_charge: params })
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.update_fixed_charge(external_subscription_id, fixed_charge_code, params)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  # Charge Filters
+
+  describe '#get_all_charge_filters' do
+    let(:json_response) { load_fixture('subscription_charge_filters') }
+    let(:external_subscription_id) { 'sub_123' }
+    let(:charge_code) { 'charge_code' }
+
+    context 'when charge filters are successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns filters with meta' do
+        response = resource.get_all_charge_filters(external_subscription_id, charge_code)
+
+        expect(response['filters'].first['lago_id']).to eq('f1901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(response['filters'].first['invoice_display_name']).to eq('From France')
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.get_all_charge_filters(external_subscription_id, charge_code)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#get_charge_filter' do
+    let(:json_response) { load_fixture('subscription_charge_filter') }
+    let(:external_subscription_id) { 'sub_123' }
+    let(:charge_code) { 'charge_code' }
+    let(:filter_id) { 'f1901a90-1a90-1a90-1a90-1a901a901a90' }
+
+    context 'when charge filter is successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters/#{filter_id}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns filter' do
+        filter = resource.get_charge_filter(external_subscription_id, charge_code, filter_id)
+
+        expect(filter.lago_id).to eq(filter_id)
+        expect(filter.invoice_display_name).to eq('From France')
+      end
+    end
+
+    context 'when charge filter is not found' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters/#{filter_id}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.get_charge_filter(external_subscription_id, charge_code, filter_id)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#create_charge_filter' do
+    let(:json_response) { load_fixture('subscription_charge_filter') }
+    let(:external_subscription_id) { 'sub_123' }
+    let(:charge_code) { 'charge_code' }
+    let(:params) do
+      {
+        invoice_display_name: 'From France',
+        properties: { amount: '0.33' },
+        values: { country: ['France'] },
+      }
+    end
+
+    context 'when charge filter is successfully created' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters")
+          .with(body: { filter: params })
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns filter' do
+        filter = resource.create_charge_filter(external_subscription_id, charge_code, params)
+
+        expect(filter.lago_id).to eq('f1901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(filter.invoice_display_name).to eq('From France')
+      end
+    end
+
+    context 'when charge filter creation fails' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters")
+          .with(body: { filter: params })
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.create_charge_filter(external_subscription_id, charge_code, params)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#update_charge_filter' do
+    let(:json_response) { load_fixture('subscription_charge_filter') }
+    let(:external_subscription_id) { 'sub_123' }
+    let(:charge_code) { 'charge_code' }
+    let(:filter_id) { 'f1901a90-1a90-1a90-1a90-1a901a901a90' }
+    let(:params) { { invoice_display_name: 'Updated Filter' } }
+
+    context 'when charge filter is successfully updated' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters/#{filter_id}")
+          .with(body: { filter: params })
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns filter' do
+        filter = resource.update_charge_filter(external_subscription_id, charge_code, filter_id, params)
+
+        expect(filter.lago_id).to eq(filter_id)
+        expect(filter.invoice_display_name).to eq('From France')
+      end
+    end
+
+    context 'when charge filter update fails' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters/#{filter_id}")
+          .with(body: { filter: params })
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.update_charge_filter(external_subscription_id, charge_code, filter_id, params)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#destroy_charge_filter' do
+    let(:json_response) { load_fixture('subscription_charge_filter') }
+    let(:external_subscription_id) { 'sub_123' }
+    let(:charge_code) { 'charge_code' }
+    let(:filter_id) { 'f1901a90-1a90-1a90-1a90-1a901a901a90' }
+
+    context 'when charge filter is successfully destroyed' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters/#{filter_id}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns filter' do
+        filter = resource.destroy_charge_filter(external_subscription_id, charge_code, filter_id)
+
+        expect(filter.lago_id).to eq(filter_id)
+        expect(filter.invoice_display_name).to eq('From France')
+      end
+    end
+
+    context 'when charge filter destruction fails' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters/#{filter_id}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.destroy_charge_filter(external_subscription_id, charge_code, filter_id)
+        end.to raise_error(Lago::Api::HttpError)
       end
     end
   end
