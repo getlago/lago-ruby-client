@@ -52,12 +52,12 @@ RSpec.describe 'Lago::Api::Client#customers.wallets.alerts', :integration do
       wallet_code: wallet.code,
       code: params[:code] || 'wallet_balance_alert',
       name: params[:name] || 'Wallet Balance Alert',
-      alert_type: 'wallet_balance_amount',
+      alert_type: params[:alert_type] || 'wallet_balance_amount',
       thresholds: [
         have_attributes(
-          code: 'alert',
-          value: '1000.0',
-          recurring: true,
+          code: be_a(String),
+          value: be_a(String),
+          recurring: be(true).or(be(false)),
         ),
       ],
       direction: be_a(String),
@@ -133,6 +133,67 @@ RSpec.describe 'Lago::Api::Client#customers.wallets.alerts', :integration do
       delete_alert(customer, wallet, alert_code)
 
       expect { get_alert(customer, wallet, alert_code) }.to raise_error(Lago::Api::HttpError)
+    end
+  end
+
+  describe '#create_batch' do
+    let(:params) do
+      [
+        {
+          code: 'wallet_balance_alert',
+          name: 'Wallet Balance Alert',
+          alert_type: 'wallet_balance_amount',
+          thresholds: [
+            {
+              code: 'warn',
+              value: 1000,
+              recurring: false,
+            },
+          ],
+        },
+        {
+          code: 'wallet_credits_alert',
+          name: 'Wallet Credits Alert',
+          alert_type: 'wallet_credits_balance',
+          thresholds: [
+            {
+              code: 'critical',
+              value: 2000,
+              recurring: false,
+            },
+          ],
+        },
+      ]
+    end
+
+    after { client.customers.wallets.alerts.destroy_all(customer.external_id, wallet.code) }
+
+    it 'creates multiple alerts' do
+      alerts = client.customers.wallets.alerts.create_batch(customer.external_id, wallet.code, params)
+
+      expect(alerts).to contain_exactly(
+        have_alert_attributes(
+          code: 'wallet_balance_alert',
+          name: 'Wallet Balance Alert',
+          alert_type: 'wallet_balance_amount',
+        ),
+        have_alert_attributes(
+          code: 'wallet_credits_alert',
+          name: 'Wallet Credits Alert',
+          alert_type: 'wallet_credits_balance',
+        ),
+      )
+    end
+  end
+
+  describe '#destroy_all' do
+    before { create_alert(customer, wallet, alert_params) }
+
+    it 'deletes an alert' do
+      client.customers.wallets.alerts.destroy_all(customer.external_id, wallet.code)
+
+      results = client.customers.wallets.alerts.get_all(customer.external_id, wallet.code)
+      expect(results.alerts).to be_empty
     end
   end
 end
