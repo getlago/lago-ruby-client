@@ -36,6 +36,17 @@ jobs:
       TEST_LAGO_API_KEY: 123456
     steps:
       - uses: actions/checkout@v3
+      - name: Ensure API key exists
+        run: |
+          docker exec -i ${{ job.services.lago.id }} su postgres -c "psql -d lago" <<'SQL'
+            INSERT INTO api_keys (id, organization_id, value, permissions, created_at, updated_at)
+            SELECT gen_random_uuid(), id, '123456', '{}'::jsonb, now(), now()
+            FROM organizations o
+            WHERE NOT EXISTS (SELECT 1 FROM api_keys WHERE organization_id = o.id)
+            LIMIT 1;
+            UPDATE api_keys SET value = '123456'
+            WHERE id = (SELECT id FROM api_keys ORDER BY created_at LIMIT 1);
+          SQL
       - name: Set up Ruby 3.4
         uses: ruby/setup-ruby@v1
         with:
