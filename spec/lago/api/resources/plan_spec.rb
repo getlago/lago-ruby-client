@@ -49,6 +49,8 @@ RSpec.describe Lago::Api::Resources::Plan do
         expect(plan.minimum_commitment.invoice_display_name).to eq(minimum_commitment.invoice_display_name)
         expect(plan.minimum_commitment.taxes.map(&:code)).to eq(tax_codes)
 
+        expect(plan.charges.first.accepts_target_wallet).to be(false)
+
         expect(plan.fixed_charges).to be_an(Array)
         expect(plan.fixed_charges.first.lago_id).to eq('fc901a90-1a90-1a90-1a90-1a901a901a90')
         expect(plan.fixed_charges.first.charge_model).to eq('standard')
@@ -415,6 +417,523 @@ RSpec.describe Lago::Api::Resources::Plan do
       response = resource.delete_metadata_key(plan_code, key)
 
       expect(response).to eq(remaining_metadata)
+    end
+  end
+
+  # Charges
+
+  describe '#get_all_charges' do
+    let(:json_response) { load_fixture('plan_charges') }
+
+    context 'when charges are successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns charges with meta' do
+        response = resource.get_all_charges(plan_code)
+
+        expect(response['charges'].first['lago_id']).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
+        expect(response['charges'].first['code']).to eq('charge_code')
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when options are present' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges?per_page=2&page=1")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns charges on selected page' do
+        response = resource.get_all_charges(plan_code, { per_page: 2, page: 1 })
+
+        expect(response['charges'].first['lago_id']).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get_all_charges(plan_code) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#get_charge' do
+    let(:json_response) { load_fixture('plan_charge') }
+    let(:charge_response) { JSON.parse(json_response) }
+    let(:charge_code) { charge_response['charge']['code'] }
+
+    context 'when charge is successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns charge' do
+        charge = resource.get_charge(plan_code, charge_code)
+
+        expect(charge.lago_id).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
+        expect(charge.code).to eq(charge_code)
+      end
+    end
+
+    context 'when charge is not found' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get_charge(plan_code, charge_code) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#create_charge' do
+    let(:json_response) { load_fixture('plan_charge') }
+    let(:params) do
+      {
+        billable_metric_id: 'a6947936-628f-4945-8857-db6858ee7941',
+        code: 'charge_code',
+        charge_model: 'standard',
+        properties: { amount: '0.22' },
+      }
+    end
+
+    context 'when charge is successfully created' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges")
+          .with(body: { charge: params })
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns charge' do
+        charge = resource.create_charge(plan_code, params)
+
+        expect(charge.lago_id).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
+        expect(charge.code).to eq('charge_code')
+      end
+    end
+
+    context 'when charge creation fails' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges")
+          .with(body: { charge: params })
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.create_charge(plan_code, params) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#update_charge' do
+    let(:json_response) { load_fixture('plan_charge') }
+    let(:charge_code) { 'charge_code' }
+    let(:params) { { invoice_display_name: 'Updated Setup' } }
+
+    context 'when charge is successfully updated' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}")
+          .with(body: { charge: params })
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns charge' do
+        charge = resource.update_charge(plan_code, charge_code, params)
+
+        expect(charge.lago_id).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
+        expect(charge.code).to eq(charge_code)
+      end
+    end
+
+    context 'when charge update fails' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}")
+          .with(body: { charge: params })
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.update_charge(plan_code, charge_code, params) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#destroy_charge' do
+    let(:json_response) { load_fixture('plan_charge') }
+    let(:charge_code) { 'charge_code' }
+
+    context 'when charge is successfully destroyed' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns charge' do
+        charge = resource.destroy_charge(plan_code, charge_code)
+
+        expect(charge.lago_id).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
+        expect(charge.code).to eq(charge_code)
+      end
+    end
+
+    context 'when charge destruction fails' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.destroy_charge(plan_code, charge_code) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  # Fixed Charges
+
+  describe '#get_all_fixed_charges' do
+    let(:json_response) { load_fixture('plan_fixed_charges') }
+
+    context 'when fixed charges are successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/fixed_charges")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns fixed charges with meta' do
+        response = resource.get_all_fixed_charges(plan_code)
+
+        expect(response['fixed_charges'].first['lago_id']).to eq('fc901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(response['fixed_charges'].first['code']).to eq('fixed_setup')
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/fixed_charges")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get_all_fixed_charges(plan_code) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#get_fixed_charge' do
+    let(:json_response) { load_fixture('plan_fixed_charge') }
+    let(:fixed_charge_code) { 'fixed_setup' }
+
+    context 'when fixed charge is successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/fixed_charges/#{fixed_charge_code}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns fixed charge' do
+        fixed_charge = resource.get_fixed_charge(plan_code, fixed_charge_code)
+
+        expect(fixed_charge.lago_id).to eq('fc901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(fixed_charge.code).to eq(fixed_charge_code)
+      end
+    end
+
+    context 'when fixed charge is not found' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/fixed_charges/#{fixed_charge_code}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get_fixed_charge(plan_code, fixed_charge_code) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#create_fixed_charge' do
+    let(:json_response) { load_fixture('plan_fixed_charge') }
+    let(:params) do
+      {
+        add_on_id: 'ao901a90-1a90-1a90-1a90-1a901a901a90',
+        code: 'fixed_setup',
+        charge_model: 'standard',
+        properties: { amount: '500' },
+      }
+    end
+
+    context 'when fixed charge is successfully created' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/plans/#{plan_code}/fixed_charges")
+          .with(body: { fixed_charge: params })
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns fixed charge' do
+        fixed_charge = resource.create_fixed_charge(plan_code, params)
+
+        expect(fixed_charge.lago_id).to eq('fc901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(fixed_charge.code).to eq('fixed_setup')
+      end
+    end
+
+    context 'when fixed charge creation fails' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/plans/#{plan_code}/fixed_charges")
+          .with(body: { fixed_charge: params })
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.create_fixed_charge(plan_code, params) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#update_fixed_charge' do
+    let(:json_response) { load_fixture('plan_fixed_charge') }
+    let(:fixed_charge_code) { 'fixed_setup' }
+    let(:params) { { invoice_display_name: 'Updated Setup Fee' } }
+
+    context 'when fixed charge is successfully updated' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/plans/#{plan_code}/fixed_charges/#{fixed_charge_code}")
+          .with(body: { fixed_charge: params })
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns fixed charge' do
+        fixed_charge = resource.update_fixed_charge(plan_code, fixed_charge_code, params)
+
+        expect(fixed_charge.lago_id).to eq('fc901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(fixed_charge.code).to eq(fixed_charge_code)
+      end
+    end
+
+    context 'when fixed charge update fails' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/plans/#{plan_code}/fixed_charges/#{fixed_charge_code}")
+          .with(body: { fixed_charge: params })
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.update_fixed_charge(plan_code, fixed_charge_code, params)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#destroy_fixed_charge' do
+    let(:json_response) { load_fixture('plan_fixed_charge') }
+    let(:fixed_charge_code) { 'fixed_setup' }
+
+    context 'when fixed charge is successfully destroyed' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/fixed_charges/#{fixed_charge_code}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns fixed charge' do
+        fixed_charge = resource.destroy_fixed_charge(plan_code, fixed_charge_code)
+
+        expect(fixed_charge.lago_id).to eq('fc901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(fixed_charge.code).to eq(fixed_charge_code)
+      end
+    end
+
+    context 'when fixed charge destruction fails' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/fixed_charges/#{fixed_charge_code}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.destroy_fixed_charge(plan_code, fixed_charge_code) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  # Charge Filters
+
+  describe '#get_all_charge_filters' do
+    let(:json_response) { load_fixture('plan_charge_filters') }
+    let(:charge_code) { 'charge_code' }
+
+    context 'when charge filters are successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}/filters")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns filters with meta' do
+        response = resource.get_all_charge_filters(plan_code, charge_code)
+
+        expect(response['filters'].first['lago_id']).to eq('f1901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(response['filters'].first['invoice_display_name']).to eq('From France')
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}/filters")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get_all_charge_filters(plan_code, charge_code) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#get_charge_filter' do
+    let(:json_response) { load_fixture('plan_charge_filter') }
+    let(:charge_code) { 'charge_code' }
+    let(:filter_id) { 'f1901a90-1a90-1a90-1a90-1a901a901a90' }
+
+    context 'when charge filter is successfully retrieved' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}/filters/#{filter_id}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns filter' do
+        filter = resource.get_charge_filter(plan_code, charge_code, filter_id)
+
+        expect(filter.lago_id).to eq(filter_id)
+        expect(filter.invoice_display_name).to eq('From France')
+      end
+    end
+
+    context 'when charge filter is not found' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}/filters/#{filter_id}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.get_charge_filter(plan_code, charge_code, filter_id) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#create_charge_filter' do
+    let(:json_response) { load_fixture('plan_charge_filter') }
+    let(:charge_code) { 'charge_code' }
+    let(:params) do
+      {
+        invoice_display_name: 'From France',
+        properties: { amount: '0.33' },
+        values: { country: ['France'] },
+      }
+    end
+
+    context 'when charge filter is successfully created' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}/filters")
+          .with(body: { filter: params })
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns filter' do
+        filter = resource.create_charge_filter(plan_code, charge_code, params)
+
+        expect(filter.lago_id).to eq('f1901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(filter.invoice_display_name).to eq('From France')
+      end
+    end
+
+    context 'when charge filter creation fails' do
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}/filters")
+          .with(body: { filter: params })
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.create_charge_filter(plan_code, charge_code, params) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#update_charge_filter' do
+    let(:json_response) { load_fixture('plan_charge_filter') }
+    let(:charge_code) { 'charge_code' }
+    let(:filter_id) { 'f1901a90-1a90-1a90-1a90-1a901a901a90' }
+    let(:params) { { invoice_display_name: 'Updated Filter' } }
+
+    context 'when charge filter is successfully updated' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}/filters/#{filter_id}")
+          .with(body: { filter: params })
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns filter' do
+        filter = resource.update_charge_filter(plan_code, charge_code, filter_id, params)
+
+        expect(filter.lago_id).to eq(filter_id)
+        expect(filter.invoice_display_name).to eq('From France')
+      end
+    end
+
+    context 'when charge filter update fails' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}/filters/#{filter_id}")
+          .with(body: { filter: params })
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.update_charge_filter(plan_code, charge_code, filter_id, params)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#destroy_charge_filter' do
+    let(:json_response) { load_fixture('plan_charge_filter') }
+    let(:charge_code) { 'charge_code' }
+    let(:filter_id) { 'f1901a90-1a90-1a90-1a90-1a901a901a90' }
+
+    context 'when charge filter is successfully destroyed' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}/filters/#{filter_id}")
+          .to_return(body: json_response, status: 200)
+      end
+
+      it 'returns filter' do
+        filter = resource.destroy_charge_filter(plan_code, charge_code, filter_id)
+
+        expect(filter.lago_id).to eq(filter_id)
+        expect(filter.invoice_display_name).to eq('From France')
+      end
+    end
+
+    context 'when charge filter destruction fails' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/plans/#{plan_code}/charges/#{charge_code}/filters/#{filter_id}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.destroy_charge_filter(plan_code, charge_code, filter_id)
+        end.to raise_error(Lago::Api::HttpError)
+      end
     end
   end
 end
