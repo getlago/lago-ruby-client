@@ -103,6 +103,32 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
     end
 
+    context 'when filter parameters are provided' do
+      let(:charge_id) { '1a901a90-1a90-1a90-1a90-1a901a901a90' }
+
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/current_usage")
+          .with(query: {
+            external_subscription_id: subscription_external_id,
+            filter_by_charge_code: 'storage',
+            'filter_by_group[cloud]' => 'aws',
+            full_usage: 'true',
+          })
+          .to_return(body: customer_usage_response, status: 200)
+      end
+
+      it 'returns the usage of the customer with filters applied' do
+        response = resource.current_usage(
+          customer_external_id,
+          subscription_external_id,
+          filter_by_charge_code: 'storage',
+          filter_by_group: { cloud: 'aws' },
+          full_usage: 'true',
+        )
+        expect(response['customer_usage']['from_datetime']).to eq('2022-07-01T00:00:00Z')
+      end
+    end
+
     context 'when the customer does not exists' do
       let(:customer_external_id) { 'DOESNOTEXIST' }
 
