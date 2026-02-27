@@ -14,15 +14,15 @@ module Lago
           'customer'
         end
 
-        def current_usage(external_customer_id, external_subscription_id, apply_taxes: nil,
-          filter_by_charge_id: nil, filter_by_charge_code: nil, filter_by_group: nil, full_usage: nil)
+        def current_usage(
+          external_customer_id, external_subscription_id, apply_taxes: nil,
+          filter_by_charge_id: nil, filter_by_charge_code: nil, filter_by_group: nil, full_usage: nil
+        ) # rubocop:disable Metrics/ParameterLists
           query_params = { external_subscription_id: external_subscription_id }
           query_params[:apply_taxes] = apply_taxes unless apply_taxes.nil?
           query_params[:filter_by_charge_id] = filter_by_charge_id unless filter_by_charge_id.nil?
           query_params[:filter_by_charge_code] = filter_by_charge_code unless filter_by_charge_code.nil?
-          unless filter_by_group.nil?
-            filter_by_group.each { |k, v| query_params[:"filter_by_group[#{k}]"] = v }
-          end
+          filter_by_group&.each { |k, v| query_params[:"filter_by_group[#{k}]"] = v }
           query_params[:full_usage] = full_usage unless full_usage.nil?
           query_string = URI.encode_www_form(query_params)
 
