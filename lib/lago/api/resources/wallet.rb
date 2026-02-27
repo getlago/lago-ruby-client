@@ -42,6 +42,9 @@ module Lago
           metadata = whitelist_metadata(params[:metadata])
           result_hash[:metadata] = metadata if metadata
 
+          payment_method_params = whitelist_payment_method_params(params[:payment_method])
+          result_hash[:payment_method] = payment_method_params if payment_method_params.present?
+
           { root_name => result_hash }
         end
 
@@ -65,6 +68,9 @@ module Lago
               :transaction_name,
               :ignore_paid_top_up_limits
             )
+
+            payment_method_params = whitelist_payment_method_params(r[:payment_method])
+            result[:payment_method] = payment_method_params if payment_method_params.present?
 
             processed_rules << result unless result.empty?
           end
@@ -108,6 +114,12 @@ module Lago
           response = connection.destroy(path, identifier: nil)
 
           response['metadata']
+        end
+
+        private
+
+        def whitelist_payment_method_params(payment_method_param)
+          payment_method_param&.slice(:payment_method_type, :payment_method_id)
         end
       end
     end
