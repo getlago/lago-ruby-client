@@ -35,75 +35,78 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct).lifetime_usage
         end
 
-        def get_entitlements(external_subscription_id)
-          response = connection.get(entitlements_uri(external_subscription_id), identifier: nil)
+        def get_entitlements(external_subscription_id, status: nil)
+          response = connection.get(entitlements_uri(external_subscription_id, status:), identifier: nil)
           JSON.parse(response.to_json, object_class: OpenStruct).entitlements
         end
 
-        def update_entitlements(external_subscription_id, params)
+        def update_entitlements(external_subscription_id, params, status: nil)
           response = connection.patch(
-            entitlements_uri(external_subscription_id),
+            entitlements_uri(external_subscription_id, status:),
             identifier: nil,
             body: whitelist_entitlements_update_params(params),
           )
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def delete_entitlement(external_subscription_id, feature_code)
-          response = connection.destroy(entitlements_uri(external_subscription_id, feature_code), identifier: nil)
-          JSON.parse(response.to_json, object_class: OpenStruct)
-        end
-
-        def delete_entitlement_privilege(external_subscription_id, entitlement_code, privilege_code)
+        def delete_entitlement(external_subscription_id, feature_code, status: nil)
           response = connection.destroy(
-            entitlements_uri(external_subscription_id, entitlement_code, "privileges/#{privilege_code}"),
+            entitlements_uri(external_subscription_id, feature_code, status:),
             identifier: nil,
           )
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def get_alert(external_subscription_id, code)
-          response = connection.get(alert_uri(external_subscription_id, code), identifier: nil)
+        def delete_entitlement_privilege(external_subscription_id, entitlement_code, privilege_code, status: nil)
+          response = connection.destroy(
+            entitlements_uri(external_subscription_id, entitlement_code, "privileges/#{privilege_code}", status:),
+            identifier: nil,
+          )
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def get_alert(external_subscription_id, code, status: nil)
+          response = connection.get(alert_uri(external_subscription_id, code, status:), identifier: nil)
           JSON.parse(response.to_json, object_class: OpenStruct).alert
         end
 
-        def update_alert(external_subscription_id, code, params)
+        def update_alert(external_subscription_id, code, params, status: nil)
           response = connection.put(
-            alert_uri(external_subscription_id, code),
+            alert_uri(external_subscription_id, code, status:),
             identifier: nil,
             body: whitelist_alert_update_params(params),
           )
           JSON.parse(response.to_json, object_class: OpenStruct).alert
         end
 
-        def delete_alert(external_subscription_id, code)
-          response = connection.destroy(alert_uri(external_subscription_id, code), identifier: nil)
+        def delete_alert(external_subscription_id, code, status: nil)
+          response = connection.destroy(alert_uri(external_subscription_id, code, status:), identifier: nil)
           JSON.parse(response.to_json, object_class: OpenStruct).alert
         end
 
-        def get_alerts(external_subscription_id)
-          response = connection.get(alert_uri(external_subscription_id), identifier: nil)
+        def get_alerts(external_subscription_id, status: nil)
+          response = connection.get(alert_uri(external_subscription_id, status:), identifier: nil)
           JSON.parse(response.to_json, object_class: OpenStruct).alerts
         end
 
-        def create_alert(external_subscription_id, params)
+        def create_alert(external_subscription_id, params, status: nil)
           response = connection.post(
             whitelist_alert_create_params(params),
-            alert_uri(external_subscription_id),
+            alert_uri(external_subscription_id, status:),
           )
           JSON.parse(response.to_json, object_class: OpenStruct).alert
         end
 
-        def create_alerts(external_subscription_id, params)
+        def create_alerts(external_subscription_id, params, status: nil)
           response = connection.post(
             whitelist_alert_batch_create_params(params),
-            alert_uri(external_subscription_id),
+            alert_uri(external_subscription_id, status:),
           )
           JSON.parse(response.to_json, object_class: OpenStruct).alerts
         end
 
-        def delete_alerts(external_subscription_id)
-          connection.destroy(alert_uri(external_subscription_id), identifier: nil)
+        def delete_alerts(external_subscription_id, status: nil)
+          connection.destroy(alert_uri(external_subscription_id, status:), identifier: nil)
         end
 
         # Charges
@@ -112,14 +115,14 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def get_charge(external_id, charge_code)
-          response = connection.get(charges_uri(external_id, charge_code), identifier: nil)
+        def get_charge(external_id, charge_code, status: nil)
+          response = connection.get(charges_uri(external_id, charge_code, status:), identifier: nil)
           JSON.parse(response.to_json, object_class: OpenStruct).charge
         end
 
-        def update_charge(external_id, charge_code, params)
+        def update_charge(external_id, charge_code, params, status: nil)
           response = connection.put(
-            charges_uri(external_id, charge_code),
+            charges_uri(external_id, charge_code, status:),
             identifier: nil,
             body: whitelist_subscription_charge_params(params),
           )
@@ -132,14 +135,14 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def get_fixed_charge(external_id, fixed_charge_code)
-          response = connection.get(fixed_charges_uri(external_id, fixed_charge_code), identifier: nil)
+        def get_fixed_charge(external_id, fixed_charge_code, status: nil)
+          response = connection.get(fixed_charges_uri(external_id, fixed_charge_code, status:), identifier: nil)
           JSON.parse(response.to_json, object_class: OpenStruct).fixed_charge
         end
 
-        def update_fixed_charge(external_id, fixed_charge_code, params)
+        def update_fixed_charge(external_id, fixed_charge_code, params, status: nil)
           response = connection.put(
-            fixed_charges_uri(external_id, fixed_charge_code),
+            fixed_charges_uri(external_id, fixed_charge_code, status:),
             identifier: nil,
             body: whitelist_subscription_fixed_charge_params(params),
           )
@@ -152,31 +155,31 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def get_charge_filter(external_id, charge_code, filter_id)
-          response = connection.get(charge_filters_uri(external_id, charge_code, filter_id), identifier: nil)
+        def get_charge_filter(external_id, charge_code, filter_id, status: nil)
+          response = connection.get(charge_filters_uri(external_id, charge_code, filter_id, status:), identifier: nil)
           JSON.parse(response.to_json, object_class: OpenStruct).filter
         end
 
-        def create_charge_filter(external_id, charge_code, params)
+        def create_charge_filter(external_id, charge_code, params, status: nil)
           response = connection.post(
             whitelist_subscription_charge_filter_params(params),
-            charge_filters_uri(external_id, charge_code),
+            charge_filters_uri(external_id, charge_code, status:),
           )
           JSON.parse(response.to_json, object_class: OpenStruct).filter
         end
 
-        def update_charge_filter(external_id, charge_code, filter_id, params)
+        def update_charge_filter(external_id, charge_code, filter_id, params, status: nil)
           response = connection.put(
-            charge_filters_uri(external_id, charge_code, filter_id),
+            charge_filters_uri(external_id, charge_code, filter_id, status:),
             identifier: nil,
             body: whitelist_subscription_charge_filter_params(params),
           )
           JSON.parse(response.to_json, object_class: OpenStruct).filter
         end
 
-        def destroy_charge_filter(external_id, charge_code, filter_id)
+        def destroy_charge_filter(external_id, charge_code, filter_id, status: nil)
           response = connection.destroy(
-            charge_filters_uri(external_id, charge_code, filter_id),
+            charge_filters_uri(external_id, charge_code, filter_id, status:),
             identifier: nil,
           )
           JSON.parse(response.to_json, object_class: OpenStruct).filter
@@ -263,33 +266,41 @@ module Lago
           payment_method_param&.slice(:payment_method_type, :payment_method_id)
         end
 
-        def entitlements_uri(external_subscription_id, feature_code = nil, action = nil)
+        def append_status_query(url, status)
+          return url if status.nil?
+
+          separator = url.include?('?') ? '&' : '?'
+          "#{url}#{separator}status=#{status}"
+        end
+
+        def entitlements_uri(external_subscription_id, feature_code = nil, action = nil, status: nil)
           url = "#{client.base_api_url}#{api_resource}/#{external_subscription_id}/entitlements"
           url += "/#{feature_code}" if feature_code
           url += "/#{action}" if action
-          URI(url)
+          URI(append_status_query(url, status))
         end
 
-        def alert_uri(external_subscription_id, code = nil)
-          URI("#{client.base_api_url}#{api_resource}/#{external_subscription_id}/alerts#{code ? "/#{code}" : ''}")
+        def alert_uri(external_subscription_id, code = nil, status: nil)
+          url = "#{client.base_api_url}#{api_resource}/#{external_subscription_id}/alerts#{code ? "/#{code}" : ''}"
+          URI(append_status_query(url, status))
         end
 
-        def charges_uri(external_id, charge_code = nil)
+        def charges_uri(external_id, charge_code = nil, status: nil)
           url = "#{client.base_api_url}#{api_resource}/#{external_id}/charges"
           url += "/#{charge_code}" if charge_code
-          URI(url)
+          URI(append_status_query(url, status))
         end
 
-        def fixed_charges_uri(external_id, fixed_charge_code = nil)
+        def fixed_charges_uri(external_id, fixed_charge_code = nil, status: nil)
           url = "#{client.base_api_url}#{api_resource}/#{external_id}/fixed_charges"
           url += "/#{fixed_charge_code}" if fixed_charge_code
-          URI(url)
+          URI(append_status_query(url, status))
         end
 
-        def charge_filters_uri(external_id, charge_code, filter_id = nil)
+        def charge_filters_uri(external_id, charge_code, filter_id = nil, status: nil)
           url = "#{client.base_api_url}#{api_resource}/#{external_id}/charges/#{charge_code}/filters"
           url += "/#{filter_id}" if filter_id
-          URI(url)
+          URI(append_status_query(url, status))
         end
 
         def whitelist_subscription_charge_params(params)
