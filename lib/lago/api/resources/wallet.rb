@@ -19,6 +19,10 @@ module Lago
           Customers::Wallets::WhitelistParams.new(params).whitelist
         end
 
+        def whitelist_metadata(metadata)
+          metadata&.to_h&.transform_keys(&:to_s)&.transform_values { |v| v&.to_s }
+        end
+
         def replace_metadata(wallet_id, metadata)
           path = "/api/v1/wallets/#{wallet_id}/metadata"
           payload = { metadata: whitelist_metadata(metadata) }

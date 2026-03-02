@@ -78,8 +78,8 @@ module Lago
               processed_rules
             end
 
-            def appliest_to_params(applies_to_params)
-              (applies_to_params || {}).slice(:fee_types, :billable_metric_codes)
+            def applies_to_params(applies_to)
+              (applies_to || {}).slice(:fee_types, :billable_metric_codes)
             end
 
             def metadata_params(metadata)
