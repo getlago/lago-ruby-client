@@ -41,7 +41,7 @@ module Lago
             end
 
             def whitelist_params(params)
-              params&.to_h&.transform_keys(&:to_s)&.transform_values { |v| v&.to_s }
+              WhitelistParams.new.metadata(params)
             end
           end
         end
