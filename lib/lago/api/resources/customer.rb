@@ -14,6 +14,10 @@ module Lago
           'customer'
         end
 
+        def wallets
+          Customers::Wallets.new(client)
+        end
+
         def current_usage( # rubocop:disable Metrics/ParameterLists
           external_customer_id, external_subscription_id, apply_taxes: nil,
           filter_by_charge_id: nil, filter_by_charge_code: nil, filter_by_group: nil, full_usage: nil
