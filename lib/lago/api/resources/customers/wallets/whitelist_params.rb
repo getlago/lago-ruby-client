@@ -83,7 +83,7 @@ module Lago
             end
 
             def payment_method_params(payment_method)
-              payment_method&.slice(:payment_method_type, :payment_method_id)
+              (payment_method || {}).slice(:payment_method_type, :payment_method_id)
             end
           end
         end
