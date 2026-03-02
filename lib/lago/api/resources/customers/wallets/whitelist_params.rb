@@ -1,0 +1,97 @@
+# frozen_string_literal: true
+
+module Lago
+  module Api
+    module Resources
+      module Customers
+        module Wallets
+          class WhitelistParams
+            def initialize(params)
+              @params = params
+            end
+
+            def whitelist
+              result_hash = params.compact.slice(
+                :external_customer_id,
+                :rate_amount,
+                :name,
+                :code,
+                :priority,
+                :paid_credits,
+                :granted_credits,
+                :currency,
+                :expiration_at,
+                :transaction_metadata,
+                :invoice_requires_successful_payment,
+                :ignore_paid_top_up_limits_on_creation,
+                :transaction_name,
+                :paid_top_up_min_amount_cents,
+                :paid_top_up_max_amount_cents
+              )
+
+              recurring_rules = recurring_rules_params(params[:recurring_transaction_rules])
+              result_hash[:recurring_transaction_rules] = recurring_rules if recurring_rules.any?
+
+              applies_to = applies_to_params(params[:applies_to])
+              result_hash[:applies_to] = applies_to if applies_to.any?
+
+              metadata = metadata_params(params[:metadata])
+              result_hash[:metadata] = metadata if metadata
+
+              payment_method = payment_method_params(params[:payment_method])
+              result_hash[:payment_method] = payment_method if payment_method.any?
+
+              { 'wallet' => result_hash }
+            end
+
+            private
+
+            attr_reader :params
+
+            def recurring_rules_params(rules)
+              processed_rules = []
+
+              (rules || []).each do |r|
+                result = (r || {}).slice(
+                  :lago_id,
+                  :paid_credits,
+                  :granted_credits,
+                  :threshold_credits,
+                  :invoice_requires_successful_payment,
+                  :trigger,
+                  :interval,
+                  :method,
+                  :started_at,
+                  :expiration_at,
+                  :target_ongoing_balance,
+                  :transaction_metadata,
+                  :transaction_name,
+                  :ignore_paid_top_up_limits
+                )
+
+                payment_method = payment_method_params(r[:payment_method])
+                result[:payment_method] = payment_method if payment_method.any?
+
+                processed_rules << result unless result.empty?
+              end
+
+              processed_rules
+            end
+
+            def appliest_to_params(applies_to_params)
+              (applies_to_params || {}).slice(:fee_types, :billable_metric_codes)
+            end
+
+            def metadata_params(metadata)
+              metadata&.to_h&.transform_keys(&:to_s)&.transform_values { |v| v&.to_s }
+            end
+
+            def payment_method_params(payment_method)
+              payment_method&.slice(:payment_method_type, :payment_method_id)
+            end
+          end
+        end
+      end
+    end
+  end
+end
