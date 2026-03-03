@@ -527,12 +527,12 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
     context 'with status parameter' do
       before do
-        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/alerts/#{code}?status=pending")
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/alerts/#{code}?subscription_status=pending")
           .to_return(body: json_response, status: 200)
       end
 
       it 'returns alert for pending subscription' do
-        alert = resource.get_alert(external_subscription_id, code, status: 'pending')
+        alert = resource.get_alert(external_subscription_id, code, subscription_status: 'pending')
 
         expect(alert.external_subscription_id).to eq(external_subscription_id)
         expect(alert.code).to eq(code)
@@ -707,13 +707,13 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
     context 'with status parameter' do
       before do
-        stub_request(:post, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/alerts?status=pending")
+        stub_request(:post, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/alerts?subscription_status=pending")
           .with(body: { alert: params })
           .to_return(body: json_response, status: 200)
       end
 
       it 'returns alert for pending subscription' do
-        alert = resource.create_alert(external_subscription_id, params, status: 'pending')
+        alert = resource.create_alert(external_subscription_id, params, subscription_status: 'pending')
 
         expect(alert.external_subscription_id).to eq(external_subscription_id)
         expect(alert.code).to eq(params[:code])
@@ -815,12 +815,12 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
     context 'with status parameter' do
       before do
-        stub_request(:delete, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/alerts?status=pending")
+        stub_request(:delete, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/alerts?subscription_status=pending")
           .to_return(body: '', status: 200)
       end
 
       it 'does not raise an error' do
-        expect { resource.delete_alerts(external_subscription_id, status: 'pending') }.not_to raise_error
+        expect { resource.delete_alerts(external_subscription_id, subscription_status: 'pending') }.not_to raise_error
       end
     end
   end
@@ -890,12 +890,12 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
     context 'with status parameter' do
       before do
-        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}?status=pending")
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}?subscription_status=pending")
           .to_return(body: json_response, status: 200)
       end
 
       it 'returns charge for pending subscription' do
-        charge = resource.get_charge(external_subscription_id, charge_code, status: 'pending')
+        charge = resource.get_charge(external_subscription_id, charge_code, subscription_status: 'pending')
 
         expect(charge.lago_id).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
         expect(charge.code).to eq(charge_code)
@@ -1121,12 +1121,12 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
     context 'with status parameter' do
       before do
-        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters/#{filter_id}?status=pending")
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/charges/#{charge_code}/filters/#{filter_id}?subscription_status=pending")
           .to_return(body: json_response, status: 200)
       end
 
       it 'returns filter for pending subscription' do
-        filter = resource.get_charge_filter(external_subscription_id, charge_code, filter_id, status: 'pending')
+        filter = resource.get_charge_filter(external_subscription_id, charge_code, filter_id, subscription_status: 'pending')
 
         expect(filter.lago_id).to eq(filter_id)
         expect(filter.invoice_display_name).to eq('From France')
@@ -1287,12 +1287,12 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
     context 'with status parameter' do
       before do
-        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements?status=pending")
+        stub_request(:get, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements?subscription_status=pending")
           .to_return(body: json_response, status: 200)
       end
 
       it 'returns entitlements for pending subscription' do
-        entitlements = resource.get_entitlements(external_subscription_id, status: 'pending')
+        entitlements = resource.get_entitlements(external_subscription_id, subscription_status: 'pending')
 
         expect(entitlements).to be_an(Array)
         expect(entitlements.map(&:code)).to eq %w[seats analytics_api salesforce sso]
@@ -1346,13 +1346,13 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
     context 'with status parameter' do
       before do
-        stub_request(:patch, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements?status=pending")
+        stub_request(:patch, "https://api.getlago.com/api/v1/subscriptions/#{external_subscription_id}/entitlements?subscription_status=pending")
           .with(body: { entitlements: params })
           .to_return(body: response_body, status: 200)
       end
 
       it 'returns response for pending subscription' do
-        response = resource.update_entitlements(external_subscription_id, params, status: 'pending')
+        response = resource.update_entitlements(external_subscription_id, params, subscription_status: 'pending')
 
         expect(response.worked).to be true
       end
