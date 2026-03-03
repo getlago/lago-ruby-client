@@ -132,7 +132,7 @@ module Lago
           result[:fees] = fees unless fees.empty?
 
           payment_method_params = whitelist_payment_method_params(params[:payment_method])
-          result[:payment_method] = payment_method_params if payment_method_params.present?
+          result[:payment_method] = payment_method_params if payment_method_params
 
           { root_name => result }
         end
