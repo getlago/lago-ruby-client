@@ -13,6 +13,7 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
         {
           'lago_id' => 'this-is-lago-id',
           'lago_wallet_id' => factory_wallet_transaction.wallet_id,
+          'lago_invoice_id' => 'invoice-uuid-1111',
           'amount' => factory_wallet_transaction.paid_credits,
           'name' => factory_wallet_transaction.name,
           'status' => 'pending',
@@ -25,6 +26,7 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
         {
           'lago_id' => 'this-is-lago-id2',
           'lago_wallet_id' => factory_wallet_transaction.wallet_id,
+          'lago_invoice_id' => nil,
           'amount' => factory_wallet_transaction.granted_credits,
           'name' => factory_wallet_transaction.name,
           'status' => 'settled',
@@ -80,6 +82,8 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
 
         expect(wallet_transactions.first.lago_id).to eq('this-is-lago-id')
         expect(wallet_transactions.last.lago_id).to eq('this-is-lago-id2')
+        expect(wallet_transactions.first.lago_invoice_id).to eq('invoice-uuid-1111')
+        expect(wallet_transactions.last.lago_invoice_id).to be_nil
         expect(wallet_transactions).to all(have_attributes(name: 'Transaction Name'))
       end
     end
@@ -131,6 +135,7 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
             {
               'lago_id' => 'this-is-lago-id',
               'lago_wallet_id' => factory_wallet_transaction.wallet_id,
+              'lago_invoice_id' => 'invoice-uuid-1111',
               'amount' => factory_wallet_transaction.paid_credits,
               'name' => factory_wallet_transaction.name,
               'status' => 'pending',
