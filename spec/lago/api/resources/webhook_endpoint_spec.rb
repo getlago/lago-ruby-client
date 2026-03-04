@@ -13,6 +13,8 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
         'lago_id' => 'this-is-lago-id',
         'webhook_url' => 'https://foo.bar',
         'signature_algo' => 'hmac',
+        'name' => 'My Webhook Endpoint',
+        'event_types' => ['customer.created'],
         'created_at' => '2022-04-29T08:59:51Z',
       }
     }.to_json
@@ -33,7 +35,7 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
       }
     end
 
-    context 'when wallet is successfully created' do
+    context 'when webhook endpoint is successfully created' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/webhook_endpoints')
           .with(body: body)
@@ -46,6 +48,8 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
         expect(webhook_endpoint.lago_id).to eq('this-is-lago-id')
         expect(webhook_endpoint.webhook_url).to eq(factory_webhook_endpoint.webhook_url)
         expect(webhook_endpoint.signature_algo).to eq(factory_webhook_endpoint.signature_algo)
+        expect(webhook_endpoint.name).to eq(factory_webhook_endpoint.name)
+        expect(webhook_endpoint.event_types).to eq(factory_webhook_endpoint.event_types)
       end
     end
 
@@ -70,6 +74,8 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
         'webhook_endpoint' => {
           webhook_url: 'https://foo.bar',
           signature_algo: 'hmac',
+          name: 'My Webhook Endpoint',
+          event_types: ['customer.created'],
         },
       }
     end
@@ -78,6 +84,8 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
       {
         webhook_url: 'https://foo.bar',
         signature_algo: 'hmac',
+        name: 'My Webhook Endpoint',
+        event_types: ['customer.created'],
       }
     end
 
@@ -94,6 +102,8 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
         expect(webhook_endpoint.lago_id).to eq('this-is-lago-id')
         expect(webhook_endpoint.webhook_url).to eq(factory_webhook_endpoint.webhook_url)
         expect(webhook_endpoint.signature_algo).to eq(factory_webhook_endpoint.signature_algo)
+        expect(webhook_endpoint.name).to eq(factory_webhook_endpoint.name)
+        expect(webhook_endpoint.event_types).to eq(factory_webhook_endpoint.event_types)
       end
     end
 
@@ -125,6 +135,8 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
         expect(webhook_endpoint.lago_id).to eq('this-is-lago-id')
         expect(webhook_endpoint.webhook_url).to eq(factory_webhook_endpoint.webhook_url)
         expect(webhook_endpoint.signature_algo).to eq(factory_webhook_endpoint.signature_algo)
+        expect(webhook_endpoint.name).to eq(factory_webhook_endpoint.name)
+        expect(webhook_endpoint.event_types).to eq(factory_webhook_endpoint.event_types)
       end
     end
 
@@ -155,6 +167,8 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
         expect(webhook_endpoint.lago_id).to eq('this-is-lago-id')
         expect(webhook_endpoint.webhook_url).to eq(factory_webhook_endpoint.webhook_url)
         expect(webhook_endpoint.signature_algo).to eq(factory_webhook_endpoint.signature_algo)
+        expect(webhook_endpoint.name).to eq(factory_webhook_endpoint.name)
+        expect(webhook_endpoint.event_types).to eq(factory_webhook_endpoint.event_types)
       end
     end
 
@@ -178,6 +192,8 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
             'lago_id' => 'this-is-lago-id',
             'webhook_url' => factory_webhook_endpoint.webhook_url,
             'signature_algo' => factory_webhook_endpoint.signature_algo,
+            'name' => factory_webhook_endpoint.name,
+            'event_types' => factory_webhook_endpoint.event_types,
             'created_at' => '2022-04-29T08:59:51Z',
           }
         ],
@@ -203,6 +219,8 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
         expect(response['webhook_endpoints'].first['lago_id']).to eq('this-is-lago-id')
         expect(response['webhook_endpoints'].first['webhook_url']).to eq(factory_webhook_endpoint.webhook_url)
         expect(response['webhook_endpoints'].first['signature_algo']).to eq(factory_webhook_endpoint.signature_algo)
+        expect(response['webhook_endpoints'].first['name']).to eq(factory_webhook_endpoint.name)
+        expect(response['webhook_endpoints'].first['event_types']).to eq(factory_webhook_endpoint.event_types)
         expect(response['meta']['current_page']).to eq(1)
       end
     end
