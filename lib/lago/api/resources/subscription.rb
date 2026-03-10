@@ -57,9 +57,17 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
-        def delete_entitlement_privilege(external_subscription_id, entitlement_code, privilege_code, subscription_status: nil)
+        def delete_entitlement_privilege(
+          external_subscription_id, entitlement_code, privilege_code,
+          subscription_status: nil
+        )
           response = connection.destroy(
-            entitlements_uri(external_subscription_id, entitlement_code, "privileges/#{privilege_code}", subscription_status:),
+            entitlements_uri(
+              external_subscription_id,
+              entitlement_code,
+              "privileges/#{privilege_code}",
+              subscription_status:,
+            ),
             identifier: nil,
           )
           JSON.parse(response.to_json, object_class: OpenStruct)
@@ -80,7 +88,10 @@ module Lago
         end
 
         def delete_alert(external_subscription_id, code, subscription_status: nil)
-          response = connection.destroy(alert_uri(external_subscription_id, code, subscription_status:), identifier: nil)
+          response = connection.destroy(
+            alert_uri(external_subscription_id, code, subscription_status:),
+            identifier: nil,
+          )
           JSON.parse(response.to_json, object_class: OpenStruct).alert
         end
 
@@ -136,7 +147,10 @@ module Lago
         end
 
         def get_fixed_charge(external_id, fixed_charge_code, subscription_status: nil)
-          response = connection.get(fixed_charges_uri(external_id, fixed_charge_code, subscription_status:), identifier: nil)
+          response = connection.get(
+            fixed_charges_uri(external_id, fixed_charge_code, subscription_status:),
+            identifier: nil,
+          )
           JSON.parse(response.to_json, object_class: OpenStruct).fixed_charge
         end
 
@@ -156,7 +170,10 @@ module Lago
         end
 
         def get_charge_filter(external_id, charge_code, filter_id, subscription_status: nil)
-          response = connection.get(charge_filters_uri(external_id, charge_code, filter_id, subscription_status:), identifier: nil)
+          response = connection.get(
+            charge_filters_uri(external_id, charge_code, filter_id, subscription_status:),
+            identifier: nil,
+          )
           JSON.parse(response.to_json, object_class: OpenStruct).filter
         end
 

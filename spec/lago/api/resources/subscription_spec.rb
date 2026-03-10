@@ -1126,7 +1126,12 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
 
       it 'returns filter for pending subscription' do
-        filter = resource.get_charge_filter(external_subscription_id, charge_code, filter_id, subscription_status: 'pending')
+        filter = resource.get_charge_filter(
+          external_subscription_id,
+          charge_code,
+          filter_id,
+          subscription_status: 'pending',
+        )
 
         expect(filter.lago_id).to eq(filter_id)
         expect(filter.invoice_display_name).to eq('From France')
