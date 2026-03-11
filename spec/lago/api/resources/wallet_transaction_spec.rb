@@ -19,6 +19,8 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
           'transaction_status' => 'purchased',
           'transaction_type' => 'inbound',
           'credit_amount' => factory_wallet_transaction.paid_credits,
+          'remaining_amount_cents' => 5000,
+          'remaining_credit_amount' => '50.0',
           'settled_at' => '2022-04-29T08:59:51Z',
           'created_at' => '2022-04-29T08:59:51Z'
         },
@@ -31,6 +33,8 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
           'transaction_status' => 'purchased',
           'transaction_type' => 'inbound',
           'credit_amount' => factory_wallet_transaction.granted_credits,
+          'remaining_amount_cents' => 10_000,
+          'remaining_credit_amount' => '100.0',
           'settled_at' => '2022-04-29T08:59:51Z',
           'created_at' => '2022-04-29T08:59:51Z'
         }
@@ -79,7 +83,11 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
         wallet_transactions = resource.create(params)
 
         expect(wallet_transactions.first.lago_id).to eq('this-is-lago-id')
+        expect(wallet_transactions.first.remaining_amount_cents).to eq(5000)
+        expect(wallet_transactions.first.remaining_credit_amount).to eq('50.0')
         expect(wallet_transactions.last.lago_id).to eq('this-is-lago-id2')
+        expect(wallet_transactions.last.remaining_amount_cents).to eq(10_000)
+        expect(wallet_transactions.last.remaining_credit_amount).to eq('100.0')
         expect(wallet_transactions).to all(have_attributes(name: 'Transaction Name'))
       end
     end
@@ -205,6 +213,92 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
       response = resource.get_all('555')
 
       expect(response['wallet_transactions'].first['lago_id']).to eq('this-is-lago-id')
+      expect(response['meta']['current_page']).to eq(1)
+    end
+  end
+
+  describe '#consumptions' do
+    let(:consumptions_response) do
+      {
+        'wallet_transaction_consumptions' => [
+          {
+            'lago_id' => 'consumption-id-1',
+            'amount_cents' => 5000,
+            'credit_amount' => '50.0',
+            'created_at' => '2022-04-29T08:59:51Z',
+            'wallet_transaction' => {
+              'lago_id' => 'outbound-tx-id',
+              'transaction_type' => 'outbound'
+            }
+          }
+        ],
+        'meta' => {
+          'current_page' => 1,
+          'next_page' => nil,
+          'prev_page' => nil,
+          'total_pages' => 1,
+          'total_count' => 1
+        }
+      }
+    end
+
+    before do
+      stub_request(:get, 'https://api.getlago.com/api/v1/wallet_transactions/inbound-tx-id/consumptions')
+        .to_return(body: consumptions_response.to_json, status: 200)
+    end
+
+    it 'returns a list of consumptions' do
+      response = resource.consumptions('inbound-tx-id')
+
+      consumption = response['wallet_transaction_consumptions'].first
+      expect(consumption['lago_id']).to eq('consumption-id-1')
+      expect(consumption['amount_cents']).to eq(5000)
+      expect(consumption['credit_amount']).to eq('50.0')
+      expect(consumption['created_at']).to eq('2022-04-29T08:59:51Z')
+      expect(consumption['wallet_transaction']['lago_id']).to eq('outbound-tx-id')
+      expect(response['meta']['current_page']).to eq(1)
+    end
+  end
+
+  describe '#fundings' do
+    let(:fundings_response) do
+      {
+        'wallet_transaction_fundings' => [
+          {
+            'lago_id' => 'funding-id-1',
+            'amount_cents' => 3000,
+            'credit_amount' => '30.0',
+            'created_at' => '2022-04-29T08:59:51Z',
+            'wallet_transaction' => {
+              'lago_id' => 'inbound-tx-id',
+              'transaction_type' => 'inbound'
+            }
+          }
+        ],
+        'meta' => {
+          'current_page' => 1,
+          'next_page' => nil,
+          'prev_page' => nil,
+          'total_pages' => 1,
+          'total_count' => 1
+        }
+      }
+    end
+
+    before do
+      stub_request(:get, 'https://api.getlago.com/api/v1/wallet_transactions/outbound-tx-id/fundings')
+        .to_return(body: fundings_response.to_json, status: 200)
+    end
+
+    it 'returns a list of fundings' do
+      response = resource.fundings('outbound-tx-id')
+
+      funding = response['wallet_transaction_fundings'].first
+      expect(funding['lago_id']).to eq('funding-id-1')
+      expect(funding['amount_cents']).to eq(3000)
+      expect(funding['credit_amount']).to eq('30.0')
+      expect(funding['created_at']).to eq('2022-04-29T08:59:51Z')
+      expect(funding['wallet_transaction']['lago_id']).to eq('inbound-tx-id')
       expect(response['meta']['current_page']).to eq(1)
     end
   end

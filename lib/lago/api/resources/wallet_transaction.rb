@@ -28,6 +28,20 @@ module Lago
           JSON.parse(response.to_json, object_class: OpenStruct)
         end
 
+        def consumptions(wallet_transaction_id, options = {})
+          path = "/api/v1/wallet_transactions/#{wallet_transaction_id}/consumptions"
+          response = connection.get_all(options, path)
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
+        def fundings(wallet_transaction_id, options = {})
+          path = "/api/v1/wallet_transactions/#{wallet_transaction_id}/fundings"
+          response = connection.get_all(options, path)
+
+          JSON.parse(response.to_json, object_class: OpenStruct)
+        end
+
         def whitelist_params(params)
           result = params.compact.slice(
             :wallet_id,
