@@ -70,6 +70,40 @@ RSpec.describe Lago::Api::Resources::Invoice do
       end
     end
 
+    context 'when invoice_custom_section is provided' do
+      let(:params) do
+        {
+          external_customer_id: '_ID_',
+          currency: 'EUR',
+          net_payment_term: 0,
+          skip_psp: true,
+          fees: [
+            {
+              add_on_code: '123',
+              description: 'desc',
+              tax_codes: [tax.code],
+            }
+          ],
+          invoice_custom_section: {
+            skip_invoice_custom_sections: false,
+            invoice_custom_section_codes: ['section_1', 'section_2'],
+          }
+        }
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices')
+          .with(body: { invoice: params })
+          .to_return(body: invoice_response, status: 200)
+      end
+
+      it 'returns invoice' do
+        invoice = resource.create(params)
+
+        expect(invoice.lago_id).to eq(invoice_id)
+      end
+    end
+
     context 'when payment_method is provided' do
       let(:params) do
         {
