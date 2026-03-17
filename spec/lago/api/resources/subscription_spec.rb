@@ -89,7 +89,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         params.merge(
           invoice_custom_section: {
             skip_invoice_custom_sections: false,
-            invoice_custom_section_codes: ['section_1', 'section_2'],
+            invoice_custom_section_codes: %w[section_1 section_2],
           },
         )
       end
@@ -98,7 +98,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
           'subscription' => params.merge(
             invoice_custom_section: {
               skip_invoice_custom_sections: false,
-              invoice_custom_section_codes: ['section_1', 'section_2'],
+              invoice_custom_section_codes: %w[section_1 section_2],
             },
           ),
         }
