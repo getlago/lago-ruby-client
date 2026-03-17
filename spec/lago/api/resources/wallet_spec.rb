@@ -105,6 +105,70 @@ RSpec.describe Lago::Api::Resources::Wallet do
       end
     end
 
+    context 'when invoice_custom_section is provided' do
+      let(:params_with_ics) do
+        params.merge(
+          invoice_custom_section: {
+            skip_invoice_custom_sections: false,
+            invoice_custom_section_codes: ['section_1', 'section_2'],
+          },
+        )
+      end
+      let(:body_with_ics) do
+        body['wallet']['invoice_custom_section'] = {
+          'skip_invoice_custom_sections' => false,
+          'invoice_custom_section_codes' => ['section_1', 'section_2'],
+        }
+        body
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
+          .with(body: body_with_ics)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns a wallet' do
+        wallet = resource.create(params_with_ics)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
+      end
+    end
+
+    context 'when invoice_custom_section is provided in recurring_transaction_rules' do
+      let(:params_with_ics_rule) do
+        params.deep_merge(
+          recurring_transaction_rules: [
+            factory_wallet.recurring_transaction_rules.first.merge(
+              invoice_custom_section: {
+                skip_invoice_custom_sections: true,
+                invoice_custom_section_codes: ['rule_section_1'],
+              },
+            ),
+          ],
+        )
+      end
+      let(:body_with_ics_rule) do
+        body['wallet']['recurring_transaction_rules'].first['invoice_custom_section'] = {
+          'skip_invoice_custom_sections' => true,
+          'invoice_custom_section_codes' => ['rule_section_1'],
+        }
+        body
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
+          .with(body: body_with_ics_rule)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns a wallet' do
+        wallet = resource.create(params_with_ics_rule)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
+      end
+    end
+
     context 'when payment_method is provided' do
       let(:params_with_pm) do
         params.merge(
