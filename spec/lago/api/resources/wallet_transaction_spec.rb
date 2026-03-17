@@ -104,6 +104,49 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
       end
     end
 
+    context 'when invoice_custom_section is provided' do
+      let(:params_with_ics) do
+        {
+          wallet_id: '123',
+          name: 'Transaction Name',
+          paid_credits: '100',
+          granted_credits: '100',
+          voided_credits: '0',
+          invoice_custom_section: {
+            skip_invoice_custom_sections: false,
+            invoice_custom_section_codes: ['section_1', 'section_2'],
+          },
+        }
+      end
+      let(:body_with_ics) do
+        {
+          'wallet_transaction' => {
+            'wallet_id' => '123',
+            'name' => 'Transaction Name',
+            'paid_credits' => '100',
+            'granted_credits' => '100',
+            'voided_credits' => '0',
+            'invoice_custom_section' => {
+              'skip_invoice_custom_sections' => false,
+              'invoice_custom_section_codes' => ['section_1', 'section_2'],
+            },
+          },
+        }
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallet_transactions')
+          .with(body: body_with_ics)
+          .to_return(body: response.to_json, status: 200)
+      end
+
+      it 'returns wallet_transactions' do
+        wallet_transactions = resource.create(params_with_ics)
+
+        expect(wallet_transactions.first.lago_id).to eq('this-is-lago-id')
+      end
+    end
+
     context 'when payment_method is provided' do
       let(:params_with_pm) do
         {

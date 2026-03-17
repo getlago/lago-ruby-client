@@ -57,6 +57,9 @@ module Lago
           payment_method_params = whitelist_payment_method_params(params[:payment_method])
           result[:payment_method] = payment_method_params if payment_method_params
 
+          invoice_custom_section = whitelist_invoice_custom_section_params(params[:invoice_custom_section])
+          result[:invoice_custom_section] = invoice_custom_section if invoice_custom_section
+
           { 'wallet_transaction' => result }
         end
 
@@ -64,6 +67,10 @@ module Lago
 
         def whitelist_payment_method_params(payment_method_param)
           payment_method_param&.slice(:payment_method_type, :payment_method_id)
+        end
+
+        def whitelist_invoice_custom_section_params(invoice_custom_section_param)
+          invoice_custom_section_param&.slice(:skip_invoice_custom_sections, :invoice_custom_section_codes)
         end
       end
     end
