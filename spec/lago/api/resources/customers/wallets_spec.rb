@@ -100,6 +100,70 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
       end
     end
 
+    context 'when invoice_custom_section is provided' do
+      let(:params_with_ics) do
+        params.merge(
+          invoice_custom_section: {
+            skip_invoice_custom_sections: false,
+            invoice_custom_section_codes: %w[section_1 section_2],
+          },
+        )
+      end
+      let(:body_with_ics) do
+        body['wallet']['invoice_custom_section'] = {
+          'skip_invoice_custom_sections' => false,
+          'invoice_custom_section_codes' => %w[section_1 section_2],
+        }
+        body
+      end
+
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets")
+          .with(body: body_with_ics)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns a wallet' do
+        wallet = resource.create(customer_id, params_with_ics)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
+      end
+    end
+
+    context 'when invoice_custom_section is provided in recurring_transaction_rules' do
+      let(:params_with_ics_rule) do
+        params.deep_merge(
+          recurring_transaction_rules: [
+            factory_wallet.recurring_transaction_rules.first.merge(
+              invoice_custom_section: {
+                skip_invoice_custom_sections: true,
+                invoice_custom_section_codes: %w[rule_section_1],
+              },
+            ),
+          ],
+        )
+      end
+      let(:body_with_ics_rule) do
+        body['wallet']['recurring_transaction_rules'].first['invoice_custom_section'] = {
+          'skip_invoice_custom_sections' => true,
+          'invoice_custom_section_codes' => %w[rule_section_1],
+        }
+        body
+      end
+
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets")
+          .with(body: body_with_ics_rule)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns a wallet' do
+        wallet = resource.create(customer_id, params_with_ics_rule)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
+      end
+    end
+
     context 'when wallet failed to create' do
       before do
         stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets")
