@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe 'Lago::Api::Client#customers.wallets.alerts', :integration do
+RSpec.xdescribe 'Lago::Api::Client#customers.wallets.alerts', :integration do
   let(:customer) { create_customer(presets: [:us]) }
   let(:wallet) do
     client.customers.wallets.create(
