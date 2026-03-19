@@ -37,6 +37,9 @@ module Lago
               payment_method = payment_method_params(params[:payment_method])
               result_hash[:payment_method] = payment_method if payment_method.any?
 
+              invoice_custom_section = invoice_custom_section_params(params[:invoice_custom_section])
+              result_hash[:invoice_custom_section] = invoice_custom_section if invoice_custom_section
+
               { 'wallet' => result_hash }
             end
 
@@ -72,6 +75,9 @@ module Lago
                 payment_method = payment_method_params(r[:payment_method])
                 result[:payment_method] = payment_method if payment_method.any?
 
+                invoice_custom_section = invoice_custom_section_params(r[:invoice_custom_section])
+                result[:invoice_custom_section] = invoice_custom_section if invoice_custom_section
+
                 processed_rules << result unless result.empty?
               end
 
@@ -84,6 +90,10 @@ module Lago
 
             def payment_method_params(payment_method)
               (payment_method || {}).slice(:payment_method_type, :payment_method_id)
+            end
+
+            def invoice_custom_section_params(invoice_custom_section)
+              invoice_custom_section&.slice(:skip_invoice_custom_sections, :invoice_custom_section_codes)
             end
           end
         end
