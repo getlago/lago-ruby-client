@@ -13,28 +13,38 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
         {
           'lago_id' => 'this-is-lago-id',
           'lago_wallet_id' => factory_wallet_transaction.wallet_id,
+          'lago_invoice_id' => 'invoice-uuid-1111',
+          'lago_credit_note_id' => 'credit-note-uuid-1111',
+          'lago_voided_invoice_id' => 'voided-invoice-uuid-1111',
           'amount' => factory_wallet_transaction.paid_credits,
           'name' => factory_wallet_transaction.name,
           'status' => 'pending',
+          'source' => 'manual',
           'transaction_status' => 'purchased',
           'transaction_type' => 'inbound',
           'credit_amount' => factory_wallet_transaction.paid_credits,
           'remaining_amount_cents' => 5000,
           'remaining_credit_amount' => '50.0',
+          'priority' => 50,
           'settled_at' => '2022-04-29T08:59:51Z',
           'created_at' => '2022-04-29T08:59:51Z'
         },
         {
           'lago_id' => 'this-is-lago-id2',
           'lago_wallet_id' => factory_wallet_transaction.wallet_id,
+          'lago_invoice_id' => 'invoice-uuid-2222',
+          'lago_credit_note_id' => nil,
+          'lago_voided_invoice_id' => nil,
           'amount' => factory_wallet_transaction.granted_credits,
           'name' => factory_wallet_transaction.name,
           'status' => 'settled',
+          'source' => 'interval',
           'transaction_status' => 'purchased',
           'transaction_type' => 'inbound',
           'credit_amount' => factory_wallet_transaction.granted_credits,
           'remaining_amount_cents' => 10_000,
           'remaining_credit_amount' => '100.0',
+          'priority' => 30,
           'settled_at' => '2022-04-29T08:59:51Z',
           'created_at' => '2022-04-29T08:59:51Z'
         }
@@ -83,11 +93,20 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
         wallet_transactions = resource.create(params)
 
         expect(wallet_transactions.first.lago_id).to eq('this-is-lago-id')
+        expect(wallet_transactions.first.lago_invoice_id).to eq('invoice-uuid-1111')
+        expect(wallet_transactions.first.lago_credit_note_id).to eq('credit-note-uuid-1111')
+        expect(wallet_transactions.first.lago_voided_invoice_id).to eq('voided-invoice-uuid-1111')
+        expect(wallet_transactions.first.source).to eq('manual')
         expect(wallet_transactions.first.remaining_amount_cents).to eq(5000)
         expect(wallet_transactions.first.remaining_credit_amount).to eq('50.0')
+        expect(wallet_transactions.first.priority).to eq(50)
         expect(wallet_transactions.last.lago_id).to eq('this-is-lago-id2')
+        expect(wallet_transactions.last.lago_credit_note_id).to be_nil
+        expect(wallet_transactions.last.lago_voided_invoice_id).to be_nil
+        expect(wallet_transactions.last.source).to eq('interval')
         expect(wallet_transactions.last.remaining_amount_cents).to eq(10_000)
         expect(wallet_transactions.last.remaining_credit_amount).to eq('100.0')
+        expect(wallet_transactions.last.priority).to eq(30)
         expect(wallet_transactions).to all(have_attributes(name: 'Transaction Name'))
       end
     end
