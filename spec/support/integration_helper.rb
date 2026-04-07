@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lago-ruby-client'
+require 'active_support/core_ext'
 
 module IntegrationHelper
   module ClassMethods

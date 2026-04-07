@@ -47,10 +47,10 @@ jobs:
             UPDATE api_keys SET value = '123456'
             WHERE id = (SELECT id FROM api_keys ORDER BY created_at LIMIT 1);
           SQL
-      - name: Set up Ruby 3.4
+      - name: Set up Ruby 4.0
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.4
+          ruby-version: 4.0
           bundler-cache: true
       - name: Run tests
         run: bundle exec rspec --tag integration

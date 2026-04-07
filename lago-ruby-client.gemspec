@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency('openssl')
   spec.add_dependency('ostruct')
 
+  spec.add_development_dependency('benchmark')
   spec.add_development_dependency('bigdecimal')
   spec.add_development_dependency('debug', '>= 1.0.0')
   spec.add_development_dependency('factory_bot')
@@ -37,6 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('observer')
   spec.add_development_dependency('pry-byebug')
   spec.add_development_dependency('rake', '~> 13.0')
+  spec.add_development_dependency('readline')
   spec.add_development_dependency('rspec', '~> 3.0')
   spec.add_development_dependency('rubocop', '~> 1.21')
   spec.add_development_dependency('rubocop-performance')
