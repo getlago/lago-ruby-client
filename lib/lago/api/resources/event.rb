@@ -16,7 +16,12 @@ module Lago
 
         def create(params)
           uri = URI("#{client.base_ingest_api_url}#{api_resource}")
-          connection = Lago::Api::Connection.new(client.api_key, uri)
+          connection = Lago::Api::Connection.new(
+            client.api_key,
+            uri,
+            max_retries: client.max_retries,
+            retry_on_rate_limit: client.retry_on_rate_limit
+          )
 
           payload = whitelist_params(params)
           response = connection.post(payload, uri)[root_name]

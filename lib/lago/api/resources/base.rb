@@ -59,7 +59,12 @@ module Lago
         def connection
           uri = URI.join(client.base_api_url, api_resource)
 
-          Lago::Api::Connection.new(client.api_key, uri)
+          Lago::Api::Connection.new(
+            client.api_key,
+            uri,
+            max_retries: client.max_retries,
+            retry_on_rate_limit: client.retry_on_rate_limit
+          )
         end
       end
     end

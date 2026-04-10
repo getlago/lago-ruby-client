@@ -8,7 +8,12 @@ module Lago
       class Nested < Base
         def initialize(client)
           super(client)
-          @connection = Lago::Api::Connection.new(client.api_key, client.base_api_url)
+          @connection = Lago::Api::Connection.new(
+            client.api_key,
+            client.base_api_url,
+            max_retries: client.max_retries,
+            retry_on_rate_limit: client.retry_on_rate_limit
+          )
         end
 
         def create(*parent_ids, params)
