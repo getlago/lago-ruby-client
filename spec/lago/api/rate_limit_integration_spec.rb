@@ -65,7 +65,7 @@ RSpec.describe 'Rate Limit Integration' do
           end
 
         allow(connection).to receive(:sleep)
-        result = connection.post({}, '/test')
+        result = connection.post({}, '/v1/test')
 
         expect(result).to eq('result' => 'ok')
         expect(connection).to have_received(:sleep).with(5)
@@ -93,7 +93,7 @@ RSpec.describe 'Rate Limit Integration' do
           end
 
         allow(connection).to receive(:sleep)
-        result = connection.post({}, '/test')
+        result = connection.post({}, '/v1/test')
 
         expect(result).to eq('result' => 'ok')
         expect(connection).to have_received(:sleep).twice
@@ -116,7 +116,7 @@ RSpec.describe 'Rate Limit Integration' do
             headers: { 'x-ratelimit-reset' => '60' }
           )
 
-        expect { connection.post({}, '/test') }.to raise_error(Lago::Api::RateLimitError)
+        expect { connection.post({}, '/v1/test') }.to raise_error(Lago::Api::RateLimitError)
       end
     end
 
@@ -142,7 +142,7 @@ RSpec.describe 'Rate Limit Integration' do
 
         allow(connection).to receive(:sleep)
 
-        expect { connection.post({}, '/test') }.to raise_error(Lago::Api::RateLimitError) do |error|
+        expect { connection.post({}, '/v1/test') }.to raise_error(Lago::Api::RateLimitError) do |error|
           expect(error.limit).to eq 100
           expect(error.remaining).to eq 0
           expect(error.reset).to eq 60
@@ -172,7 +172,7 @@ RSpec.describe 'Rate Limit Integration' do
           end
 
         allow(connection).to receive(:sleep)
-        result = connection.get('/resource', identifier: nil)
+        result = connection.get('/v1/resource', identifier: nil)
 
         expect(result).to eq('data' => 'value')
         expect(connection).to have_received(:sleep).with(1)
@@ -198,7 +198,7 @@ RSpec.describe 'Rate Limit Integration' do
           end
 
         allow(connection).to receive(:sleep)
-        result = connection.put('/resource', identifier: '123', body: {})
+        result = connection.put('/v1/resource', identifier: '123', body: {})
 
         expect(result).to eq('updated' => true)
         expect(connection).to have_received(:sleep).with(1)
