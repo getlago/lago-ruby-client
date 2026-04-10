@@ -123,7 +123,7 @@ module Lago
       end
 
       def handle_rate_limit(response, retry_count, block)
-        reset_seconds = extract_reset_seconds(response)
+        reset_seconds = extract_reset_seconds(response, retry_count)
         sleep(reset_seconds)
         execute_request(retry_count + 1, &block)
       end
@@ -164,12 +164,12 @@ module Lago
         [limit, remaining, reset]
       end
 
-      def extract_reset_seconds(response)
+      def extract_reset_seconds(response, retry_count)
         reset_header = response['x-ratelimit-reset']&.to_i
-        return reset_header if reset_header
+        return [reset_header, INITIAL_BACKOFF].max if reset_header
 
         # Exponential backoff if header is missing
-        calculate_backoff(0)
+        calculate_backoff(retry_count)
       end
 
       def calculate_backoff(retry_count)

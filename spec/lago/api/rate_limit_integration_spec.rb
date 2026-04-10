@@ -96,7 +96,9 @@ RSpec.describe 'Rate Limit Integration' do
         result = connection.post({}, '/v1/test')
 
         expect(result).to eq('result' => 'ok')
-        expect(connection).to have_received(:sleep).twice
+        # retry_count 0 → backoff 1s, retry_count 1 → backoff 2s
+        expect(connection).to have_received(:sleep).with(1).ordered
+        expect(connection).to have_received(:sleep).with(2).ordered
       end
     end
 
