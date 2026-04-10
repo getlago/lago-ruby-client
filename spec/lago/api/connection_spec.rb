@@ -32,7 +32,7 @@ RSpec.describe Lago::Api::Connection do
     it 'encodes the identifier' do
       stub_request(:get, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F12%2034')
 
-      connection.get(identifier: identifier)
+      connection.get(uri.path, identifier: identifier)
     end
   end
 
@@ -42,7 +42,7 @@ RSpec.describe Lago::Api::Connection do
     it 'encodes the identifier' do
       stub_request(:put, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F12%2034')
 
-      connection.put(identifier: identifier, body: nil)
+      connection.put(uri.path, identifier: identifier, body: nil)
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe Lago::Api::Connection do
     it 'encodes the identifier' do
       stub_request(:patch, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F12%2034')
 
-      connection.patch(identifier: identifier, body: nil)
+      connection.patch(uri.path, identifier: identifier, body: nil)
     end
   end
 
@@ -62,7 +62,7 @@ RSpec.describe Lago::Api::Connection do
     it 'encodes the identifier' do
       stub_request(:delete, 'https://testapi.example.org:443/gid:%2F%2Fapp%2FCustomer%2F12%2034')
 
-      connection.destroy(identifier: identifier)
+      connection.destroy(uri.path, identifier: identifier)
     end
   end
 

@@ -172,9 +172,10 @@ RSpec.describe 'Rate Limit Integration' do
           end
 
         allow(connection).to receive(:sleep)
-        result = connection.get(path: '/resource', identifier: nil)
+        result = connection.get('/resource', identifier: nil)
 
         expect(result).to eq('data' => 'value')
+        expect(connection).to have_received(:sleep).with(1)
       end
 
       it 'retries PUT requests' do
@@ -197,9 +198,10 @@ RSpec.describe 'Rate Limit Integration' do
           end
 
         allow(connection).to receive(:sleep)
-        result = connection.put(identifier: '123', body: {})
+        result = connection.put('/resource', identifier: '123', body: {})
 
         expect(result).to eq('updated' => true)
+        expect(connection).to have_received(:sleep).with(1)
       end
     end
   end
