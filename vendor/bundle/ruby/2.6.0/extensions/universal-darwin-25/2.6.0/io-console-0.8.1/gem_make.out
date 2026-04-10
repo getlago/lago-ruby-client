@@ -1,0 +1,30 @@
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/2.6.0/gems/io-console-0.8.1/ext/io/console
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20260410-58236-1t6ki4j.rb extconf.rb
+checking for rb_syserr_fail_str(0, Qnil)... yes
+checking for rb_interned_str_cstr()... no
+checking for rb_io_path() in ruby/io.h... no
+checking for rb_io_descriptor() in ruby/io.h... no
+checking for rb_io_get_write_io() in ruby/io.h... yes
+checking for rb_io_closed_p() in ruby/io.h... no
+checking for rb_io_open_descriptor() in ruby/io.h... no
+checking for rb_ractor_local_storage_value_newkey()... no
+checking for termios.h... yes
+checking for cfmakeraw() in termios.h... yes
+checking for sys/ioctl.h... yes
+checking for HAVE_RUBY_FIBER_SCHEDULER_H... no
+checking for rb_scheduler_timeout()... no
+checking for ttyname_r()... yes
+creating Makefile
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/2.6.0/gems/io-console-0.8.1/ext/io/console
+make "DESTDIR=" clean
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/2.6.0/gems/io-console-0.8.1/ext/io/console
+make "DESTDIR="
+compiling console.c
+linking shared-object io/console.bundle
+ld: warning: search path '/AppleInternal/Library/BuildRoots/4~CJjgugCJ4ENyM-QIheSyiY0FNL8vspelLyB3fTk/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.4.Internal.sdk/usr/local/lib' not found
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/2.6.0/gems/io-console-0.8.1/ext/io/console
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 console.bundle ./.gem.20260410-58236-uc04p7/io

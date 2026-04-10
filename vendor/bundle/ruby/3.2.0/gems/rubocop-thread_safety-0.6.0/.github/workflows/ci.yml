@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  confirm_documentation:
+    runs-on: ubuntu-latest
+    name: Confirm documentation
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+      - run: bundle exec rake documentation_syntax_check confirm_documentation
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["2.7", "3.0", "3.1", "3.2", "3.3", ruby-head, jruby-9.4]
+        rubocop_version: ["1.48", "1.66"]
+    env:
+      BUNDLE_GEMFILE: "gemfiles/rubocop_${{ matrix.rubocop_version }}.gemfile"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # 'bundle install' and cache gems
+          ruby-version: ${{ matrix.ruby }}
+          bundler: 2.3.26
+      - name: Run tests
+        run: bundle exec rspec
+
+  test-prism:
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_GEMFILE: "gemfiles/rubocop_1.66.gemfile"
+      PARSER_ENGINE: parser_prism
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # 'bundle install' and cache gems
+          ruby-version: 3.3
+          bundler: 2.3.26
+      - name: Run tests
+        run: bundle exec rspec

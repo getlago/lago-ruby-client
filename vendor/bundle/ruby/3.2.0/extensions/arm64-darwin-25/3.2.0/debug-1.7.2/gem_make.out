@@ -1,0 +1,42 @@
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/3.2.0/gems/debug-1.7.2/ext/debug
+/Users/mhirt/.rbenv/versions/3.2.2/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/3.2.0/gems/debug-1.7.2/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260410-92943-agn691 sitelibdir\=./.gem.20260410-92943-agn691 clean
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/3.2.0/gems/debug-1.7.2/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260410-92943-agn691 sitelibdir\=./.gem.20260410-92943-agn691
+compiling debug.c
+In file included from debug.c:2:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling iseq_collector.c
+In file included from iseq_collector.c:1:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+linking shared-object debug/debug.bundle
+ld: warning: ignoring duplicate libraries: '-lruby.3.2'
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/3.2.0/gems/debug-1.7.2/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260410-92943-agn691 sitelibdir\=./.gem.20260410-92943-agn691 install
+/usr/bin/install -c -m 0755 debug.bundle ./.gem.20260410-92943-agn691/debug
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/3.2.0/gems/debug-1.7.2/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260410-92943-agn691 sitelibdir\=./.gem.20260410-92943-agn691 clean

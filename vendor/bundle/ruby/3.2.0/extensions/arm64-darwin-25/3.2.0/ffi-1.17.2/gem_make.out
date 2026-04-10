@@ -1,0 +1,326 @@
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/3.2.0/gems/ffi-1.17.2/ext/ffi_c
+/Users/mhirt/.rbenv/versions/3.2.2/bin/ruby extconf.rb
+checking for ffi_prep_closure_loc() in -lffi... yes
+checking for ffi_prep_cif_var()... yes
+checking for ffi_raw_call()... yes
+checking for ffi_prep_raw_closure()... yes
+checking for rb_gc_mark_movable()... yes
+checking for whether -pthread is accepted as LDFLAGS... yes
+creating extconf.h
+creating Makefile
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/3.2.0/gems/ffi-1.17.2/ext/ffi_c
+make DESTDIR\= sitearchdir\=./.gem.20260410-92943-4koun sitelibdir\=./.gem.20260410-92943-4koun clean
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/3.2.0/gems/ffi-1.17.2/ext/ffi_c
+make DESTDIR\= sitearchdir\=./.gem.20260410-92943-4koun sitelibdir\=./.gem.20260410-92943-4koun
+compiling AbstractMemory.c
+In file included from AbstractMemory.c:40:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling ArrayType.c
+In file included from ArrayType.c:30:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling Buffer.c
+In file included from Buffer.c:34:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling Call.c
+In file included from Call.c:40:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling ClosurePool.c
+In file included from ClosurePool.c:47:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling DynamicLibrary.c
+In file included from DynamicLibrary.c:41:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling Function.c
+In file included from Function.c:42:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling FunctionInfo.c
+In file included from FunctionInfo.c:40:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling LastError.c
+In file included from LastError.c:39:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling LongDouble.c
+In file included from LongDouble.c:1:
+In file included from ./LongDouble.h:33:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling MappedType.c
+In file included from MappedType.c:30:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling MemoryPointer.c
+In file included from MemoryPointer.c:34:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling MethodHandle.c
+In file included from MethodHandle.c:43:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling Platform.c
+In file included from Platform.c:36:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling Pointer.c
+In file included from Pointer.c:33:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling Struct.c
+In file included from Struct.c:37:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling StructByValue.c
+In file included from StructByValue.c:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling StructLayout.c
+In file included from StructLayout.c:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling Thread.c
+In file included from Thread.c:44:
+In file included from ./Thread.h:34:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling Type.c
+In file included from Type.c:35:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling Types.c
+In file included from Types.c:32:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling Variadic.c
+In file included from Variadic.c:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+compiling ffi.c
+In file included from ffi.c:33:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby.h:38:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/ruby.h:28:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/arithmetic/char.h:29:
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rstring.h:465:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  465 |         struct RString retval;
+      |                        ^
+/Users/mhirt/.rbenv/versions/3.2.2/include/ruby-3.2.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+linking shared-object ffi_c.bundle
+ld: warning: ignoring duplicate libraries: '-lffi', '-lruby.3.2'
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/3.2.0/gems/ffi-1.17.2/ext/ffi_c
+make DESTDIR\= sitearchdir\=./.gem.20260410-92943-4koun sitelibdir\=./.gem.20260410-92943-4koun install
+/usr/bin/install -c -m 0755 ffi_c.bundle ./.gem.20260410-92943-4koun
+
+current directory: /Users/mhirt/Code/lago-ruby-client/vendor/bundle/ruby/3.2.0/gems/ffi-1.17.2/ext/ffi_c
+make DESTDIR\= sitearchdir\=./.gem.20260410-92943-4koun sitelibdir\=./.gem.20260410-92943-4koun clean

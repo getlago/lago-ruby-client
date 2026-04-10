@@ -1,0 +1,79 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop/cop/internal_affairs
+
+AllCops:
+  DisplayCopNames: true
+  TargetRubyVersion: 2.5
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 14
+
+Naming/FileName:
+  Exclude:
+    - lib/rubocop-thread_safety.rb
+    - rubocop-thread_safety.gemspec
+
+# Enable more cops that are disabled by default:
+
+Style/AutoResourceCleanup:
+  Enabled: true
+
+Style/CollectionMethods:
+  Enabled: true
+
+Style/FormatStringToken:
+  Exclude:
+    - spec/**/*
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - "gemfiles/*.gemfile"
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: false
+
+Style/HashTransformValues:
+  Enabled: false
+
+Style/MethodCalledOnDoEndBlock:
+  Enabled: true
+  Exclude:
+    - spec/**/*
+
+Style/MissingElse:
+  Enabled: true
+  EnforcedStyle: case
+
+Style/OptionHash:
+  Enabled: true
+
+Style/Send:
+  Enabled: true
+
+Style/StringLiterals:
+  Exclude:
+    - "gemfiles/*.gemfile"
+
+Style/StringMethods:
+  Enabled: true
+
+Style/SymbolArray:
+  Enabled: true

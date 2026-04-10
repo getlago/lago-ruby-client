@@ -1,0 +1,8 @@
+=== Department xref:cops_threadsafety.adoc[ThreadSafety]
+
+* xref:cops_threadsafety.adoc#threadsafetyclassandmoduleattributes[ThreadSafety/ClassAndModuleAttributes]
+* xref:cops_threadsafety.adoc#threadsafetyclassinstancevariable[ThreadSafety/ClassInstanceVariable]
+* xref:cops_threadsafety.adoc#threadsafetymutableclassinstancevariable[ThreadSafety/MutableClassInstanceVariable]
+* xref:cops_threadsafety.adoc#threadsafetynewthread[ThreadSafety/NewThread]
+* xref:cops_threadsafety.adoc#threadsafetydirchdir[ThreadSafety/DirChdir]
+* xref:cops_threadsafety.adoc#threadsafetyrackmiddlewareinstancevariable[ThreadSafety/RackMiddlewareInstanceVariable]
