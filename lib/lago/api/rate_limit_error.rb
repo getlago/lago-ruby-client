@@ -5,11 +5,11 @@ module Lago
     class RateLimitError < HttpError
       attr_reader :limit, :remaining, :reset
 
-      def initialize(code, body, uri, limit: nil, remaining: nil, reset: nil)
+      def initialize(code, body, uri, **options)
         super(code, body, uri)
-        @limit = limit
-        @remaining = remaining
-        @reset = reset
+        @limit = options[:limit]
+        @remaining = options[:remaining]
+        @reset = options[:reset]
       end
 
       def message

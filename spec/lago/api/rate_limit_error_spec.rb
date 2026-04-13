@@ -8,9 +8,9 @@ RSpec.describe Lago::Api::RateLimitError do
       429,
       'rate limited',
       uri,
-      limit: limit,
-      remaining: remaining,
-      reset: reset
+      limit:,
+      remaining:,
+      reset:,
     )
   end
 

@@ -2,12 +2,12 @@
 
 require 'spec_helper'
 
-RSpec.describe 'Rate Limit Integration' do
+RSpec.describe Lago::Api::Connection do
   let(:client) do
     Lago::Api::Client.new(
       api_key: 'test-key',
       max_retries: 2,
-      retry_on_rate_limit: true
+      retry_on_rate_limit: true,
     )
   end
 
@@ -42,7 +42,7 @@ RSpec.describe 'Rate Limit Integration' do
           'test-key',
           uri,
           max_retries: 1,
-          retry_on_rate_limit: true
+          retry_on_rate_limit: true,
         )
 
         call_count = 0
@@ -56,8 +56,8 @@ RSpec.describe 'Rate Limit Integration' do
                 headers: {
                   'x-ratelimit-limit' => '100',
                   'x-ratelimit-remaining' => '0',
-                  'x-ratelimit-reset' => '5'
-                }
+                  'x-ratelimit-reset' => '5',
+                },
               }
             else
               { status: 200, body: '{"result": "ok"}' }
@@ -78,7 +78,7 @@ RSpec.describe 'Rate Limit Integration' do
           'test-key',
           uri,
           max_retries: 2,
-          retry_on_rate_limit: true
+          retry_on_rate_limit: true,
         )
 
         call_count = 0
@@ -108,14 +108,14 @@ RSpec.describe 'Rate Limit Integration' do
           'test-key',
           uri,
           max_retries: 0,
-          retry_on_rate_limit: true
+          retry_on_rate_limit: true,
         )
 
         stub_request(:post, 'https://api.example.com/v1/test')
           .to_return(
             status: 429,
             body: '{"error": "rate limited"}',
-            headers: { 'x-ratelimit-reset' => '60' }
+            headers: { 'x-ratelimit-reset' => '60' },
           )
 
         expect { connection.post({}, '/v1/test') }.to raise_error(Lago::Api::RateLimitError)
@@ -128,7 +128,7 @@ RSpec.describe 'Rate Limit Integration' do
           'test-key',
           uri,
           max_retries: 10,
-          retry_on_rate_limit: false
+          retry_on_rate_limit: false,
         )
 
         stub_request(:post, 'https://api.example.com/v1/test')
@@ -138,8 +138,8 @@ RSpec.describe 'Rate Limit Integration' do
             headers: {
               'x-ratelimit-limit' => '100',
               'x-ratelimit-remaining' => '0',
-              'x-ratelimit-reset' => '60'
-            }
+              'x-ratelimit-reset' => '60',
+            },
           )
 
         allow(connection).to receive(:sleep)
@@ -159,7 +159,7 @@ RSpec.describe 'Rate Limit Integration' do
           'test-key',
           uri,
           max_retries: 1,
-          retry_on_rate_limit: true
+          retry_on_rate_limit: true,
         )
 
         call_count = 0
@@ -185,7 +185,7 @@ RSpec.describe 'Rate Limit Integration' do
           'test-key',
           uri,
           max_retries: 1,
-          retry_on_rate_limit: true
+          retry_on_rate_limit: true,
         )
 
         call_count = 0
@@ -216,7 +216,7 @@ RSpec.describe 'Rate Limit Integration' do
         URI('https://api.example.com/v1/customers'),
         limit: 100,
         remaining: 0,
-        reset: 45
+        reset: 45,
       )
     end
 

@@ -104,7 +104,7 @@ module Lago
       end
 
       def execute_request(retry_count = 0, &block)
-        response = block.call
+        response = yield
         handle_response(response, retry_count, block)
       end
 
@@ -148,12 +148,17 @@ module Lago
       def raise_error(response)
         code = response.code.to_i
 
-        if code == 429
-          limit, remaining, reset = parse_rate_limit_headers(response)
-          raise Lago::Api::RateLimitError.new(code, response.body, uri, limit: limit, remaining: remaining, reset: reset)
-        else
-          raise Lago::Api::HttpError.new(code, response.body, uri)
-        end
+        raise Lago::Api::HttpError.new(code, response.body, uri) unless code == 429
+
+        limit, remaining, reset = parse_rate_limit_headers(response)
+        raise Lago::Api::RateLimitError.new(
+          code,
+          response.body,
+          uri,
+          limit:,
+          remaining:,
+          reset:
+        )
       end
 
       def parse_rate_limit_headers(response)
@@ -173,7 +178,7 @@ module Lago
       end
 
       def calculate_backoff(retry_count)
-        INITIAL_BACKOFF * (BACKOFF_MULTIPLIER ** retry_count)
+        INITIAL_BACKOFF * (BACKOFF_MULTIPLIER**retry_count)
       end
     end
   end
