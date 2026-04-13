@@ -9,6 +9,7 @@ module Lago
       DEFAULT_MAX_RETRIES = 3
       INITIAL_BACKOFF = 1
       BACKOFF_MULTIPLIER = 2
+      MAX_RETRY_DELAY = 20
 
       def initialize(api_key, uri, max_retries: DEFAULT_MAX_RETRIES, retry_on_rate_limit: true)
         @api_key = api_key
@@ -170,11 +171,14 @@ module Lago
       end
 
       def extract_reset_seconds(response, retry_count)
-        reset_header = response['x-ratelimit-reset']&.to_i
-        return [reset_header, INITIAL_BACKOFF].max if reset_header
+        delay = if response['x-ratelimit-reset']
+                  [response['x-ratelimit-reset'].to_i, INITIAL_BACKOFF].max
+                else
+                  # Exponential backoff if header is missing
+                  calculate_backoff(retry_count)
+                end
 
-        # Exponential backoff if header is missing
-        calculate_backoff(retry_count)
+        [delay, MAX_RETRY_DELAY].min
       end
 
       def calculate_backoff(retry_count)
