@@ -75,7 +75,7 @@ RSpec.describe Lago::Api::Connection do
           headers: {
             'x-ratelimit-limit' => '100',
             'x-ratelimit-remaining' => '0',
-            'x-ratelimit-reset' => '60'
+            'x-ratelimit-reset' => '60',
           }
         )
 
@@ -109,13 +109,13 @@ RSpec.describe Lago::Api::Connection do
                 status: 429,
                 body: '{"error": "rate limited"}',
                 headers: {
-                  'x-ratelimit-reset' => '1'
-                }
+                  'x-ratelimit-reset' => '1',
+                },
               }
             else
               {
                 status: 200,
-                body: '{"result": "success"}'
+                body: '{"result": "success"}',
               }
             end
           end
@@ -137,12 +137,12 @@ RSpec.describe Lago::Api::Connection do
             if call_count == 1
               {
                 status: 429,
-                body: '{"error": "rate limited"}'
+                body: '{"error": "rate limited"}',
               }
             else
               {
                 status: 200,
-                body: '{"result": "success"}'
+                body: '{"result": "success"}',
               }
             end
           end

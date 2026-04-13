@@ -12,7 +12,7 @@ module Lago
             client.api_key,
             client.base_api_url,
             max_retries: client.max_retries,
-            retry_on_rate_limit: client.retry_on_rate_limit
+            retry_on_rate_limit: client.retry_on_rate_limit,
           )
         end
 
