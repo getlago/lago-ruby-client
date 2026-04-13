@@ -172,11 +172,11 @@ module Lago
 
       def extract_reset_seconds(response, retry_count)
         delay = if response['x-ratelimit-reset']
-                  [response['x-ratelimit-reset'].to_i, INITIAL_BACKOFF].max
-                else
-                  # Exponential backoff if header is missing
-                  calculate_backoff(retry_count)
-                end
+          [response['x-ratelimit-reset'].to_i, INITIAL_BACKOFF].max
+        else
+          # Exponential backoff if header is missing
+          calculate_backoff(retry_count)
+        end
 
         [delay, MAX_RETRY_DELAY].min
       end
