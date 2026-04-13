@@ -15,3 +15,5 @@
 .idea/*
 .ruby-version
 mise.toml
+/vendor/
+.claude
