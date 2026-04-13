@@ -68,6 +68,8 @@ RSpec.describe Lago::Api::Connection do
 
   context 'when rate limit (429) is received' do
     it 'raises RateLimitError with rate limit headers' do
+      non_retry_conn = described_class.new('fake-api-key', uri, retry_on_rate_limit: false)
+
       stub_request(:post, 'https://testapi.example.org/test')
         .to_return(
           status: 429,
@@ -76,10 +78,10 @@ RSpec.describe Lago::Api::Connection do
             'x-ratelimit-limit' => '100',
             'x-ratelimit-remaining' => '0',
             'x-ratelimit-reset' => '60',
-          }
+          },
         )
 
-      expect { connection.post({}, '/test') }.to raise_error { |exception|
+      expect { non_retry_conn.post({}, '/test') }.to raise_error { |exception|
         expect(exception).to be_a(Lago::Api::RateLimitError)
         expect(exception.error_code).to eq 429
         expect(exception.limit).to eq 100
