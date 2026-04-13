@@ -89,7 +89,7 @@ RSpec.describe Lago::Api::Connection do
     end
 
     context 'when retry_on_rate_limit is enabled' do
-      subject(:connection) do
+      let(:retryable_connection) do
         described_class.new(
           'fake-api-key',
           uri,
@@ -120,12 +120,12 @@ RSpec.describe Lago::Api::Connection do
             end
           end
 
-        allow(connection).to receive(:sleep)
+        allow(retryable_connection).to receive(:sleep)
 
-        result = connection.post({}, '/test')
+        result = retryable_connection.post({}, '/test')
 
         expect(result).to eq('result' => 'success')
-        expect(connection).to have_received(:sleep).with(1)
+        expect(retryable_connection).to have_received(:sleep).with(1)
       end
 
       it 'uses exponential backoff when reset header is missing' do
@@ -147,12 +147,12 @@ RSpec.describe Lago::Api::Connection do
             end
           end
 
-        allow(connection).to receive(:sleep)
+        allow(retryable_connection).to receive(:sleep)
 
-        result = connection.post({}, '/test')
+        result = retryable_connection.post({}, '/test')
 
         expect(result).to eq('result' => 'success')
-        expect(connection).to have_received(:sleep).with(1)
+        expect(retryable_connection).to have_received(:sleep).with(1)
       end
 
       it 'raises error after max retries exceeded' do
@@ -163,14 +163,14 @@ RSpec.describe Lago::Api::Connection do
             headers: { 'x-ratelimit-reset' => '1' }
           )
 
-        allow(connection).to receive(:sleep)
+        allow(retryable_connection).to receive(:sleep)
 
-        expect { connection.post({}, '/test') }.to raise_error(Lago::Api::RateLimitError)
+        expect { retryable_connection.post({}, '/test') }.to raise_error(Lago::Api::RateLimitError)
       end
     end
 
     context 'when retry_on_rate_limit is disabled' do
-      subject(:connection) do
+      let(:non_retryable_connection) do
         described_class.new(
           'fake-api-key',
           uri,
@@ -186,7 +186,7 @@ RSpec.describe Lago::Api::Connection do
             headers: { 'x-ratelimit-reset' => '60' }
           )
 
-        expect { connection.post({}, '/test') }.to raise_error(Lago::Api::RateLimitError)
+        expect { non_retryable_connection.post({}, '/test') }.to raise_error(Lago::Api::RateLimitError)
       end
     end
   end

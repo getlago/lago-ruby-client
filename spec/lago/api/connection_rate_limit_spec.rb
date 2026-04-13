@@ -38,7 +38,7 @@ RSpec.describe Lago::Api::Connection do
 
     context 'when 429 response includes reset header' do
       it 'sleeps for the exact duration specified in header' do
-        connection = Lago::Api::Connection.new(
+        connection = described_class.new(
           'test-key',
           uri,
           max_retries: 1,
@@ -74,7 +74,7 @@ RSpec.describe Lago::Api::Connection do
 
     context 'when 429 response is missing reset header' do
       it 'uses exponential backoff' do
-        connection = Lago::Api::Connection.new(
+        connection = described_class.new(
           'test-key',
           uri,
           max_retries: 2,
@@ -104,7 +104,7 @@ RSpec.describe Lago::Api::Connection do
 
     context 'when max_retries is 0' do
       it 'raises immediately without retrying' do
-        connection = Lago::Api::Connection.new(
+        connection = described_class.new(
           'test-key',
           uri,
           max_retries: 0,
@@ -124,7 +124,7 @@ RSpec.describe Lago::Api::Connection do
 
     context 'when retry_on_rate_limit is false' do
       it 'does not retry and raises immediately' do
-        connection = Lago::Api::Connection.new(
+        connection = described_class.new(
           'test-key',
           uri,
           max_retries: 10,
@@ -155,7 +155,7 @@ RSpec.describe Lago::Api::Connection do
 
     context 'when multiple HTTP methods are called' do
       it 'retries GET requests' do
-        connection = Lago::Api::Connection.new(
+        conn = described_class.new(
           'test-key',
           uri,
           max_retries: 1,
@@ -173,15 +173,15 @@ RSpec.describe Lago::Api::Connection do
             end
           end
 
-        allow(connection).to receive(:sleep)
-        result = connection.get('/v1/resource', identifier: nil)
+        allow(conn).to receive(:sleep)
+        result = conn.get('/v1/resource', identifier: nil)
 
         expect(result).to eq('data' => 'value')
-        expect(connection).to have_received(:sleep).with(1)
+        expect(conn).to have_received(:sleep).with(1)
       end
 
       it 'retries PUT requests' do
-        connection = Lago::Api::Connection.new(
+        conn = described_class.new(
           'test-key',
           uri,
           max_retries: 1,
@@ -199,11 +199,11 @@ RSpec.describe Lago::Api::Connection do
             end
           end
 
-        allow(connection).to receive(:sleep)
-        result = connection.put('/v1/resource', identifier: '123', body: {})
+        allow(conn).to receive(:sleep)
+        result = conn.put('/v1/resource', identifier: '123', body: {})
 
         expect(result).to eq('updated' => true)
-        expect(connection).to have_received(:sleep).with(1)
+        expect(conn).to have_received(:sleep).with(1)
       end
     end
   end
