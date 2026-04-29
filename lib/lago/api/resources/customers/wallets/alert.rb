@@ -43,6 +43,7 @@ module Lago
                 alert: {
                   name: params[:name],
                   code: params[:code],
+                  billable_metric_code: params[:billable_metric_code],
                   thresholds: params[:thresholds],
                 }.compact,
               }
@@ -59,6 +60,7 @@ module Lago
                 alert_type: params[:alert_type],
                 name: params[:name],
                 code: params[:code],
+                billable_metric_code: params[:billable_metric_code],
                 thresholds: params[:thresholds],
               }.compact
             end

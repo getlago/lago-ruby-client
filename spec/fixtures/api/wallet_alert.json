@@ -1,8 +1,9 @@
 {
   "alert": {
     "external_customer_id": "customer-id-12345",
-    "code": "wallet_balance_alert",
-    "alert_type": "wallet_balance_amount",
+    "code": "usage_alert",
+    "alert_type": "billable_metric_current_usage_amount",
+    "billable_metric_code": "storage",
     "thresholds": [
       {
         "code": "warn",

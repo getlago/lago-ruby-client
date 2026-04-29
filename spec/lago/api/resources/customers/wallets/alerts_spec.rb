@@ -16,6 +16,7 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets::Alert do
         :name,
         :code,
         :alert_type,
+        :billable_metric_code,
         :thresholds,
       )
     end
@@ -103,7 +104,7 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets::Alert do
 
   describe '#update' do
     let(:params) do
-      { name: 'Update name' }
+      { name: 'Update name', billable_metric_code: 'storage' }
     end
     let(:json_response) { load_fixture('wallet_alert') }
     let(:alert_response) { JSON.parse(json_response) }
@@ -247,9 +248,10 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets::Alert do
           thresholds: [{ code: 'warn', value: 1000 }],
         },
         {
-          code: 'wallet_credits_alert',
-          name: 'Wallet Credits Alert',
-          alert_type: 'wallet_credits_balance',
+          code: 'usage_alert',
+          name: 'Usage Alert',
+          alert_type: 'billable_metric_current_usage_amount',
+          billable_metric_code: 'storage',
           thresholds: [{ value: 2000 }],
         },
       ]
