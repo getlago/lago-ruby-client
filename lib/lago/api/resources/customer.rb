@@ -20,10 +20,15 @@ module Lago
 
         def current_usage( # rubocop:disable Metrics/ParameterLists
           external_customer_id, external_subscription_id, apply_taxes: nil,
+          charge_id: nil, charge_code: nil, billable_metric_code: nil, group: nil,
           filter_by_charge_id: nil, filter_by_charge_code: nil, filter_by_group: nil, full_usage: nil
         )
           query_params = { external_subscription_id: external_subscription_id }
           query_params[:apply_taxes] = apply_taxes unless apply_taxes.nil?
+          query_params[:charge_id] = charge_id unless charge_id.nil?
+          query_params[:charge_code] = charge_code unless charge_code.nil?
+          query_params[:billable_metric_code] = billable_metric_code unless billable_metric_code.nil?
+          group&.each { |k, v| query_params[:"group[#{k}]"] = v }
           query_params[:filter_by_charge_id] = filter_by_charge_id unless filter_by_charge_id.nil?
           query_params[:filter_by_charge_code] = filter_by_charge_code unless filter_by_charge_code.nil?
           filter_by_group&.each { |k, v| query_params[:"filter_by_group[#{k}]"] = v }
