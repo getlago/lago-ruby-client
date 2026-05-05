@@ -64,6 +64,7 @@ module Lago
             uri,
             max_retries: client.max_retries,
             retry_on_rate_limit: client.retry_on_rate_limit,
+            on_rate_limit_info: client.on_rate_limit_info,
           )
         end
       end

@@ -53,4 +53,17 @@ RSpec.describe Lago::Api::Client do
       end
     end
   end
+
+  describe '#on_rate_limit_info' do
+    it 'is exposed on the client' do
+      observer = ->(_info) {}
+      client = described_class.new(api_key: 'k', on_rate_limit_info: observer)
+      expect(client.on_rate_limit_info).to be(observer)
+    end
+
+    it 'defaults to nil' do
+      client = described_class.new(api_key: 'k')
+      expect(client.on_rate_limit_info).to be_nil
+    end
+  end
 end
