@@ -26,76 +26,52 @@ module Lago
       end
 
       def post(body, path = uri.path)
-        execute_request(method: 'POST') do
-          http_client.send_request(
-            'POST',
-            path,
-            prepare_payload(body),
-            headers
-          )
+        method = 'POST'
+        execute_request(method:) do
+          http_client.send_request(method, path, prepare_payload(body), headers)
         end
       end
 
       def put(path = uri.path, identifier:, body:)
+        method = 'PUT'
         uri_path = identifier.nil? ? path : "#{path}/#{CGI.escapeURIComponent(identifier)}"
-        execute_request(method: 'PUT') do
-          http_client.send_request(
-            'PUT',
-            uri_path,
-            prepare_payload(body),
-            headers
-          )
+        execute_request(method:) do
+          http_client.send_request(method, uri_path, prepare_payload(body), headers)
         end
       end
 
       def patch(path = uri.path, identifier:, body:)
+        method = 'PATCH'
         uri_path = identifier.nil? ? path : "#{path}/#{CGI.escapeURIComponent(identifier)}"
-        execute_request(method: 'PATCH') do
-          http_client.send_request(
-            'PATCH',
-            uri_path,
-            prepare_payload(body),
-            headers
-          )
+        execute_request(method:) do
+          http_client.send_request(method, uri_path, prepare_payload(body), headers)
         end
       end
 
       def get(path = uri.path, identifier:)
+        method = 'GET'
         uri_path = identifier.nil? ? path : "#{path}/#{CGI.escapeURIComponent(identifier)}"
-        execute_request(method: 'GET') do
-          http_client.send_request(
-            'GET',
-            uri_path,
-            prepare_payload(nil),
-            headers
-          )
+        execute_request(method:) do
+          http_client.send_request(method, uri_path, prepare_payload(nil), headers)
         end
       end
 
       def destroy(path = uri.path, identifier:, options: nil)
+        method = 'DELETE'
         uri_path = path
         uri_path += "/#{CGI.escapeURIComponent(identifier)}" if identifier
         uri_path += "?#{URI.encode_www_form(options)}" unless options.nil?
-        execute_request(method: 'DELETE') do
-          http_client.send_request(
-            'DELETE',
-            uri_path,
-            prepare_payload(nil),
-            headers
-          )
+        execute_request(method:) do
+          http_client.send_request(method, uri_path, prepare_payload(nil), headers)
         end
       end
 
       def get_all(options, path = uri.path)
+        method = 'GET'
         uri_path = options.empty? ? path : "#{path}?#{URI.encode_www_form(options)}"
 
-        execute_request(method: 'GET') do
-          http_client.send_request(
-            'GET',
-            uri_path,
-            prepare_payload(nil),
-            headers
-          )
+        execute_request(method:) do
+          http_client.send_request(method, uri_path, prepare_payload(nil), headers)
         end
       end
 
