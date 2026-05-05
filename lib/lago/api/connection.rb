@@ -11,84 +11,67 @@ module Lago
       BACKOFF_MULTIPLIER = 2
       MAX_RETRY_DELAY = 20
 
-      def initialize(api_key, uri, max_retries: DEFAULT_MAX_RETRIES, retry_on_rate_limit: true)
+      def initialize(
+        api_key,
+        uri,
+        max_retries: DEFAULT_MAX_RETRIES,
+        retry_on_rate_limit: true,
+        on_rate_limit_info: nil
+      )
         @api_key = api_key
         @uri = uri
         @max_retries = max_retries
         @retry_on_rate_limit = retry_on_rate_limit
+        @on_rate_limit_info = on_rate_limit_info
       end
 
       def post(body, path = uri.path)
-        execute_request do
-          http_client.send_request(
-            'POST',
-            path,
-            prepare_payload(body),
-            headers
-          )
+        method = 'POST'
+        execute_request(method:) do
+          http_client.send_request(method, path, prepare_payload(body), headers)
         end
       end
 
       def put(path = uri.path, identifier:, body:)
+        method = 'PUT'
         uri_path = identifier.nil? ? path : "#{path}/#{CGI.escapeURIComponent(identifier)}"
-        execute_request do
-          http_client.send_request(
-            'PUT',
-            uri_path,
-            prepare_payload(body),
-            headers
-          )
+        execute_request(method:) do
+          http_client.send_request(method, uri_path, prepare_payload(body), headers)
         end
       end
 
       def patch(path = uri.path, identifier:, body:)
+        method = 'PATCH'
         uri_path = identifier.nil? ? path : "#{path}/#{CGI.escapeURIComponent(identifier)}"
-        execute_request do
-          http_client.send_request(
-            'PATCH',
-            uri_path,
-            prepare_payload(body),
-            headers
-          )
+        execute_request(method:) do
+          http_client.send_request(method, uri_path, prepare_payload(body), headers)
         end
       end
 
       def get(path = uri.path, identifier:)
+        method = 'GET'
         uri_path = identifier.nil? ? path : "#{path}/#{CGI.escapeURIComponent(identifier)}"
-        execute_request do
-          http_client.send_request(
-            'GET',
-            uri_path,
-            prepare_payload(nil),
-            headers
-          )
+        execute_request(method:) do
+          http_client.send_request(method, uri_path, prepare_payload(nil), headers)
         end
       end
 
       def destroy(path = uri.path, identifier:, options: nil)
+        method = 'DELETE'
         uri_path = path
         uri_path += "/#{CGI.escapeURIComponent(identifier)}" if identifier
         uri_path += "?#{URI.encode_www_form(options)}" unless options.nil?
-        execute_request do
-          http_client.send_request(
-            'DELETE',
-            uri_path,
-            prepare_payload(nil),
-            headers
-          )
+        execute_request(method:) do
+          http_client.send_request(method, uri_path, prepare_payload(nil), headers)
         end
       end
 
       def get_all(options, path = uri.path)
+        method = 'GET'
         uri_path = options.empty? ? path : "#{path}?#{URI.encode_www_form(options)}"
 
-        execute_request do
-          http_client.send_request(
-            'GET',
-            uri_path,
-            prepare_payload(nil),
-            headers
-          )
+        execute_request(method:) do
+          http_client.send_request(method, uri_path, prepare_payload(nil), headers)
         end
       end
 
@@ -104,29 +87,41 @@ module Lago
         }
       end
 
-      def execute_request(retry_count = 0, &block)
+      def execute_request(retry_count = 0, method: nil, &block)
         response = yield
-        handle_response(response, retry_count, block)
+        handle_response(response, retry_count, block, method:)
       end
 
-      def handle_response(response, retry_count, block)
+      def handle_response(response, retry_count, block, method: nil)
         code = response.code.to_i
 
         if code == 429 && @retry_on_rate_limit && retry_count < @max_retries
-          handle_rate_limit(response, retry_count, block)
+          handle_rate_limit(response, retry_count, block, method:)
         elsif !RESPONSE_SUCCESS_CODES.include?(code)
           raise_error(response)
         else
+          emit_rate_limit_info(response, method:)
           parse_response_body(response)
         end
       rescue JSON::ParserError
         response.body
       end
 
-      def handle_rate_limit(response, retry_count, block)
+      def handle_rate_limit(response, retry_count, block, method: nil)
         reset_seconds = extract_reset_seconds(response, retry_count)
         sleep(reset_seconds)
-        execute_request(retry_count + 1, &block)
+        execute_request(retry_count + 1, method:, &block)
+      end
+
+      def emit_rate_limit_info(response, method: nil)
+        return if @on_rate_limit_info.nil?
+
+        info = Lago::Api::RateLimitInfo.parse(response, method:, url: uri.to_s)
+        return if info.nil?
+
+        @on_rate_limit_info.call(info)
+      rescue StandardError => e
+        warn("Lago: on_rate_limit_info callback raised: #{e.class}: #{e.message}")
       end
 
       def parse_response_body(response)

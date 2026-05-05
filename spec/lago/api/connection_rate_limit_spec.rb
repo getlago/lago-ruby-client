@@ -228,4 +228,105 @@ RSpec.describe Lago::Api::Connection do
       expect(error.message).to include('Rate limit will reset in 45 seconds')
     end
   end
+
+  describe 'on_rate_limit_info callback' do
+    let(:uri) { URI('https://api.example.com/v1') }
+
+    it 'fires after a successful request with rate limit headers' do
+      captured = []
+      connection = described_class.new(
+        'test-key',
+        uri,
+        on_rate_limit_info: ->(info) { captured << info },
+      )
+
+      stub_request(:get, 'https://api.example.com/v1').to_return(
+        status: 200,
+        body: '{"result": "ok"}',
+        headers: {
+          'x-ratelimit-limit' => '100',
+          'x-ratelimit-remaining' => '20',
+          'x-ratelimit-reset' => '5',
+        },
+      )
+
+      connection.get(identifier: nil)
+
+      expect(captured.size).to eq(1)
+      info = captured.first
+      expect(info.limit).to eq(100)
+      expect(info.remaining).to eq(20)
+      expect(info.reset).to eq(5)
+      expect(info.method).to eq('GET')
+      expect(info.usage_pct).to eq(0.80)
+    end
+
+    it 'does not fire when rate limit headers are absent' do
+      called = 0
+      connection = described_class.new(
+        'test-key',
+        uri,
+        on_rate_limit_info: ->(_info) { called += 1 },
+      )
+
+      stub_request(:get, 'https://api.example.com/v1').to_return(
+        status: 200,
+        body: '{"result": "ok"}',
+      )
+
+      connection.get(identifier: nil)
+      expect(called).to eq(0)
+    end
+
+    it 'swallows errors raised by the callback so the request still returns' do
+      connection = described_class.new(
+        'test-key',
+        uri,
+        on_rate_limit_info: ->(_info) { raise 'intentional' },
+      )
+
+      stub_request(:get, 'https://api.example.com/v1').to_return(
+        status: 200,
+        body: '{"result": "ok"}',
+        headers: { 'x-ratelimit-limit' => '100', 'x-ratelimit-remaining' => '1', 'x-ratelimit-reset' => '5' },
+      )
+
+      expect { connection.get(identifier: nil) }.not_to raise_error
+    end
+
+    it 'fires once after a 429 retry sequence resolves to success' do
+      captured = []
+      connection = described_class.new(
+        'test-key',
+        uri,
+        max_retries: 1,
+        retry_on_rate_limit: true,
+        on_rate_limit_info: ->(info) { captured << info },
+      )
+
+      call_count = 0
+      stub_request(:get, 'https://api.example.com/v1').to_return do
+        call_count += 1
+        if call_count == 1
+          { status: 429, body: '{}', headers: { 'x-ratelimit-reset' => '1' } }
+        else
+          {
+            status: 200,
+            body: '{"result":"ok"}',
+            headers: {
+              'x-ratelimit-limit' => '100',
+              'x-ratelimit-remaining' => '50',
+              'x-ratelimit-reset' => '5',
+            },
+          }
+        end
+      end
+
+      allow(connection).to receive(:sleep)
+      connection.get(identifier: nil)
+
+      expect(captured.size).to eq(1)
+      expect(captured.first.remaining).to eq(50)
+    end
+  end
 end

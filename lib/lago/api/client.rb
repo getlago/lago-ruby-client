@@ -53,7 +53,13 @@ module Lago
     API_PATH = 'api/v1/'
 
     class Client
-      attr_reader :api_key, :api_url, :use_ingest_service, :ingest_api_url, :max_retries, :retry_on_rate_limit
+      attr_reader :api_key,
+                  :api_url,
+                  :use_ingest_service,
+                  :ingest_api_url,
+                  :max_retries,
+                  :retry_on_rate_limit,
+                  :on_rate_limit_info
 
       def initialize(api_key: nil, api_url: nil, use_ingest_service: false, ingest_api_url: nil, **options)
         @api_key = api_key
@@ -62,6 +68,7 @@ module Lago
         @ingest_api_url = ingest_api_url
         @max_retries = options.fetch(:max_retries, 3)
         @retry_on_rate_limit = options.fetch(:retry_on_rate_limit, true)
+        @on_rate_limit_info = options[:on_rate_limit_info]
       end
 
       def base_api_url
