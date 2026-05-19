@@ -194,6 +194,32 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect { resource.create(params_with_invalid_pm) }.to raise_error Lago::Api::HttpError
       end
     end
+
+    context 'when consolidate_invoice is provided' do
+      let(:params_with_consolidate) { params.merge(consolidate_invoice: false) }
+      let(:body_with_consolidate) do
+        {
+          'subscription' => params_with_consolidate,
+        }
+      end
+      let(:response_with_consolidate) do
+        {
+          'subscription' => factory_subscription.to_h.merge(consolidate_invoice: false),
+        }.to_json
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
+          .with(body: body_with_consolidate)
+          .to_return(body: response_with_consolidate, status: 200)
+      end
+
+      it 'forwards consolidate_invoice to the API and returns it' do
+        subscription = resource.create(params_with_consolidate)
+
+        expect(subscription.consolidate_invoice).to eq(false)
+      end
+    end
   end
 
   describe '#delete' do
@@ -351,6 +377,32 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
       it 'raises an error' do
         expect { resource.update(params_with_invalid_pm, '123') }.to raise_error Lago::Api::HttpError
+      end
+    end
+
+    context 'when consolidate_invoice is provided' do
+      let(:params_with_consolidate) { { consolidate_invoice: false } }
+      let(:body_with_consolidate) do
+        {
+          'subscription' => params_with_consolidate,
+        }
+      end
+      let(:response_with_consolidate) do
+        {
+          'subscription' => factory_subscription.to_h.merge(consolidate_invoice: false),
+        }.to_json
+      end
+
+      before do
+        stub_request(:put, 'https://api.getlago.com/api/v1/subscriptions/123')
+          .with(body: body_with_consolidate)
+          .to_return(body: response_with_consolidate, status: 200)
+      end
+
+      it 'forwards consolidate_invoice to the API and returns it' do
+        subscription = resource.update(params_with_consolidate, '123')
+
+        expect(subscription.consolidate_invoice).to eq(false)
       end
     end
   end

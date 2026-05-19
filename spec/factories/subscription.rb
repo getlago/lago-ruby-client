@@ -15,5 +15,6 @@ FactoryBot.define do
     terminated_at { nil }
     canceled_at { nil }
     created_at { '2022-05-05T12:27:30Z' }
+    consolidate_invoice { true }
   end
 end
