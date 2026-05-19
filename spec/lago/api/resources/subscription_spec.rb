@@ -217,7 +217,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
       it 'forwards consolidate_invoice to the API and returns it' do
         subscription = resource.create(params_with_consolidate)
 
-        expect(subscription.consolidate_invoice).to eq(false)
+        expect(subscription.consolidate_invoice).to be(false)
       end
     end
   end
@@ -402,7 +402,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
       it 'forwards consolidate_invoice to the API and returns it' do
         subscription = resource.update(params_with_consolidate, '123')
 
-        expect(subscription.consolidate_invoice).to eq(false)
+        expect(subscription.consolidate_invoice).to be(false)
       end
     end
   end
