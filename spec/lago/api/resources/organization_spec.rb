@@ -37,6 +37,7 @@ RSpec.describe Lago::Api::Resources::Organization do
         expect(organization.document_number_prefix).to eq('ORG-1234')
         expect(organization.tax_identification_number).to eq('EU123456789')
         expect(organization.billing_configuration.invoice_grace_period).to eq(3)
+        expect(organization.events_store).to eq('clickhouse')
       end
     end
 
