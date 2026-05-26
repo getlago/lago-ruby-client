@@ -35,6 +35,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         subscription_at: factory_subscription.subscription_at,
         billing_time: factory_subscription.billing_time,
         ending_at: factory_subscription.ending_at,
+        consolidate_invoice: factory_subscription.consolidate_invoice,
         plan_overrides: {
           amount_cents: 1000,
           minimum_commitment: {
@@ -69,6 +70,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.subscription_at).to eq(factory_subscription.subscription_at)
         expect(subscription.billing_time).to eq(factory_subscription.billing_time)
         expect(subscription.ending_at).to eq(factory_subscription.ending_at)
+        expect(subscription.consolidate_invoice).to eq(factory_subscription.consolidate_invoice)
       end
     end
 
@@ -240,7 +242,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
   end
 
   describe '#update' do
-    let(:params) { { name: 'new name' } }
+    let(:params) { { name: 'new name', consolidate_invoice: factory_subscription.consolidate_invoice } }
     let(:body) do
       {
         'subscription' => params,
@@ -261,6 +263,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.plan_code).to eq(factory_subscription.plan_code)
         expect(subscription.status).to eq(factory_subscription.status)
         expect(subscription.external_id).to eq(factory_subscription.external_id)
+        expect(subscription.consolidate_invoice).to eq(factory_subscription.consolidate_invoice)
       end
     end
 

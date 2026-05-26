@@ -212,6 +212,7 @@ module Lago
             subscription_at: params[:subscription_at],
             ending_at: params[:ending_at],
             plan_overrides: params[:plan_overrides],
+            consolidate_invoice: params[:consolidate_invoice],
           }.compact
 
           payment_method_params = whitelist_payment_method_params(params[:payment_method])
