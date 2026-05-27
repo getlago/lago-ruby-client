@@ -675,6 +675,20 @@ RSpec.describe Lago::Api::Resources::Wallet do
       end
     end
 
+    context 'when currency is given' do
+      before do
+        stub_request(:get, 'https://api.getlago.com/api/v1/wallets?currency=EUR')
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns wallets filtered by currency' do
+        response = resource.get_all({ currency: 'EUR' })
+
+        expect(response['wallets'].first['lago_id']).to eq('this-is-lago-id')
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
     context 'when there is an issue' do
       before do
         stub_request(:get, 'https://api.getlago.com/api/v1/wallets')
