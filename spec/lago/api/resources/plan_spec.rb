@@ -181,6 +181,8 @@ RSpec.describe Lago::Api::Resources::Plan do
         expect(response['plans'].first['invoice_display_name']).to eq(plan_dsplay_name)
         expect(response['plans'].first['charges'].first['invoice_display_name']).to eq('Charge 1')
         expect(response['plans'].first['charges'].first['properties']['pricing_group_keys']).to eq(['agent_name'])
+        presentation_group_keys = response['plans'].first['charges'].first['properties']['presentation_group_keys']
+        expect(presentation_group_keys.first['value']).to eq('region')
         expect(response['plans'].first['minimum_commitment']['invoice_display_name']).to eq('Minimum commitment (C1)')
         expect(response['meta']['current_page']).to eq(1)
       end
@@ -436,6 +438,7 @@ RSpec.describe Lago::Api::Resources::Plan do
 
         expect(response['charges'].first['lago_id']).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
         expect(response['charges'].first['code']).to eq('charge_code')
+        expect(response['charges'].first['properties']['presentation_group_keys'].first['value']).to eq('region')
         expect(response['meta']['current_page']).to eq(1)
       end
     end
@@ -482,6 +485,7 @@ RSpec.describe Lago::Api::Resources::Plan do
 
         expect(charge.lago_id).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
         expect(charge.code).to eq(charge_code)
+        expect(charge.properties.presentation_group_keys.first.value).to eq('region')
       end
     end
 
@@ -504,7 +508,12 @@ RSpec.describe Lago::Api::Resources::Plan do
         billable_metric_id: 'a6947936-628f-4945-8857-db6858ee7941',
         code: 'charge_code',
         charge_model: 'standard',
-        properties: { amount: '0.22' },
+        properties: {
+          amount: '0.22',
+          presentation_group_keys: [
+            { value: 'region', options: { display_in_invoice: true } },
+          ],
+        },
       }
     end
 
@@ -539,7 +548,17 @@ RSpec.describe Lago::Api::Resources::Plan do
   describe '#update_charge' do
     let(:json_response) { load_fixture('plan_charge') }
     let(:charge_code) { 'charge_code' }
-    let(:params) { { invoice_display_name: 'Updated Setup' } }
+    let(:params) do
+      {
+        invoice_display_name: 'Updated Setup',
+        properties: {
+          amount: '0.22',
+          presentation_group_keys: [
+            { value: 'region', options: { display_in_invoice: true } },
+          ],
+        },
+      }
+    end
 
     context 'when charge is successfully updated' do
       before do

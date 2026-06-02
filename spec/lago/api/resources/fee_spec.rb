@@ -36,6 +36,7 @@ RSpec.describe Lago::Api::Resources::Fee do
         expect(fee.invoice_display_name).to eq(fee_invoice_display_name)
         expect(fee.item.invoice_display_name).to eq(fee_item_invoice_display_name)
         expect(fee.item.filter_invoice_display_name).to eq(fee_item_filter_invoice_display_name)
+        expect(fee.presentation_breakdowns.first.presentation_by.team).to eq('engineering')
       end
     end
 
@@ -76,6 +77,7 @@ RSpec.describe Lago::Api::Resources::Fee do
 
         expect(response['fees'].first['lago_id']).to eq(fee_id)
         expect(response['fees'].first['invoice_display_name']).to eq(fee_invoice_display_name)
+        expect(response['fees'].first['presentation_breakdowns'].first['units']).to eq('2.0')
       end
 
       context 'when filters are present' do
