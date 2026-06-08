@@ -423,11 +423,11 @@ RSpec.describe Lago::Api::Resources::Subscription do
           .to_return(body: response, status: 200)
       end
 
-      it 'returns subscriptions filtered by currency' do
-        response = resource.get_all({ currency: 'EUR' })
+      it 'forwards the currency option as a query param' do
+        resource.get_all({ currency: 'EUR' })
 
-        expect(response['subscriptions'].first['lago_id']).to eq(factory_subscription.lago_id)
-        expect(response['meta']['current_page']).to eq(1)
+        expect(WebMock).to have_requested(:get, 'https://api.getlago.com/api/v1/subscriptions')
+          .with(query: { currency: 'EUR' })
       end
     end
 
