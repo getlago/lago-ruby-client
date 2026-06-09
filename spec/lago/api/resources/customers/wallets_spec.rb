@@ -164,6 +164,40 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
       end
     end
 
+    context 'when grants_target_top_up is provided in a target recurring rule' do
+      let(:params_with_grants) do
+        params.deep_merge(
+          recurring_transaction_rules: [
+            factory_wallet.recurring_transaction_rules.first.merge(
+              method: 'target',
+              target_ongoing_balance: '200',
+              grants_target_top_up: true,
+            ),
+          ],
+        )
+      end
+      let(:body_with_grants) do
+        body['wallet']['recurring_transaction_rules'].first.merge!(
+          'method' => 'target',
+          'target_ongoing_balance' => '200',
+          'grants_target_top_up' => true,
+        )
+        body
+      end
+
+      before do
+        stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets")
+          .with(body: body_with_grants)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'forwards grants_target_top_up in the request' do
+        wallet = resource.create(customer_id, params_with_grants)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
+      end
+    end
+
     context 'when wallet failed to create' do
       before do
         stub_request(:post, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets")
@@ -222,6 +256,40 @@ RSpec.describe Lago::Api::Resources::Customers::Wallets do
 
         expect(wallet.lago_id).to eq('this-is-lago-id')
         expect(wallet.name).to eq(factory_wallet.name)
+      end
+    end
+
+    context 'when grants_target_top_up is provided in a target recurring rule' do
+      let(:params_with_grants) do
+        params.deep_merge(
+          recurring_transaction_rules: [
+            factory_wallet.recurring_transaction_rules.first.merge(
+              method: 'target',
+              target_ongoing_balance: '200',
+              grants_target_top_up: true,
+            ),
+          ],
+        )
+      end
+      let(:body_with_grants) do
+        body['wallet']['recurring_transaction_rules'].first.merge!(
+          'method' => 'target',
+          'target_ongoing_balance' => '200',
+          'grants_target_top_up' => true,
+        )
+        body
+      end
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/customers/#{customer_id}/wallets/#{code}")
+          .with(body: body_with_grants)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'forwards grants_target_top_up in the request' do
+        wallet = resource.update(customer_id, code, params_with_grants)
+
+        expect(wallet.lago_id).to eq('this-is-lago-id')
       end
     end
 
