@@ -70,6 +70,7 @@ module Lago
                   :transaction_metadata,
                   :transaction_name,
                   :ignore_paid_top_up_limits,
+                  :grants_target_top_up,
                 )
 
                 payment_method = payment_method_params(r[:payment_method])
