@@ -157,6 +157,71 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
     end
 
+    context 'when filter_by_presentation parameter is provided' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/current_usage")
+          .with(query: {
+            external_subscription_id: subscription_external_id,
+            filter_by_presentation: '["engineering","operations"]',
+          })
+          .to_return(body: customer_usage_response, status: 200)
+      end
+
+      it 'returns the usage of the customer with presentation breakdowns filtered' do
+        response = resource.current_usage(
+          customer_external_id,
+          subscription_external_id,
+          filter_by_presentation: %w[engineering operations],
+        )
+
+        breakdown = response['customer_usage']['charges_usage'].first['presentation_breakdowns'].first
+        expect(breakdown['presentation_by']).to eq('team' => 'engineering')
+        expect(breakdown['units']).to eq('2.0')
+      end
+    end
+
+    context 'when filter_by_presentation is empty' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/current_usage")
+          .with(query: {
+            external_subscription_id: subscription_external_id,
+            filter_by_presentation: '[]',
+          })
+          .to_return(body: customer_usage_response, status: 200)
+      end
+
+      it 'passes an empty presentation filter' do
+        response = resource.current_usage(
+          customer_external_id,
+          subscription_external_id,
+          filter_by_presentation: [],
+        )
+
+        expect(response['customer_usage']['from_datetime']).to eq('2022-07-01T00:00:00Z')
+      end
+    end
+
+    context 'when filter_by_presentation is already JSON encoded' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/current_usage")
+          .with(query: {
+            external_subscription_id: subscription_external_id,
+            filter_by_presentation: '["engineering","operations"]',
+          })
+          .to_return(body: customer_usage_response, status: 200)
+      end
+
+      it 'passes the encoded presentation filter through' do
+        response = resource.current_usage(
+          customer_external_id,
+          subscription_external_id,
+          filter_by_presentation: '["engineering","operations"]',
+        )
+
+        expect(response['customer_usage']['from_datetime']).to eq('2022-07-01T00:00:00Z')
+      end
+    end
+
     context 'when the customer does not exists' do
       let(:customer_external_id) { 'DOESNOTEXIST' }
 
@@ -182,6 +247,26 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect do
           resource.current_usage(customer_external_id, subscription_external_id)
         end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
+  describe '#projected_usage' do
+    let(:customer_usage_response) { load_fixture('customer_projected_usage') }
+    let(:subscription_external_id) { '123' }
+
+    context 'when the customer exists' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/projected_usage?external_subscription_id=#{subscription_external_id}")
+          .to_return(body: customer_usage_response, status: 200)
+      end
+
+      it 'returns projected presentation breakdowns' do
+        response = resource.projected_usage(customer_external_id, subscription_external_id)
+        charge_usage = response['customer_usage']['charges_usage'].first
+
+        expect(charge_usage['presentation_breakdowns'].first['units']).to eq('2.0')
+        expect(charge_usage['projected_presentation_breakdowns'].first['units']).to eq('4.0')
       end
     end
   end

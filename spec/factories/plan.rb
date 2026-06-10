@@ -24,7 +24,12 @@ FactoryBot.define do
           invoice_display_name: 'Charge 1',
           min_amount_cents: 0,
           accepts_target_wallet: false,
-          properties: { amount: '0.22' },
+          properties: {
+            amount: '0.22',
+            presentation_group_keys: [
+              { value: 'region', options: { display_in_invoice: true } },
+            ],
+          },
         },
       ]
     end

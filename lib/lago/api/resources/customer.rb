@@ -21,7 +21,8 @@ module Lago
         def current_usage( # rubocop:disable Metrics/ParameterLists
           external_customer_id, external_subscription_id, apply_taxes: nil,
           charge_id: nil, charge_code: nil, billable_metric_code: nil, group: nil,
-          filter_by_charge_id: nil, filter_by_charge_code: nil, filter_by_group: nil, full_usage: nil
+          filter_by_charge_id: nil, filter_by_charge_code: nil, filter_by_group: nil, full_usage: nil,
+          filter_by_presentation: nil
         )
           query_params = { external_subscription_id: external_subscription_id }
           query_params[:apply_taxes] = apply_taxes unless apply_taxes.nil?
@@ -33,6 +34,10 @@ module Lago
           query_params[:filter_by_charge_code] = filter_by_charge_code unless filter_by_charge_code.nil?
           filter_by_group&.each { |k, v| query_params[:"filter_by_group[#{k}]"] = v }
           query_params[:full_usage] = full_usage unless full_usage.nil?
+          unless filter_by_presentation.nil?
+            query_params[:filter_by_presentation] =
+              filter_by_presentation_param(filter_by_presentation)
+          end
           query_string = URI.encode_www_form(query_params)
 
           uri = URI("#{client.base_api_url}#{api_resource}/#{external_customer_id}/current_usage?#{query_string}")
@@ -124,6 +129,10 @@ module Lago
           result_hash[:metadata] = metadata unless metadata.empty?
 
           { root_name => result_hash }
+        end
+
+        def filter_by_presentation_param(filter_by_presentation)
+          filter_by_presentation.is_a?(String) ? filter_by_presentation : JSON.generate(filter_by_presentation)
         end
 
         def whitelist_billing_configuration(billing_params)

@@ -878,6 +878,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
         expect(response['charges'].first['lago_id']).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
         expect(response['charges'].first['code']).to eq('charge_code')
+        expect(response['charges'].first['properties']['presentation_group_keys'].first['value']).to eq('region')
         expect(response['meta']['current_page']).to eq(1)
       end
     end
@@ -910,6 +911,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
 
         expect(charge.lago_id).to eq('51c1e851-5be6-4343-a0ee-39a81d8b4ee1')
         expect(charge.code).to eq(charge_code)
+        expect(charge.properties.presentation_group_keys.first.value).to eq('region')
       end
     end
 
@@ -943,7 +945,17 @@ RSpec.describe Lago::Api::Resources::Subscription do
     let(:json_response) { load_fixture('subscription_charge') }
     let(:external_subscription_id) { 'sub_123' }
     let(:charge_code) { 'charge_code' }
-    let(:params) { { invoice_display_name: 'Updated Setup' } }
+    let(:params) do
+      {
+        invoice_display_name: 'Updated Setup',
+        properties: {
+          amount: '0.22',
+          presentation_group_keys: [
+            { value: 'region', options: { display_in_invoice: true } },
+          ],
+        },
+      }
+    end
 
     context 'when charge is successfully updated' do
       before do

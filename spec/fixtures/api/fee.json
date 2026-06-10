@@ -25,6 +25,14 @@
     "total_amount_currency": "EUR",
     "units": "10.0",
     "events_count": 10,
+    "presentation_breakdowns": [
+      {
+        "presentation_by": {
+          "team": "engineering"
+        },
+        "units": "2.0"
+      }
+    ],
     "applied_taxes": [
       {
         "lago_id": "1a901a90-1a90-1a90-1a90-1a901a901a90",
