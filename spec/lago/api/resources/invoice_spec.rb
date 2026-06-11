@@ -160,6 +160,37 @@ RSpec.describe Lago::Api::Resources::Invoice do
         end
       end
     end
+
+    context 'when billing_entity_code is provided' do
+      let(:params) do
+        {
+          external_customer_id: '_ID_',
+          currency: 'EUR',
+          net_payment_term: 0,
+          skip_psp: true,
+          billing_entity_code: 'eu_entity',
+          fees: [
+            {
+              add_on_code: '123',
+              description: 'desc',
+              tax_codes: [tax.code],
+            }
+          ]
+        }
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices')
+          .with(body: { invoice: params })
+          .to_return(body: invoice_response, status: 200)
+      end
+
+      it 'returns invoice' do
+        invoice = resource.create(params)
+
+        expect(invoice.lago_id).to eq(invoice_id)
+      end
+    end
   end
 
   describe '#update' do
@@ -523,6 +554,27 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
       it 'raises an error' do
         expect { subject }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+
+    context 'when billing_entity_code is provided' do
+      let(:invoice_response) { load_fixture('invoice_preview') }
+      let(:params) do
+        {
+          customer: { external_id: '_ID_' },
+          plan_code: 'plan_code',
+          billing_entity_code: 'eu_entity'
+        }
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices/preview')
+          .with(body: params)
+          .to_return(body: invoice_response, status: 200)
+      end
+
+      it 'forwards billing_entity_code to the preview endpoint' do
+        expect(subject).to have_attributes(lago_id: nil)
       end
     end
   end

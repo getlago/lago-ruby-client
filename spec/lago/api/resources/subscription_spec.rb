@@ -196,6 +196,23 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect { resource.create(params_with_invalid_pm) }.to raise_error Lago::Api::HttpError
       end
     end
+
+    context 'when billing_entity_code is provided' do
+      let(:params_with_billing_entity) { params.merge(billing_entity_code: 'eu_entity') }
+      let(:body_with_billing_entity) { { 'subscription' => params_with_billing_entity } }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
+          .with(body: body_with_billing_entity)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns subscription with billing_entity_code' do
+        subscription = resource.create(params_with_billing_entity)
+
+        expect(subscription.billing_entity_code).to eq(factory_subscription.billing_entity_code)
+      end
+    end
   end
 
   describe '#delete' do
@@ -356,6 +373,23 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect { resource.update(params_with_invalid_pm, '123') }.to raise_error Lago::Api::HttpError
       end
     end
+
+    context 'when billing_entity_code is provided' do
+      let(:params_with_billing_entity) { { name: 'new name', billing_entity_code: 'us_entity' } }
+      let(:body_with_billing_entity) { { 'subscription' => params_with_billing_entity } }
+
+      before do
+        stub_request(:put, 'https://api.getlago.com/api/v1/subscriptions/123')
+          .with(body: body_with_billing_entity)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns subscription with billing_entity_code' do
+        subscription = resource.update(params_with_billing_entity, '123')
+
+        expect(subscription.billing_entity_code).to eq(factory_subscription.billing_entity_code)
+      end
+    end
   end
 
   describe '#get' do
@@ -428,6 +462,22 @@ RSpec.describe Lago::Api::Resources::Subscription do
       it 'returns subscriptions with that given status' do
         response = resource.get_all({ external_customer_id: '123', 'status[]': 'pending' })
         expect(response['subscriptions'].count).to eq(1)
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when billing_entity_codes is given' do
+      before do
+        stub_request(
+          :get,
+          'https://api.getlago.com/api/v1/subscriptions?billing_entity_codes%5B%5D=eu_entity&billing_entity_codes%5B%5D=us_entity',
+        ).to_return(body: response, status: 200)
+      end
+
+      it 'returns subscriptions filtered by billing_entity_codes' do
+        response = resource.get_all({ 'billing_entity_codes[]': %w[eu_entity us_entity] })
+
+        expect(response['subscriptions'].first['lago_id']).to eq(factory_subscription.lago_id)
         expect(response['meta']['current_page']).to eq(1)
       end
     end

@@ -333,6 +333,42 @@ RSpec.describe Lago::Api::Resources::Wallet do
         end
       end
     end
+
+    context 'when billing_entity_code is provided' do
+      let(:params_with_billing_entity) { params.merge(billing_entity_code: 'eu_entity') }
+      let(:body_with_billing_entity) do
+        body['wallet']['billing_entity_code'] = 'eu_entity'
+        body
+      end
+      let(:response_with_billing_entity) do
+        {
+          'wallet' => {
+            'lago_id' => 'this-is-lago-id',
+            'lago_customer_id' => factory_wallet.id,
+            'name' => factory_wallet.name,
+            'billing_entity_code' => 'eu_entity',
+            'expiration_at' => factory_wallet.expiration_at,
+            'balance_cents' => 10_000,
+            'rate_amount' => factory_wallet.rate_amount,
+            'created_at' => '2022-04-29T08:59:51Z',
+            'recurring_transaction_rules' => factory_wallet.recurring_transaction_rules,
+            'applies_to' => factory_wallet.applies_to,
+          }
+        }.to_json
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
+          .with(body: body_with_billing_entity)
+          .to_return(body: response_with_billing_entity, status: 200)
+      end
+
+      it 'returns a wallet with billing_entity_code' do
+        wallet = resource.create(params_with_billing_entity)
+
+        expect(wallet.billing_entity_code).to eq('eu_entity')
+      end
+    end
   end
 
   describe '#update' do
@@ -671,6 +707,22 @@ RSpec.describe Lago::Api::Resources::Wallet do
 
         expect(response['wallets'].first['lago_id']).to eq('this-is-lago-id')
         expect(response['wallets'].first['name']).to eq(factory_wallet.name)
+        expect(response['meta']['current_page']).to eq(1)
+      end
+    end
+
+    context 'when billing_entity_codes is given' do
+      before do
+        stub_request(
+          :get,
+          'https://api.getlago.com/api/v1/wallets?billing_entity_codes%5B%5D=eu_entity&billing_entity_codes%5B%5D=us_entity',
+        ).to_return(body: response, status: 200)
+      end
+
+      it 'returns wallets filtered by billing_entity_codes' do
+        response = resource.get_all({ 'billing_entity_codes[]': %w[eu_entity us_entity] })
+
+        expect(response['wallets'].first['lago_id']).to eq('this-is-lago-id')
         expect(response['meta']['current_page']).to eq(1)
       end
     end

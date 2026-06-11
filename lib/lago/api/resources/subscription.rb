@@ -213,6 +213,7 @@ module Lago
             ending_at: params[:ending_at],
             plan_overrides: params[:plan_overrides],
             consolidate_invoice: params[:consolidate_invoice],
+            billing_entity_code: params[:billing_entity_code],
           }.compact
 
           payment_method_params = whitelist_payment_method_params(params[:payment_method])
