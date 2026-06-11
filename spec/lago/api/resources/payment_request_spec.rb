@@ -96,6 +96,20 @@ RSpec.describe Lago::Api::Resources::PaymentRequest do
           end
         end
 
+        context 'when currency is given' do
+          before do
+            stub_request(:get, 'https://api.getlago.com/api/v1/payment_requests?currency=EUR')
+              .to_return(body: payment_requests_response, status: 200)
+          end
+
+          it 'forwards the currency option as a query param' do
+            resource.get_all({ currency: 'EUR' })
+
+            expect(WebMock).to have_requested(:get, 'https://api.getlago.com/api/v1/payment_requests')
+              .with(query: { currency: 'EUR' })
+          end
+        end
+
         context 'when there is an issue' do
           before do
             stub_request(:get, 'https://api.getlago.com/api/v1/payment_requests')
