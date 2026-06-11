@@ -54,9 +54,10 @@ RSpec.describe 'Lago::Api::Client#customers.wallets', :integration do
     # The balance is synced synchronously when the wallet transaction settles, but the ongoing
     # balance is now refreshed by an async job (RefreshWalletJob). Re-fetch until that refresh has
     # landed, otherwise the ongoing balance can still be 0 when the balance already reached 2000.
+    expected_ongoing_balance_cents = attributes.fetch(:ongoing_balance_cents, 2000)
     wait_until do
       wallet = client.customers.wallets.get(wallet.external_customer_id, wallet.code)
-      wallet.ongoing_balance_cents == 2000
+      wallet.ongoing_balance_cents == expected_ongoing_balance_cents
     end
 
     assert_wallet_attributes(
