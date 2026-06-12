@@ -73,10 +73,13 @@ RSpec.describe 'Lago::Api::Client#customers.wallets', :integration do
   end
 
   def wait_for_balance_update(wallet)
+    # balance_cents is synced synchronously when the wallet transaction settles, but the ongoing
+    # balance and pending transactions are reconciled by RefreshWalletJob. Wait for both so any
+    # subsequent destroy/assertion sees a fully settled wallet.
     new_wallet = nil
     wait_until do
       new_wallet = client.customers.wallets.get(wallet.external_customer_id, wallet.code)
-      new_wallet.balance_cents == 2000
+      new_wallet.balance_cents == 2000 && new_wallet.ongoing_balance_cents == 2000
     end
     new_wallet
   end
