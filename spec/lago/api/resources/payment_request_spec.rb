@@ -96,6 +96,22 @@ RSpec.describe Lago::Api::Resources::PaymentRequest do
           end
         end
 
+        context 'when billing_entity_codes is given' do
+          before do
+            stub_request(
+              :get,
+              'https://api.getlago.com/api/v1/payment_requests?billing_entity_codes%5B%5D=eu_entity&billing_entity_codes%5B%5D=us_entity',
+            ).to_return(body: payment_requests_response, status: 200)
+          end
+
+          it 'returns payment requests filtered by billing_entity_codes' do
+            response = resource.get_all({ 'billing_entity_codes[]': %w[eu_entity us_entity] })
+
+            expect(response['payment_requests'].first['lago_id']).to eq(payment_request_id)
+            expect(response['meta']['current_page']).to eq(1)
+          end
+        end
+
         context 'when there is an issue' do
           before do
             stub_request(:get, 'https://api.getlago.com/api/v1/payment_requests')
