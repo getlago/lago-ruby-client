@@ -221,6 +221,9 @@ module Lago
           invoice_custom_section = whitelist_invoice_custom_section_params(params[:invoice_custom_section])
           result[:invoice_custom_section] = invoice_custom_section if invoice_custom_section
 
+          activation_rules = whitelist_activation_rules_params(params[:activation_rules])
+          result[:activation_rules] = activation_rules if activation_rules
+
           { root_name => result }
         end
 
@@ -285,6 +288,12 @@ module Lago
 
         def whitelist_payment_method_params(payment_method_param)
           payment_method_param&.slice(:payment_method_type, :payment_method_id)
+        end
+
+        def whitelist_activation_rules_params(activation_rules_param)
+          activation_rules_param&.map do |rule|
+            (rule || {}).slice(:type, :timeout_hours)
+          end
         end
 
         def whitelist_invoice_custom_section_params(invoice_custom_section_param)
