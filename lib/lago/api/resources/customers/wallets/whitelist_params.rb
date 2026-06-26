@@ -23,6 +23,7 @@ module Lago
                 :transaction_name,
                 :paid_top_up_min_amount_cents,
                 :paid_top_up_max_amount_cents,
+                :billing_entity_code,
               )
 
               recurring_rules = recurring_rules_params(params[:recurring_transaction_rules])

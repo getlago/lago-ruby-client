@@ -16,5 +16,6 @@ FactoryBot.define do
     canceled_at { nil }
     created_at { '2022-05-05T12:27:30Z' }
     consolidate_invoice { true }
+    billing_entity_code { 'acme_corp' }
   end
 end
