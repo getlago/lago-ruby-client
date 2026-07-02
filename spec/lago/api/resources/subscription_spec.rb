@@ -164,6 +164,37 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
     end
 
+    context 'when activation_rules is provided' do
+      let(:params_with_activation_rules) do
+        params.merge(
+          activation_rules: [
+            { type: 'payment', timeout_hours: 48 },
+          ],
+        )
+      end
+      let(:body_with_activation_rules) do
+        {
+          'subscription' => params.merge(
+            activation_rules: [
+              { type: 'payment', timeout_hours: 48 },
+            ],
+          ),
+        }
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
+          .with(body: body_with_activation_rules)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'returns subscription' do
+        subscription = resource.create(params_with_activation_rules)
+
+        expect(subscription.external_customer_id).to eq(factory_subscription.external_customer_id)
+      end
+    end
+
     context 'when payment_method_id is invalid' do
       let(:params_with_invalid_pm) do
         params.merge(
