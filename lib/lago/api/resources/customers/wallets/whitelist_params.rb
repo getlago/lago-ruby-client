@@ -24,6 +24,7 @@ module Lago
                 :paid_top_up_min_amount_cents,
                 :paid_top_up_max_amount_cents,
                 :billing_entity_code,
+                :purchase_order_number,
               )
 
               recurring_rules = recurring_rules_params(params[:recurring_transaction_rules])
@@ -72,6 +73,7 @@ module Lago
                   :transaction_name,
                   :ignore_paid_top_up_limits,
                   :grants_target_top_up,
+                  :purchase_order_number,
                 )
 
                 payment_method = payment_method_params(r[:payment_method])

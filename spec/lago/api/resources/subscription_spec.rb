@@ -36,6 +36,7 @@ RSpec.describe Lago::Api::Resources::Subscription do
         billing_time: factory_subscription.billing_time,
         ending_at: factory_subscription.ending_at,
         consolidate_invoice: factory_subscription.consolidate_invoice,
+        purchase_order_number: 'PO-123',
         plan_overrides: {
           amount_cents: 1000,
           minimum_commitment: {
