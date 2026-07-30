@@ -67,6 +67,7 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
         paid_credits: "100",
         granted_credits: "100",
         voided_credits: "0",
+        purchase_order_number: 'PO-123',
         extra_param: "extra_value"
       }
     end
@@ -77,7 +78,8 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
           "name" => "Transaction Name",
           "paid_credits" => "100",
           "granted_credits" => "100",
-          "voided_credits" => "0"
+          "voided_credits" => "0",
+          "purchase_order_number" => 'PO-123'
         }
       }
     end

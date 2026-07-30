@@ -214,6 +214,7 @@ module Lago
             plan_overrides: params[:plan_overrides],
             consolidate_invoice: params[:consolidate_invoice],
             billing_entity_code: params[:billing_entity_code],
+            purchase_order_number: params[:purchase_order_number],
           }.compact
 
           payment_method_params = whitelist_payment_method_params(params[:payment_method])
