@@ -292,6 +292,32 @@ RSpec.describe Lago::Api::Resources::Invoice do
     end
   end
 
+  describe '#destroy' do
+    context 'when the draft invoice is successfully destroyed' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/invoices/#{invoice_id}")
+          .to_return(body: invoice_response, status: 200)
+      end
+
+      it 'returns an invoice' do
+        invoice = resource.destroy(invoice_id)
+
+        expect(invoice.lago_id).to eq(invoice_id)
+      end
+    end
+
+    context 'when there is an issue' do
+      before do
+        stub_request(:delete, "https://api.getlago.com/api/v1/invoices/#{invoice_id}")
+          .to_return(body: error_response, status: 422)
+      end
+
+      it 'raises an error' do
+        expect { resource.destroy(invoice_id) }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
   describe '#get_all' do
     let(:invoices_response) do
       {
