@@ -126,7 +126,8 @@ module Lago
             currency: params[:currency],
             net_payment_term: params[:net_payment_term],
             skip_psp: params[:skip_psp],
-            billing_entity_code: params[:billing_entity_code]
+            billing_entity_code: params[:billing_entity_code],
+            purchase_order_number: params[:purchase_order_number]
           }.compact
 
           fees = whitelist_fees(params[:fees])
