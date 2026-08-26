@@ -38,6 +38,8 @@ require 'lago/api/resources/payment'
 require 'lago/api/resources/payment_receipt'
 require 'lago/api/resources/payment_request'
 require 'lago/api/resources/plan'
+require 'lago/api/resources/quote'
+require 'lago/api/resources/quote_version'
 require 'lago/api/resources/subscription'
 require 'lago/api/resources/tax'
 require 'lago/api/resources/usage'
@@ -207,6 +209,14 @@ module Lago
 
       def plans
         Resources::Plan.new(self)
+      end
+
+      def quotes
+        Resources::Quote.new(self)
+      end
+
+      def quote_versions
+        Resources::QuoteVersion.new(self)
       end
 
       def subscriptions
