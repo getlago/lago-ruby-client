@@ -32,12 +32,16 @@ require 'lago/api/resources/invoice'
 require 'lago/api/resources/invoice_collection'
 require 'lago/api/resources/invoiced_usage'
 require 'lago/api/resources/mrr'
+require 'lago/api/resources/order_form'
+require 'lago/api/resources/order'
 require 'lago/api/resources/organization'
 require 'lago/api/resources/overdue_balance'
 require 'lago/api/resources/payment'
 require 'lago/api/resources/payment_receipt'
 require 'lago/api/resources/payment_request'
 require 'lago/api/resources/plan'
+require 'lago/api/resources/quote'
+require 'lago/api/resources/quote_version'
 require 'lago/api/resources/subscription'
 require 'lago/api/resources/tax'
 require 'lago/api/resources/usage'
@@ -185,6 +189,14 @@ module Lago
         Resources::Mrr.new(self)
       end
 
+      def order_forms
+        Resources::OrderForm.new(self)
+      end
+
+      def orders
+        Resources::Order.new(self)
+      end
+
       def organizations
         Resources::Organization.new(self)
       end
@@ -207,6 +219,14 @@ module Lago
 
       def plans
         Resources::Plan.new(self)
+      end
+
+      def quotes
+        Resources::Quote.new(self)
+      end
+
+      def quote_versions
+        Resources::QuoteVersion.new(self)
       end
 
       def subscriptions
