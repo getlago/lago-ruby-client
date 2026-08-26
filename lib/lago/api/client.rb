@@ -33,6 +33,7 @@ require 'lago/api/resources/invoice_collection'
 require 'lago/api/resources/invoiced_usage'
 require 'lago/api/resources/mrr'
 require 'lago/api/resources/order_form'
+require 'lago/api/resources/order'
 require 'lago/api/resources/organization'
 require 'lago/api/resources/overdue_balance'
 require 'lago/api/resources/payment'
@@ -190,6 +191,10 @@ module Lago
 
       def order_forms
         Resources::OrderForm.new(self)
+      end
+
+      def orders
+        Resources::Order.new(self)
       end
 
       def organizations
