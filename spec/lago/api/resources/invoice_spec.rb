@@ -24,7 +24,6 @@ RSpec.describe Lago::Api::Resources::Invoice do
       {
         external_customer_id: '_ID_',
         currency: 'EUR',
-        net_payment_term: 0,
         skip_psp: true,
         fees: [
           {
@@ -48,7 +47,6 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
         expect(invoice).to have_attributes(
           lago_id: invoice_id,
-          net_payment_term: 0,
           payment_due_date: '2022-06-02',
           payment_status: 'succeeded',
           payment_overdue: false,
@@ -75,7 +73,6 @@ RSpec.describe Lago::Api::Resources::Invoice do
         {
           external_customer_id: '_ID_',
           currency: 'EUR',
-          net_payment_term: 0,
           skip_psp: true,
           fees: [
             {
@@ -109,7 +106,6 @@ RSpec.describe Lago::Api::Resources::Invoice do
         {
           external_customer_id: '_ID_',
           currency: 'EUR',
-          net_payment_term: 0,
           skip_psp: true,
           fees: [
             {
@@ -166,7 +162,6 @@ RSpec.describe Lago::Api::Resources::Invoice do
         {
           external_customer_id: '_ID_',
           currency: 'EUR',
-          net_payment_term: 0,
           skip_psp: true,
           billing_entity_code: 'eu_entity',
           fees: [

@@ -94,7 +94,7 @@ module Lago
         end
 
         def whitelist_params(params)
-          result = params.slice(:payment_status, :net_payment_term)
+          result = params.slice(:payment_status)
 
           if params.key?(:metadata)
             metadata = whitelist_metadata(params[:metadata])
@@ -124,7 +124,6 @@ module Lago
           result = {
             external_customer_id: params[:external_customer_id],
             currency: params[:currency],
-            net_payment_term: params[:net_payment_term],
             skip_psp: params[:skip_psp],
             billing_entity_code: params[:billing_entity_code],
             purchase_order_number: params[:purchase_order_number]
