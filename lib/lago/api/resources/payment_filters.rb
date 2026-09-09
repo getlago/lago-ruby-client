@@ -5,7 +5,7 @@ module Lago
     module Resources
       module PaymentFilters
         ARRAY_FILTERS = %w[
-          payment_status payment_statuses payment_provider_type payment_method_type payment_type payable_type
+          payment_status payment_statuses payment_provider_type payment_type payable_type
         ].freeze
 
         def get_all(options = {})

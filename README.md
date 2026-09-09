@@ -126,7 +126,6 @@ Lago Ruby client is distributed under [MIT license](LICENSE).
 ```ruby
 filters = {
   payment_status: %w[succeeded failed],
-  payment_method_type: %w[card sepa_debit],
   currency: 'EUR',
   amount_from: 0,
   amount_to: 9_223_372_036_854_775_807,

@@ -33,7 +33,6 @@ RSpec.describe Lago::Api::Resources::PaymentFilters do
           created_at_from: '2026-09-01',
           created_at_to: '2026-09-07',
           payment_provider_type: %w[stripe gocardless],
-          payment_method_type: %w[card sepa_debit],
           currency: 'EUR',
           invoice_number: 'LAG & +/#2',
           payment_type: %w[manual provider],
@@ -52,7 +51,6 @@ RSpec.describe Lago::Api::Resources::PaymentFilters do
           'created_at_from' => ['2026-09-01'],
           'created_at_to' => ['2026-09-07'],
           'payment_provider_type[]' => %w[stripe gocardless],
-          'payment_method_type[]' => %w[card sepa_debit],
           'currency' => ['EUR'],
           'invoice_number' => ['LAG & +/#2'],
           'payment_type[]' => %w[manual provider],
@@ -75,13 +73,15 @@ RSpec.describe Lago::Api::Resources::PaymentFilters do
       it 'preserves scalar values, string keys, explicit brackets and repeated query pairs' do
         options = [
           ['payment_status', 'processing'],
-          ['payment_method_type[]', 'card'],
-          ['payment_method_type[]', 'sepa_debit'],
+          ['payment_provider_type[]', 'stripe'],
+          ['payment_provider_type[]', 'gocardless'],
           ['payment_type', []],
         ]
         request = stub_request(:get, /^#{Regexp.escape(url)}(?:\?|$)/).with do |actual|
           URI.decode_www_form(actual.uri.query).sort == [
-            ['payment_status', 'processing'], ['payment_method_type[]', 'card'], ['payment_method_type[]', 'sepa_debit']
+            ['payment_status', 'processing'],
+            ['payment_provider_type[]', 'stripe'],
+            ['payment_provider_type[]', 'gocardless'],
           ].sort
         end.to_return(body: response_body)
 
