@@ -245,9 +245,10 @@ RSpec.describe 'Lago::Api::Client#plans', :integration do
   describe '#get_all' do
     before_all_integration_tests do
       @billable_metric = create_billable_metric(presets: [:count_agg, :filters])
-      @plans = Array.new(3) do
+      # The API lists plans by name: the leading digit makes these plans come first, in this order.
+      @plans = Array.new(3) do |index|
         suffix = unique_id
-        params = build_plan_params(name: "Integration Plan #{suffix}", code: "integration-plan-#{suffix}")
+        params = build_plan_params(name: "#{index} Integration Plan #{suffix}", code: "integration-plan-#{suffix}")
         client.plans.create(params)
       end
     end
@@ -261,46 +262,44 @@ RSpec.describe 'Lago::Api::Client#plans', :integration do
       client.plans.get_all(params)
     end
 
-    # The API sorts plans by name (deleted plans last), and other tests create plans in the same
-    # organization, so these tests do not rely on the position of the created plans.
     it 'returns the created plans' do
-      response = fetch_plans(per_page: 100)
+      response = fetch_plans
 
       meta = response.meta
       expect(meta.current_page).to eq 1
       expect(meta.total_pages).to be >= 1
       expect(meta.total_count).to be >= plans.count
       expect(meta.prev_page).to be_nil
+      expect(meta.next_page).to be_nil.or(be >= 2)
 
-      fetched_plans = response.plans.select { |plan| plans.map(&:lago_id).include?(plan.lago_id) }
-      expect(fetched_plans.map(&:lago_id)).to match_array(plans.map(&:lago_id))
+      fetched_plans = response.plans
+      expect(fetched_plans.count).to be >= 3
+      expect(fetched_plans[..2].map(&:lago_id)).to eq plans.map(&:lago_id)
 
-      fetched_plans.each do |fetched_plan|
-        plan = plans.find { |created_plan| created_plan.lago_id == fetched_plan.lago_id }
+      fetched_plans[..2].each_with_index do |fetched_plan, index|
         expect_plan_attributes(
           fetched_plan,
-          name: plan.name,
-          code: plan.code,
+          name: plans[index].name,
+          code: plans[index].code,
           fixed_charges: :missing,
         )
       end
     end
 
     context 'when paginating' do
-      it 'returns one plan per page' do
-        lago_ids = (1..plans.count).map do |page|
-          response = fetch_plans(page:, per_page: 1)
+      it 'returns the plans for the requested page' do
+        plans.each_with_index do |plan, index|
+          response = fetch_plans(page: index + 1, per_page: 1)
 
           meta = response.meta
-          expect(meta.current_page).to eq(page)
-          expect(meta.total_pages).to be >= plans.count
-          expect(meta.total_count).to be >= plans.count
+          expect(meta.current_page).to eq(index + 1)
+          expect(meta.total_pages).to be >= 3
+          expect(meta.total_count).to be >= 3
 
           expect(response.plans.count).to eq 1
-          response.plans.first.lago_id
+          fetched_plan = response.plans.first
+          expect(fetched_plan.lago_id).to eq plan.lago_id
         end
-
-        expect(lago_ids.uniq.count).to eq plans.count
       end
     end
   end
