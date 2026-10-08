@@ -245,11 +245,12 @@ RSpec.describe 'Lago::Api::Client#plans', :integration do
   describe '#get_all' do
     before_all_integration_tests do
       @billable_metric = create_billable_metric(presets: [:count_agg, :filters])
-      @plans = Array.new(3) do
+      # The API lists plans by name: the leading digit makes these plans come first, in this order.
+      @plans = Array.new(3) do |index|
         suffix = unique_id
-        params = build_plan_params(name: "Integration Plan #{suffix}", code: "integration-plan-#{suffix}")
+        params = build_plan_params(name: "#{index} Integration Plan #{suffix}", code: "integration-plan-#{suffix}")
         client.plans.create(params)
-      end.reverse
+      end
     end
 
     attr_reader :plans,
