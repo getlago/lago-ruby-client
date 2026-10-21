@@ -65,7 +65,7 @@ module Lago
 
             def whitelist_thresholds(params)
               (params || []).map do |p|
-                (p || {}).slice(:code, :value, :recurring)
+                (p || {}).slice(:code, :value, :recurring, :notify_on)
               end
             end
           end
