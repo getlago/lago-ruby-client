@@ -332,6 +332,83 @@ RSpec.describe Lago::Api::Resources::Customer do
     end
   end
 
+  describe '#attributed_usage' do
+    let(:attributed_usage_response) { load_fixture('customer_attributed_usage') }
+    let(:subscription_external_id) { 'sub_123' }
+
+    context 'when the customer exists' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/attributed_usage")
+          .with(query: { external_subscription_id: subscription_external_id })
+          .to_return(body: attributed_usage_response, status: 200)
+      end
+
+      it 'returns the attributed usage of the customer' do
+        response = resource.attributed_usage(customer_external_id, subscription_external_id)
+
+        expect(response['attributed_usage']['group_by']).to eq('team')
+        expect(response['attributed_usage']['rows'].first['value']).to eq('eng')
+        expect(response['meta']['total_count']).to eq(1)
+      end
+    end
+
+    context 'when options are provided' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/attributed_usage")
+          .with(query: {
+            external_subscription_id: subscription_external_id,
+            group_by: 'team',
+            filters: { org: 'acme', model: %w[opus haiku] },
+            charge_codes: %w[tokens storage],
+            split_charge_code: 'tokens',
+            from_datetime: '2026-10-01T00:00:00Z',
+            to_datetime: '2026-10-15T00:00:00Z',
+            search_term: 'eng',
+            basis: 'amount',
+            page: '2',
+            per_page: '10',
+          })
+          .to_return(body: attributed_usage_response, status: 200)
+      end
+
+      it 'sends them as query parameters' do
+        response = resource.attributed_usage(
+          customer_external_id,
+          subscription_external_id,
+          group_by: 'team',
+          filters: { org: 'acme', model: %w[opus haiku] },
+          charge_codes: %w[tokens storage],
+          split_charge_code: 'tokens',
+          from_datetime: '2026-10-01T00:00:00Z',
+          to_datetime: '2026-10-15T00:00:00Z',
+          search_term: 'eng',
+          basis: 'amount',
+          page: 2,
+          per_page: 10,
+        )
+
+        expect(response['attributed_usage']['currency']).to eq('USD')
+      end
+    end
+
+    context 'when the query exceeds the limits' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/attributed_usage")
+          .with(query: { external_subscription_id: subscription_external_id })
+          .to_return(
+            body: JSON.generate(status: 422, error: 'Unprocessable Entity', code: 'too_many_groups'),
+            status: 422,
+          )
+      end
+
+      it 'raises an error' do
+        expect do
+          resource.attributed_usage(customer_external_id, subscription_external_id)
+        end.to raise_error(Lago::Api::HttpError)
+      end
+    end
+  end
+
   describe '#plan_url' do
     context 'when the customer exists' do
       before do

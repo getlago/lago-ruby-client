@@ -45,6 +45,7 @@ require 'lago/api/resources/quote_version'
 require 'lago/api/resources/subscription'
 require 'lago/api/resources/tax'
 require 'lago/api/resources/usage'
+require 'lago/api/resources/usage_attribution_type'
 require 'lago/api/resources/wallet'
 require 'lago/api/resources/wallet_transaction'
 require 'lago/api/resources/webhook'
@@ -235,6 +236,10 @@ module Lago
 
       def taxes
         Resources::Tax.new(self)
+      end
+
+      def usage_attribution_types
+        Resources::UsageAttributionType.new(self)
       end
 
       def wallet_transactions

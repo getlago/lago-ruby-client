@@ -64,6 +64,30 @@ module Lago
           )
         end
 
+        def attributed_usage(external_customer_id, external_subscription_id, options = {})
+          query_params = [['external_subscription_id', external_subscription_id]]
+          options.each do |key, value|
+            case key.to_sym
+            when :filters
+              value.each do |filter_key, filter_value|
+                if filter_value.is_a?(Array)
+                  filter_value.each { |v| query_params << ["filters[#{filter_key}][]", v] }
+                else
+                  query_params << ["filters[#{filter_key}]", filter_value]
+                end
+              end
+            when :charge_codes
+              Array(value).each { |code| query_params << ['charge_codes[]', code] }
+            else
+              query_params << [key.to_s, value] unless value.nil?
+            end
+          end
+          query_string = URI.encode_www_form(query_params)
+
+          uri = URI("#{client.base_api_url}#{api_resource}/#{external_customer_id}/attributed_usage?#{query_string}")
+          connection.get(uri, identifier: nil)
+        end
+
         def portal_url(external_customer_id)
           uri = URI(
             "#{client.base_api_url}#{api_resource}/#{external_customer_id}/portal_url",
