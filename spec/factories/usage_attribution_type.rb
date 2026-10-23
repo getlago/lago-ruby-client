@@ -4,8 +4,9 @@ FactoryBot.define do
   factory :create_usage_attribution_type, class: OpenStruct do
     code { 'team' }
     name { 'Team' }
-    attribution_key { 'team_id' }
-    role { 'team' }
+    description { 'Teams of the organization' }
+    attribution_keys { %w[team_id] }
+    role { 'hierarchical' }
     parent_code { 'org' }
   end
 end

@@ -18,7 +18,8 @@ module Lago
           result = {
             code: params[:code],
             name: params[:name],
-            attribution_key: params[:attribution_key],
+            description: params[:description],
+            attribution_keys: params[:attribution_keys],
             role: params[:role],
           }.compact
 

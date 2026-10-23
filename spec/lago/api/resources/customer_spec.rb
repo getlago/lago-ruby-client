@@ -391,6 +391,55 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
     end
 
+    context 'when filters are nil' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/attributed_usage")
+          .with(query: { external_subscription_id: subscription_external_id })
+          .to_return(body: attributed_usage_response, status: 200)
+      end
+
+      it 'skips them' do
+        response = resource.attributed_usage(customer_external_id, subscription_external_id, filters: nil)
+
+        expect(response['attributed_usage']['group_by']).to eq('team')
+      end
+    end
+
+    context 'when empty selections are provided' do
+      before do
+        stub_request(
+          :get,
+          "https://api.getlago.com/api/v1/customers/#{customer_external_id}/attributed_usage" \
+          '?external_subscription_id=sub_123&filters%5Bteam%5D%5B%5D&charge_codes%5B%5D',
+        ).to_return(body: attributed_usage_response, status: 200)
+      end
+
+      it 'sends them as empty arrays' do
+        response = resource.attributed_usage(
+          customer_external_id,
+          subscription_external_id,
+          filters: { team: [] },
+          charge_codes: [],
+        )
+
+        expect(response['attributed_usage']['group_by']).to eq('team')
+      end
+    end
+
+    context 'when the customer external id contains reserved characters' do
+      before do
+        stub_request(:get, 'https://api.getlago.com/api/v1/customers/acme%2Feu%23/attributed_usage')
+          .with(query: { external_subscription_id: subscription_external_id })
+          .to_return(body: attributed_usage_response, status: 200)
+      end
+
+      it 'escapes it' do
+        response = resource.attributed_usage('acme/eu#', subscription_external_id)
+
+        expect(response['attributed_usage']['group_by']).to eq('team')
+      end
+    end
+
     context 'when the query exceeds the limits' do
       before do
         stub_request(:get, "https://api.getlago.com/api/v1/customers/#{customer_external_id}/attributed_usage")

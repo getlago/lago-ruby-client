@@ -33,6 +33,8 @@ RSpec.describe Lago::Api::Resources::UsageAttributionType do
 
         expect(usage_attribution_type.lago_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
         expect(usage_attribution_type.name).to eq('Team')
+        expect(usage_attribution_type.attribution_keys).to eq(%w[team_id])
+        expect(usage_attribution_type.role).to eq('hierarchical')
       end
     end
 
