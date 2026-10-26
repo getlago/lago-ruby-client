@@ -6,7 +6,8 @@
     "thresholds": [
       {
         "code": "warn",
-        "value": 10000
+        "value": 10000,
+        "notify_on": ["triggered", "resolved"]
       },
       {
         "code": "alert",
