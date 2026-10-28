@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 require 'lago/api/resources/base'
+require 'lago/api/resources/payment_filters'
 
 module Lago
   module Api
     module Resources
       class Payment < Base
+        include PaymentFilters
+
         def api_resource
           'payments'
         end

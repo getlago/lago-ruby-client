@@ -119,3 +119,30 @@ The contribution documentation is available [here](https://github.com/getlago/la
 ## License
 
 Lago Ruby client is distributed under [MIT license](LICENSE).
+
+
+### Payment list filters
+
+```ruby
+filters = {
+  payment_status: %w[succeeded failed],
+  currency: 'EUR',
+  amount_from: 0,
+  amount_to: 9_223_372_036_854_775_807,
+  created_at_from: '2026-09-01',
+  created_at_to: '2026-09-07'
+}
+client.payments.get_all(filters)
+client.customer_payments('cust_1').get_all(filters)
+```
+
+Also accepts `payment_statuses` (status alias), `receipt_number`, `invoice_number`,
+`payment_provider_type`, `payment_type`, `payable_type`, `search_term`, and the existing
+`page`, `per_page`, `invoice_id` and `external_customer_id` options. Enum filters accept
+one string or an array. Arrays serialize as repeated bracketed keys, such as
+`payment_status[]=succeeded&payment_status[]=failed`; scalar strings keep their original
+query names. All filters combine with AND; array values combine with OR.
+
+Amount bounds are inclusive integer cents. Receipt and invoice numbers match exactly,
+ignoring case. Dates include the entire boundary days in the organization's timezone.
+Keep the same filters when requesting the page number in `meta.next_page`.
