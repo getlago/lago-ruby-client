@@ -348,6 +348,7 @@ RSpec.describe Lago::Api::Resources::Customer do
 
         expect(response['attributed_usage']['group_by']).to eq('team')
         expect(response['attributed_usage']['rows'].first['value']).to eq('eng')
+        expect(response['attributed_usage']['split_filters_count']).to be_nil
         expect(response['meta']['total_count']).to eq(1)
       end
     end
@@ -361,6 +362,7 @@ RSpec.describe Lago::Api::Resources::Customer do
             filters: { org: 'acme', model: %w[opus haiku] },
             charge_codes: %w[tokens storage],
             split_charge_code: 'tokens',
+            split_filters_offset: '10',
             from_datetime: '2026-10-01T00:00:00Z',
             to_datetime: '2026-10-15T00:00:00Z',
             search_term: 'eng',
@@ -379,6 +381,7 @@ RSpec.describe Lago::Api::Resources::Customer do
           filters: { org: 'acme', model: %w[opus haiku] },
           charge_codes: %w[tokens storage],
           split_charge_code: 'tokens',
+          split_filters_offset: 10,
           from_datetime: '2026-10-01T00:00:00Z',
           to_datetime: '2026-10-15T00:00:00Z',
           search_term: 'eng',
