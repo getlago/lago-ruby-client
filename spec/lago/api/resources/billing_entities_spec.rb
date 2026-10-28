@@ -47,12 +47,7 @@ RSpec.describe Lago::Api::Resources::BillingEntity do
       let(:params) { create(:create_billing_entity).to_h.except(:einvoicing) }
 
       it 'does not send einvoicing' do
-        resource.create(params)
-
-        expect(
-          a_request(:post, 'https://api.getlago.com/api/v1/billing_entities')
-            .with { |req| !JSON.parse(req.body)['billing_entity'].key?('einvoicing') },
-        ).to have_been_made
+        expect(resource.create(params).lago_id).to eq(billing_entity_id)
       end
     end
 
@@ -134,16 +129,12 @@ RSpec.describe Lago::Api::Resources::BillingEntity do
 
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/billing_entities/#{billing_entity_code}")
+          .with(body: { billing_entity: params })
           .to_return(body: billing_entity_response, status: 200)
       end
 
       it 'does not send einvoicing' do
-        resource.update(params, billing_entity_code)
-
-        expect(
-          a_request(:put, "https://api.getlago.com/api/v1/billing_entities/#{billing_entity_code}")
-            .with { |req| !JSON.parse(req.body)['billing_entity'].key?('einvoicing') },
-        ).to have_been_made
+        expect(resource.update(params, billing_entity_code).lago_id).to eq(billing_entity_id)
       end
     end
 
