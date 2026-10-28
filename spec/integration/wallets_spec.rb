@@ -89,6 +89,27 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
       wallet = create_wallet(customer)
       assert_wallet_attributes(wallet, name: "Test Wallet #{customer_unique_id(customer)}")
     end
+
+    it 'creates the initial wallet transactions with the given transaction_priority' do
+      wallet = client.wallets.create(
+        external_customer_id: customer.external_id,
+        name: "Test Wallet #{customer_unique_id(customer)}",
+        rate_amount: 1,
+        granted_credits: '10.0',
+        currency: customer.currency,
+        transaction_priority: 5,
+      )
+
+      transactions = []
+      wait_until do
+        transactions = client.wallet_transactions.get_all(wallet.lago_id).wallet_transactions
+        transactions.any?
+      end
+
+      inbound_transactions = transactions.select { |transaction| transaction.transaction_type == 'inbound' }
+      expect(inbound_transactions).not_to be_empty
+      expect(inbound_transactions.map(&:priority)).to all(eq(5))
+    end
   end
 
   describe '#update' do
