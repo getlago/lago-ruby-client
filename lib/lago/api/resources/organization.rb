@@ -17,7 +17,7 @@ module Lago
         def whitelist_params(params)
           result_hash = {
             webhook_url: params[:webhook_url],
-            webhook_urls: params[:webhook_urls],
+            slug: params[:slug],
             country: params[:country],
             default_currency: params[:default_currency],
             address_line1: params[:address_line1],
