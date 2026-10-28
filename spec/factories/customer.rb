@@ -68,5 +68,7 @@ FactoryBot.define do
     tax_codes { ['tax_code'] }
     invoice_custom_section_codes { ['ics_code'] }
     timezone { 'Europe/Paris' }
+    account_type { 'partner' }
+    external_salesforce_id { 'sf-123' }
   end
 end
