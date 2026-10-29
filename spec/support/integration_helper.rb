@@ -38,6 +38,15 @@ module IntegrationHelper
 
       WebMock.disable_net_connect!(allow: uri.host)
     end
+
+    # Examples tagged :premium use features the open-source Lago image does not
+    # provide (billing entities, revenue share), so they only run against an
+    # instance with a premium license.
+    config.before(:each, :premium) do
+      unless ENV['TEST_LAGO_PREMIUM'] == 'true'
+        skip 'needs a Lago instance with a premium license (set TEST_LAGO_PREMIUM=true)'
+      end
+    end
   end
 
   def client

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe 'Lago::Api::Client#billing_entities', :integration do
+RSpec.describe 'Lago::Api::Client#billing_entities', :integration, :premium do
   # The client cannot delete billing entities, so a single FR billing entity is
   # created on the first run and reused by the following ones.
   let(:billing_entity_code) { 'ruby-sdk-einvoicing' }

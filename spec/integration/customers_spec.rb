@@ -124,7 +124,7 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
       end
     end
 
-    it 'creates a customer with an account type and a Salesforce ID and keeps them on upsert' do
+    it 'creates a customer with an account type and a Salesforce ID and keeps them on upsert', :premium do
       customer = create_customer(params: { account_type: 'partner', external_salesforce_id: 'sf-123' })
 
       fetched_customer = client.customers.get(customer.external_id)
