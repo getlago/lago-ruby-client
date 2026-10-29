@@ -119,7 +119,9 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
     it 'updates a wallet' do
       wait_for_balance_update(wallet.lago_id) # avoid race condition
 
-      updated_wallet = client.wallets.update({ name: "Updated Wallet #{customer_unique_id(customer)}" }, wallet.lago_id)
+      updated_wallet = retry_on_conflict do
+        client.wallets.update({ name: "Updated Wallet #{customer_unique_id(customer)}" }, wallet.lago_id)
+      end
       assert_wallet_attributes_with_updated_balance(
         updated_wallet,
         name: "Updated Wallet #{customer_unique_id(customer)}",
@@ -176,7 +178,7 @@ RSpec.describe 'Lago::Api::Client#wallets', :integration do
     end
 
     it 'deletes a wallet' do
-      client.wallets.destroy(wallet.lago_id)
+      retry_on_conflict { client.wallets.destroy(wallet.lago_id) }
       destroyed_wallet = client.wallets.get(wallet.lago_id)
       expect(destroyed_wallet.terminated_at).to be_present
       expect(destroyed_wallet.status).to eq 'terminated'

@@ -220,4 +220,16 @@ module IntegrationHelper
       sleep 0.01 until yield
     end
   end
+
+  # After a top-up, the wallet refresh job writes the wallet a second time with no change visible
+  # through the API. A wallet write sent at that moment fails with a 409 (stale lock_version) and is
+  # rolled back, so it is safe to send it again.
+  def retry_on_conflict(attempts: 5)
+    yield
+  rescue Lago::Api::HttpError => e
+    raise unless e.error_code.to_i == 409 && (attempts -= 1).positive?
+
+    sleep 0.2
+    retry
+  end
 end
