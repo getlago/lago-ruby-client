@@ -32,12 +32,27 @@ RSpec.describe Lago::Api::Resources::Organization do
 
         expect(organization.webhook_url).to eq('https://test-example.example')
         expect(organization.webhook_urls).to eq(['https://test-example.example'])
+        expect(organization.slug).to eq('hooli')
         expect(organization.net_payment_term).to eq(0)
         expect(organization.document_numbering).to eq('per_customer')
         expect(organization.document_number_prefix).to eq('ORG-1234')
         expect(organization.tax_identification_number).to eq('EU123456789')
         expect(organization.billing_configuration.invoice_grace_period).to eq(3)
         expect(organization.events_store).to eq('clickhouse')
+      end
+    end
+
+    context 'when webhook_urls is passed' do
+      before do
+        stub_request(:put, 'https://api.getlago.com/api/v1/organizations')
+          .with(body: { organization: params })
+          .to_return(body: organization_response, status: 200)
+      end
+
+      it 'does not send webhook_urls' do
+        organization = resource.update(params.merge(webhook_urls: ['https://a.example']))
+
+        expect(organization.slug).to eq('hooli')
       end
     end
 

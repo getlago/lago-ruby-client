@@ -35,6 +35,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
       factory_wallet.to_h.merge(
         transaction_name: 'wallet transaction name',
         purchase_order_number: 'PO-123',
+        transaction_priority: 5,
         transaction_metadata: [{ 'key' => 'key', 'value' => 'value' }]
       )
     end
@@ -51,6 +52,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
           'expiration_at' => '2022-07-07T23:59:59Z',
           'transaction_name' => 'wallet transaction name',
           'purchase_order_number' => 'PO-123',
+          'transaction_priority' => 5,
           'transaction_metadata' => [{ 'key' => 'key', 'value' => 'value' }],
           'recurring_transaction_rules' => [
             {

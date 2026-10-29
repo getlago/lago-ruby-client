@@ -125,6 +125,56 @@ RSpec.describe Lago::Api::Resources::WalletTransaction do
       end
     end
 
+    context 'with priority and voided_transaction_id' do
+      let(:params) do
+        {
+          wallet_id: '123',
+          priority: 10,
+          voided_credits: '5',
+          voided_transaction_id: 'b7ab2926-1de8-4428-9bcd-779314ac1111',
+        }
+      end
+      let(:body) do
+        {
+          'wallet_transaction' => {
+            'wallet_id' => '123',
+            'priority' => 10,
+            'voided_credits' => '5',
+            'voided_transaction_id' => 'b7ab2926-1de8-4428-9bcd-779314ac1111',
+          },
+        }
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallet_transactions')
+          .with(body: body)
+          .to_return(body: response.to_json, status: 200)
+      end
+
+      it 'sends priority and voided_transaction_id' do
+        wallet_transactions = resource.create(params)
+
+        expect(wallet_transactions.first.lago_id).to eq('this-is-lago-id')
+      end
+    end
+
+    context 'when priority is nil' do
+      let(:params) { { wallet_id: '123', paid_credits: '100', priority: nil } }
+      let(:body) { { 'wallet_transaction' => { 'wallet_id' => '123', 'paid_credits' => '100' } } }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallet_transactions')
+          .with(body: body)
+          .to_return(body: response.to_json, status: 200)
+      end
+
+      it 'does not send priority' do
+        wallet_transactions = resource.create(params)
+
+        expect(wallet_transactions.first.lago_id).to eq('this-is-lago-id')
+      end
+    end
+
     context 'when invoice_custom_section is provided' do
       let(:params_with_ics) do
         {

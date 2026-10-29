@@ -32,6 +32,7 @@ RSpec.describe Lago::Api::Resources::BillingEntity do
 
     before do
       stub_request(:post, 'https://api.getlago.com/api/v1/billing_entities')
+        .with(body: { billing_entity: params })
         .to_return(body: billing_entity_response, status: 200)
     end
 
@@ -40,6 +41,14 @@ RSpec.describe Lago::Api::Resources::BillingEntity do
 
       expect(response.lago_id).to eq(billing_entity_id)
       expect(response.code).to eq(billing_entity_code)
+    end
+
+    context 'when einvoicing is not given' do
+      let(:params) { create(:create_billing_entity).to_h.except(:einvoicing) }
+
+      it 'does not send einvoicing' do
+        expect(resource.create(params).lago_id).to eq(billing_entity_id)
+      end
     end
 
     context 'when billing entity failed to create' do
@@ -87,6 +96,7 @@ RSpec.describe Lago::Api::Resources::BillingEntity do
     context 'when billing entity is successfully updated' do
       before do
         stub_request(:put, "https://api.getlago.com/api/v1/billing_entities/#{billing_entity_code}")
+          .with(body: { billing_entity: params })
           .to_return(body: billing_entity_response, status: 200)
       end
 
@@ -95,6 +105,36 @@ RSpec.describe Lago::Api::Resources::BillingEntity do
 
         expect(response.lago_id).to eq(billing_entity_id)
         expect(response.code).to eq(billing_entity_code)
+      end
+    end
+
+    context 'when einvoicing is false' do
+      let(:params) { create(:update_billing_entity, einvoicing: false).to_h }
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/billing_entities/#{billing_entity_code}")
+          .with(body: { billing_entity: params })
+          .to_return(body: billing_entity_response, status: 200)
+      end
+
+      it 'sends einvoicing false' do
+        response = resource.update(params, billing_entity_code)
+
+        expect(response.lago_id).to eq(billing_entity_id)
+      end
+    end
+
+    context 'when einvoicing is not given' do
+      let(:params) { create(:update_billing_entity).to_h.except(:einvoicing) }
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/billing_entities/#{billing_entity_code}")
+          .with(body: { billing_entity: params })
+          .to_return(body: billing_entity_response, status: 200)
+      end
+
+      it 'does not send einvoicing' do
+        expect(resource.update(params, billing_entity_code).lago_id).to eq(billing_entity_id)
       end
     end
 

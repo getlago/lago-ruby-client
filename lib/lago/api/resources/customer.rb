@@ -114,6 +114,9 @@ module Lago
             billing_entity_code: params[:billing_entity_code],
           }
 
+          result_hash[:account_type] = params[:account_type] if params.key?(:account_type)
+          result_hash[:external_salesforce_id] = params[:external_salesforce_id] if params.key?(:external_salesforce_id)
+
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
             result_hash[:billing_configuration] = config unless config.empty?
           end

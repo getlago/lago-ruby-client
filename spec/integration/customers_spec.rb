@@ -54,7 +54,7 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
         expect(c.customer_type).to eq 'company'
         expect(c.email).to match(/^yohan\+ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}@getlago\.com$/)
         expect(c.external_id).to match(/^ExternalID ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
-        expect(c.external_salesforce_id).to be_nil # TODO: fix this
+        expect(c.external_salesforce_id).to eq 'salesforce-id-123'
         expect(c.finalize_zero_amount_invoice).to eq 'inherit'
         expect(c.firstname).to match(/^Firstname ruby-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{3}$/)
         expect(c.integration_customers).to eq []
@@ -121,6 +121,29 @@ RSpec.describe 'Lago::Api::Client#customers', :integration do
         expect(c.address_line2).to eq 'Apt 3'
         expect(c.shipping_address.address_line1).to eq '134 Main St'
         expect(c.shipping_address.address_line2).to eq 'Apt 4'
+      end
+    end
+
+    it 'creates a customer with an account type and a Salesforce ID and keeps them on upsert', :premium do
+      customer = create_customer(params: { account_type: 'partner', external_salesforce_id: 'sf-123' })
+
+      fetched_customer = client.customers.get(customer.external_id)
+
+      [customer, fetched_customer].each do |c|
+        expect(c.account_type).to eq 'partner'
+        expect(c.external_salesforce_id).to eq 'sf-123'
+      end
+
+      updated_customer = client.customers.create(external_id: customer.external_id, name: 'Updated name')
+
+      expect(updated_customer.lago_id).to eq customer.lago_id
+
+      fetched_updated_customer = client.customers.get(customer.external_id)
+
+      [updated_customer, fetched_updated_customer].each do |c|
+        expect(c.name).to eq 'Updated name'
+        expect(c.account_type).to eq 'partner'
+        expect(c.external_salesforce_id).to eq 'sf-123'
       end
     end
   end

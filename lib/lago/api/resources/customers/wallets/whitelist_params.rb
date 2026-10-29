@@ -21,6 +21,7 @@ module Lago
                 :invoice_requires_successful_payment,
                 :ignore_paid_top_up_limits_on_creation,
                 :transaction_name,
+                :transaction_priority,
                 :paid_top_up_min_amount_cents,
                 :paid_top_up_max_amount_cents,
                 :billing_entity_code,

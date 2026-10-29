@@ -71,6 +71,8 @@ The repository includes two types of tests:
 
     To run these tests, you need to set the `INTEGRATION_TESTS_ENABLED` environment variable to `true` and provide the `TEST_LAGO_API_URL` and `TEST_LAGO_API_KEY` environment variables. These variables are set by default when using the Docker Compose file.
 
+    Examples tagged `:premium` use premium features and are skipped unless `TEST_LAGO_PREMIUM` is set to `true`, for an instance with a premium license.
+
 #### Running the tests
 
 ```bash

@@ -51,6 +51,45 @@ RSpec.describe Lago::Api::Resources::Customer do
       end
     end
 
+    context 'when account_type and external_salesforce_id are not given' do
+      let(:params) { create(:create_customer).to_h.except(:account_type, :external_salesforce_id) }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
+          .with(body: { customer: params })
+          .to_return(body: customer_response, status: 200)
+      end
+
+      it 'does not send them' do
+        customer = resource.create(params)
+
+        expect(customer.external_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+      end
+    end
+
+    context 'when account_type and external_salesforce_id are explicitly nil' do
+      let(:params) { create(:create_customer).to_h.merge(account_type: nil, external_salesforce_id: nil) }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
+          .with(body: { customer: params })
+          .to_return(body: customer_response, status: 200)
+      end
+
+      it 'sends them as null' do
+        customer = resource.create(params)
+
+        expect(customer.external_id).to eq('1a901a90-1a90-1a90-1a90-1a901a901a90')
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/customers').with do |req|
+            body = JSON.parse(req.body)['customer']
+            body.key?('account_type') && body['account_type'].nil? &&
+              body.key?('external_salesforce_id') && body['external_salesforce_id'].nil?
+          end,
+        ).to have_been_made
+      end
+    end
+
     context 'when customer is NOT successfully created' do
       let(:response) do
         {

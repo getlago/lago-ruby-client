@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :update_organization, class: OpenStruct do
     webhook_url { 'http://example.com/webhooks/' }
-    webhook_urls { ['http://example.com/webhooks/', 'http://example2.com/webhooks/'] }
+    slug { 'hooli' }
     country { 'country' }
     default_currency { 'USD' }
     address_line1 { 'line1' }

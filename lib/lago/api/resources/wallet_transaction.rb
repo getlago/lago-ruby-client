@@ -49,6 +49,8 @@ module Lago
             :paid_credits,
             :granted_credits,
             :voided_credits,
+            :voided_transaction_id,
+            :priority,
             :invoice_requires_successful_payment,
             :ignore_paid_top_up_limits,
             :purchase_order_number,
