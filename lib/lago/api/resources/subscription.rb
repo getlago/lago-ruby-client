@@ -217,6 +217,8 @@ module Lago
             purchase_order_number: params[:purchase_order_number],
           }.compact
 
+          result[:payment_term] = params[:payment_term] if params.key?(:payment_term)
+
           payment_method_params = whitelist_payment_method_params(params[:payment_method])
           result[:payment_method] = payment_method_params if payment_method_params
 

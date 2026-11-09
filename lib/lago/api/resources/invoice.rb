@@ -86,7 +86,14 @@ module Lago
         def preview(params)
           path = "/api/v1/invoices/preview"
           payload = params.slice(
-            :customer, :plan_code, :subscription_at, :billing_time, :coupons, :subscriptions, :billing_entity_code
+            :customer,
+            :plan_code,
+            :subscription_at,
+            :billing_time,
+            :coupons,
+            :subscriptions,
+            :billing_entity_code,
+            :payment_term,
           )
           response = connection.post(payload, path)[root_name]
 
@@ -128,6 +135,8 @@ module Lago
             billing_entity_code: params[:billing_entity_code],
             purchase_order_number: params[:purchase_order_number]
           }.compact
+
+          result[:payment_term] = params[:payment_term] if params.key?(:payment_term)
 
           fees = whitelist_fees(params[:fees])
           result[:fees] = fees unless fees.empty?

@@ -186,6 +186,42 @@ RSpec.describe Lago::Api::Resources::Invoice do
         expect(invoice.lago_id).to eq(invoice_id)
       end
     end
+
+    context 'when payment_term is provided' do
+      let(:params_with_payment_term) do
+        params.merge(payment_term: { term_type: 'net', days: 30 })
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices')
+          .with(body: { invoice: params_with_payment_term })
+          .to_return(body: invoice_response, status: 200)
+      end
+
+      it 'sends payment_term and returns invoice' do
+        invoice = resource.create(params_with_payment_term)
+
+        expect(invoice.lago_id).to eq(invoice_id)
+        expect(invoice.payment_term.term_type).to eq('due_on_receipt')
+      end
+    end
+
+    context 'when payment_term is not provided' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices')
+          .to_return(body: invoice_response, status: 200)
+      end
+
+      it 'does not send payment_term' do
+        resource.create(params)
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/invoices').with do |req|
+            !JSON.parse(req.body)['invoice'].key?('payment_term')
+          end,
+        ).to have_been_made
+      end
+    end
   end
 
   describe '#update' do
@@ -575,6 +611,47 @@ RSpec.describe Lago::Api::Resources::Invoice do
 
       it 'raises an error' do
         expect { subject }.to raise_error(Lago::Api::HttpError)
+      end
+    end
+
+    context 'when payment_term is provided' do
+      let(:invoice_response) { load_fixture('invoice_preview') }
+      let(:params) do
+        {
+          customer: { external_id: '_ID_' },
+          plan_code: 'plan_code',
+          payment_term: { term_type: 'net', days: 30 }
+        }
+      end
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices/preview')
+          .with(body: params)
+          .to_return(body: invoice_response, status: 200)
+      end
+
+      it 'forwards payment_term to the preview endpoint' do
+        expect(subject).to have_attributes(lago_id: nil)
+        expect(subject.payment_term.term_type).to eq('due_on_receipt')
+      end
+    end
+
+    context 'when payment_term is not provided' do
+      let(:invoice_response) { load_fixture('invoice_preview') }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/invoices/preview')
+          .to_return(body: invoice_response, status: 200)
+      end
+
+      it 'does not send payment_term' do
+        subject
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/invoices/preview').with do |req|
+            !JSON.parse(req.body).key?('payment_term')
+          end,
+        ).to have_been_made
       end
     end
 

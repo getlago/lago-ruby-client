@@ -245,6 +245,42 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.billing_entity_code).to eq(factory_subscription.billing_entity_code)
       end
     end
+
+    context 'when payment_term is provided' do
+      let(:params_with_payment_term) { params.merge(payment_term: { term_type: 'net', days: 15 }) }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
+          .with(body: { 'subscription' => params_with_payment_term })
+          .to_return(body: response, status: 200)
+      end
+
+      it 'sends payment_term' do
+        resource.create(params_with_payment_term)
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
+            .with(body: { 'subscription' => params_with_payment_term }),
+        ).to have_been_made
+      end
+    end
+
+    context 'when payment_term is not given' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/subscriptions')
+          .to_return(body: response, status: 200)
+      end
+
+      it 'does not send payment_term' do
+        resource.create(params)
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/subscriptions').with do |req|
+            !JSON.parse(req.body)['subscription'].key?('payment_term')
+          end,
+        ).to have_been_made
+      end
+    end
   end
 
   describe '#delete' do
@@ -313,6 +349,42 @@ RSpec.describe Lago::Api::Resources::Subscription do
         expect(subscription.status).to eq(factory_subscription.status)
         expect(subscription.external_id).to eq(factory_subscription.external_id)
         expect(subscription.consolidate_invoice).to eq(factory_subscription.consolidate_invoice)
+      end
+    end
+
+    context 'when payment_term is not given' do
+      before do
+        stub_request(:put, 'https://api.getlago.com/api/v1/subscriptions/123')
+          .to_return(body: response, status: 200)
+      end
+
+      it 'does not send payment_term' do
+        resource.update(params, '123')
+
+        expect(
+          a_request(:put, 'https://api.getlago.com/api/v1/subscriptions/123').with do |req|
+            !JSON.parse(req.body)['subscription'].key?('payment_term')
+          end,
+        ).to have_been_made
+      end
+    end
+
+    context 'when payment_term is provided' do
+      let(:params_with_payment_term) { params.merge(payment_term: { term_type: 'net', days: 15 }) }
+
+      before do
+        stub_request(:put, 'https://api.getlago.com/api/v1/subscriptions/123')
+          .with(body: { 'subscription' => params_with_payment_term })
+          .to_return(body: response, status: 200)
+      end
+
+      it 'sends payment_term' do
+        resource.update(params_with_payment_term, '123')
+
+        expect(
+          a_request(:put, 'https://api.getlago.com/api/v1/subscriptions/123')
+            .with(body: { 'subscription' => params_with_payment_term }),
+        ).to have_been_made
       end
     end
 
