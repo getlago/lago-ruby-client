@@ -49,7 +49,6 @@ require 'lago/api/resources/wallet'
 require 'lago/api/resources/wallet_transaction'
 require 'lago/api/resources/webhook'
 require 'lago/api/resources/webhook_endpoint'
-require 'lago/api/resources/v2/webhook_endpoint'
 
 module Lago
   module Api
@@ -248,10 +247,6 @@ module Lago
 
       def webhook_endpoints
         Resources::WebhookEndpoint.new(self)
-      end
-
-      def v2_webhook_endpoints
-        Resources::V2::WebhookEndpoint.new(self)
       end
 
       def webhooks

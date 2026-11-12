@@ -66,10 +66,4 @@ RSpec.describe Lago::Api::Client do
       expect(client.on_rate_limit_info).to be_nil
     end
   end
-
-  describe '#v2_webhook_endpoints' do
-    it 'returns the v2 webhook endpoints resource' do
-      expect(client.v2_webhook_endpoints).to be_a(Lago::Api::Resources::V2::WebhookEndpoint)
-    end
-  end
 end
