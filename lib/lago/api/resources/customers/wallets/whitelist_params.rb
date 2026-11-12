@@ -28,6 +28,8 @@ module Lago
                 :purchase_order_number,
               )
 
+              result_hash[:payment_term] = params[:payment_term] if params.key?(:payment_term)
+
               recurring_rules = recurring_rules_params(params[:recurring_transaction_rules])
               result_hash[:recurring_transaction_rules] = recurring_rules if recurring_rules.any?
 

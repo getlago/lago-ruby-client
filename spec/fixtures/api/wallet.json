@@ -7,6 +7,7 @@
     "currency": "EUR",
     "name": "name",
     "code": "wallet_code",
+    "payment_term": { "term_type": "day_of_month", "day_of_month": 15, "month_offset": 1 },
     "priority": "30",
     "rate_amount": "1.5",
     "credits_balance": "10",
