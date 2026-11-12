@@ -6,5 +6,9 @@ FactoryBot.define do
     signature_algo { 'hmac' }
     name { 'My Webhook Endpoint' }
     event_types { ['customer.created'] }
+
+    trait :standard_webhooks do
+      signature_algo { 'standard_webhooks' }
+    end
   end
 end
