@@ -42,6 +42,20 @@ puts applied_coupons
 
 For detailed usage, refer to the [lago API reference](https://getlago.com/docs/api-reference/intro).
 
+### Verify a Standard Webhooks delivery
+
+For a webhook endpoint created with `signature_algo: 'standard_webhooks'`, check each delivery with the endpoint's signing secret (`whsec_...`). Pass the raw request body, not JSON parsed and serialized again, or the signature will not match. Header names are matched in any case.
+
+```ruby
+# In a Rails controller
+headers = %w[webhook-id webhook-timestamp webhook-signature].to_h { |name| [name, request.headers[name]] }
+
+client.webhooks.valid_standard_webhooks_signature?(request.raw_post, headers, ENV['LAGO_WEBHOOK_SECRET'])
+# => true or false
+```
+
+The check makes no network call. It returns `false` when the signature does not match, a header is missing, or the timestamp is more than 5 minutes away from the current time.
+
 ## Development
 
 ### Docker Compose

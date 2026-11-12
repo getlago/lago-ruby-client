@@ -40,6 +40,30 @@ module Lago
         rescue JWT::InvalidIssuerError, JWT::VerificationError
           false
         end
+
+        def valid_standard_webhooks_signature?(raw_body, headers, secret)
+          normalized_headers = headers.to_h.transform_keys { |key| key.to_s.downcase }
+          # The gem stops at the first entry without a comma, so keep only well-formed entries.
+          signature = normalized_headers['webhook-signature']
+          if signature
+            normalized_headers['webhook-signature'] = signature.to_s.split(' ').select { |s| s.include?(',') }.join(' ')
+          end
+          StandardWebhooks::Webhook.new(secret).verify(raw_body, normalized_headers)
+
+          # verify returns the parsed body, which is falsy for a signed `null` body.
+          true
+        # The gem raises NoMethodError for a nil secret or a `v1` signature without a comma,
+        # ArgumentError for a signature of another byte size, TypeError for a nil body,
+        # JSON::ParserError for a signed non-JSON body and EncodingError for a non-ASCII
+        # webhook-id with a binary body.
+        rescue StandardWebhooks::StandardWebhooksError,
+               NoMethodError,
+               ArgumentError,
+               TypeError,
+               EncodingError,
+               JSON::ParserError
+          false
+        end
       end
     end
   end

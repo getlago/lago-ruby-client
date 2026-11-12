@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency('jwt')
   spec.add_dependency('openssl')
   spec.add_dependency('ostruct')
+  spec.add_dependency('standardwebhooks', '~> 1.0', '>= 1.0.1')
 
   spec.add_development_dependency('benchmark')
   spec.add_development_dependency('bigdecimal')
