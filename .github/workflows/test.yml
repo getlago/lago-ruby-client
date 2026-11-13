@@ -36,7 +36,7 @@ jobs:
       TEST_LAGO_API_KEY: 123456
     steps:
       - uses: actions/checkout@v3
-      - name: Ensure API key exists
+      - name: Configure test organization and API key
         run: |
           docker exec -i ${{ job.services.lago.id }} psql -h /tmp -U postgres -d lago <<'SQL'
             INSERT INTO api_keys (id, organization_id, value, permissions, created_at, updated_at)
@@ -46,6 +46,10 @@ jobs:
             LIMIT 1;
             UPDATE api_keys SET value = '123456'
             WHERE id = (SELECT id FROM api_keys ORDER BY created_at LIMIT 1);
+            UPDATE organizations
+            SET feature_flags = array_append(feature_flags, 'product_catalog')
+            WHERE id = (SELECT organization_id FROM api_keys WHERE value = '123456')
+              AND NOT ('product_catalog' = ANY(feature_flags));
           SQL
       - name: Set up Ruby 4.0
         uses: ruby/setup-ruby@v1

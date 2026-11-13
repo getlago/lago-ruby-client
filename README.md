@@ -42,6 +42,22 @@ puts applied_coupons
 
 For detailed usage, refer to the [lago API reference](https://getlago.com/docs/api-reference/intro).
 
+### API v2 (beta)
+
+Use `Lago::Api::V2::Client` for the endpoints documented in the v2 OpenAPI specification.
+`Lago::Api::Client` continues to use API v1.
+
+```ruby
+client = Lago::Api::V2::Client.new(api_key: 'xyz')
+
+page = client.customers.get_all(limit: 20)
+customer = client.customers.get('customer-123', expands: ['taxes'])
+client.customers.patch({ name: 'Acme', description: nil }, 'customer-123')
+```
+
+API v2 is in beta and requires a Lago instance with the product catalog enabled.
+See the [API v2 guide](docs/api-v2.md) for configuration, pagination, errors, and the supported resources.
+
 ## Development
 
 ### Docker Compose
