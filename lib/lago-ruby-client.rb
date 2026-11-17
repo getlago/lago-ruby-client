@@ -6,7 +6,6 @@ require 'json'
 require 'openssl'
 require 'ostruct'
 require 'jwt'
-require 'standardwebhooks'
 
 require 'lago/version'
 require 'lago/api/client'
