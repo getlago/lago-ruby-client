@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'cgi'
 require 'lago/api/resources/base'
 
 module Lago
@@ -16,7 +17,7 @@ module Lago
 
         def lifetime_usage(external_subscription_id)
           uri = URI(
-            "#{client.base_api_url}#{api_resource}/#{external_subscription_id}/lifetime_usage",
+            "#{subscription_url(external_subscription_id)}/lifetime_usage",
           )
           response = connection.get(uri, identifier: nil)
           JSON.parse(response.to_json, object_class: OpenStruct).lifetime_usage
@@ -24,7 +25,7 @@ module Lago
 
         def update_lifetime_usage(external_subscription_id, params)
           uri = URI(
-            "#{client.base_api_url}#{api_resource}/#{external_subscription_id}/lifetime_usage",
+            "#{subscription_url(external_subscription_id)}/lifetime_usage",
           )
 
           response = connection.put(
@@ -65,7 +66,7 @@ module Lago
             entitlements_uri(
               external_subscription_id,
               entitlement_code,
-              "privileges/#{privilege_code}",
+              ['privileges', privilege_code],
               subscription_status:,
             ),
             identifier: nil,
@@ -302,6 +303,18 @@ module Lago
           invoice_custom_section_param&.slice(:skip_invoice_custom_sections, :invoice_custom_section_codes)
         end
 
+        def escape_segment(segment)
+          CGI.escapeURIComponent(segment.to_s)
+        end
+
+        def subscription_url(external_subscription_id)
+          "#{client.base_api_url}#{api_resource}/#{escape_segment(external_subscription_id)}"
+        end
+
+        def action_path(action)
+          Array(action).map { |segment| escape_segment(segment) }.join('/')
+        end
+
         def append_status_query(url, subscription_status)
           return url if subscription_status.nil?
 
@@ -310,32 +323,32 @@ module Lago
         end
 
         def entitlements_uri(external_subscription_id, feature_code = nil, action = nil, subscription_status: nil)
-          url = "#{client.base_api_url}#{api_resource}/#{external_subscription_id}/entitlements"
-          url += "/#{feature_code}" if feature_code
-          url += "/#{action}" if action
+          url = "#{subscription_url(external_subscription_id)}/entitlements"
+          url += "/#{escape_segment(feature_code)}" if feature_code
+          url += "/#{action_path(action)}" if action
           URI(append_status_query(url, subscription_status))
         end
 
         def alert_uri(external_subscription_id, code = nil, subscription_status: nil)
-          url = "#{client.base_api_url}#{api_resource}/#{external_subscription_id}/alerts#{code ? "/#{code}" : ''}"
+          url = "#{subscription_url(external_subscription_id)}/alerts#{code ? "/#{escape_segment(code)}" : ''}"
           URI(append_status_query(url, subscription_status))
         end
 
         def charges_uri(external_id, charge_code = nil, subscription_status: nil)
-          url = "#{client.base_api_url}#{api_resource}/#{external_id}/charges"
-          url += "/#{charge_code}" if charge_code
+          url = "#{subscription_url(external_id)}/charges"
+          url += "/#{escape_segment(charge_code)}" if charge_code
           URI(append_status_query(url, subscription_status))
         end
 
         def fixed_charges_uri(external_id, fixed_charge_code = nil, subscription_status: nil)
-          url = "#{client.base_api_url}#{api_resource}/#{external_id}/fixed_charges"
-          url += "/#{fixed_charge_code}" if fixed_charge_code
+          url = "#{subscription_url(external_id)}/fixed_charges"
+          url += "/#{escape_segment(fixed_charge_code)}" if fixed_charge_code
           URI(append_status_query(url, subscription_status))
         end
 
         def charge_filters_uri(external_id, charge_code, filter_id = nil, subscription_status: nil)
-          url = "#{client.base_api_url}#{api_resource}/#{external_id}/charges/#{charge_code}/filters"
-          url += "/#{filter_id}" if filter_id
+          url = "#{subscription_url(external_id)}/charges/#{escape_segment(charge_code)}/filters"
+          url += "/#{escape_segment(filter_id)}" if filter_id
           URI(append_status_query(url, subscription_status))
         end
 
