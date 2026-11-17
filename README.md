@@ -42,10 +42,6 @@ puts applied_coupons
 
 For detailed usage, refer to the [lago API reference](https://getlago.com/docs/api-reference/intro).
 
-### Standard Webhooks
-
-Webhook endpoints created with `signature_algo: 'standard_webhooks'` sign their messages with [Standard Webhooks](https://www.standardwebhooks.com). These messages are verified with the official Standard Webhooks library for Ruby and the endpoint's signing key from `signing_keys`.
-
 ## Development
 
 ### Docker Compose
