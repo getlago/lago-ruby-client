@@ -26,6 +26,50 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
       'message' => 'Validation error on the record',
     }.to_json
   end
+  let(:standard_webhook_endpoint) { build(:webhook_endpoint, :standard_webhooks) }
+  let(:signing_key) do
+    {
+      'lago_id' => 'sk-1',
+      'secret_key' => 'whsec_ZmFrZS1zZWNyZXQtZm9yLXNwZWNzLW9ubHk=',
+      'created_at' => '2026-01-01T00:00:00Z',
+    }
+  end
+  let(:standard_webhooks_response) do
+    {
+      'webhook_endpoint' => {
+        'lago_id' => 'this-is-lago-id',
+        'webhook_url' => 'https://foo.bar',
+        'signature_algo' => 'standard_webhooks',
+        'name' => 'My Webhook Endpoint',
+        'event_types' => ['customer.created'],
+        'created_at' => '2022-04-29T08:59:51Z',
+        'signing_keys' => [signing_key],
+      }
+    }.to_json
+  end
+  let(:empty_signing_keys_response) do
+    {
+      'webhook_endpoint' => {
+        'lago_id' => 'this-is-lago-id',
+        'webhook_url' => 'https://foo.bar',
+        'signature_algo' => 'hmac',
+        'name' => 'My Webhook Endpoint',
+        'event_types' => ['customer.created'],
+        'created_at' => '2022-04-29T08:59:51Z',
+        'signing_keys' => [],
+      }
+    }.to_json
+  end
+
+  shared_examples 'a standard webhooks endpoint' do
+    it 'exposes the signature algo and the signing keys' do
+      expect(webhook_endpoint.signature_algo).to eq('standard_webhooks')
+      expect(webhook_endpoint.signing_keys.size).to eq(1)
+      expect(webhook_endpoint.signing_keys.first.lago_id).to eq('sk-1')
+      expect(webhook_endpoint.signing_keys.first.secret_key).to eq('whsec_ZmFrZS1zZWNyZXQtZm9yLXNwZWNzLW9ubHk=')
+      expect(webhook_endpoint.signing_keys.first.created_at).to eq('2026-01-01T00:00:00Z')
+    end
+  end
 
   describe '#create' do
     let(:params) { factory_webhook_endpoint.to_h }
@@ -62,6 +106,45 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
 
       it 'raises an error' do
         expect { resource.create(params) }.to raise_error Lago::Api::HttpError
+      end
+    end
+
+    context 'when the endpoint uses standard webhooks' do
+      subject(:webhook_endpoint) { resource.create(standard_webhook_endpoint.to_h) }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/webhook_endpoints')
+          .with(body: { 'webhook_endpoint' => standard_webhook_endpoint.to_h })
+          .to_return(body: standard_webhooks_response, status: 200)
+      end
+
+      it_behaves_like 'a standard webhooks endpoint'
+    end
+
+    context 'when the response has an empty signing_keys list' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/webhook_endpoints')
+          .with(body: body)
+          .to_return(body: empty_signing_keys_response, status: 200)
+      end
+
+      it 'returns an empty list of signing keys' do
+        expect(resource.create(params).signing_keys).to eq([])
+      end
+    end
+
+    context 'when the response has no signing_keys' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/webhook_endpoints')
+          .with(body: body)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'parses the endpoint without signing keys' do
+        webhook_endpoint = resource.create(params)
+
+        expect(webhook_endpoint.lago_id).to eq('this-is-lago-id')
+        expect(webhook_endpoint.signing_keys).to be_nil
       end
     end
   end
@@ -118,6 +201,18 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
         expect { resource.update(params, id) }.to raise_error Lago::Api::HttpError
       end
     end
+
+    context 'when the endpoint is updated to standard webhooks' do
+      subject(:webhook_endpoint) { resource.update(standard_webhook_endpoint.to_h, id) }
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/webhook_endpoints/#{id}")
+          .with(body: { 'webhook_endpoint' => standard_webhook_endpoint.to_h })
+          .to_return(body: standard_webhooks_response, status: 200)
+      end
+
+      it_behaves_like 'a standard webhooks endpoint'
+    end
   end
 
   describe '#get' do
@@ -148,6 +243,28 @@ RSpec.describe Lago::Api::Resources::WebhookEndpoint do
 
       it 'raises an error' do
         expect { resource.get(id) }.to raise_error Lago::Api::HttpError
+      end
+    end
+
+    context 'when the endpoint uses standard webhooks' do
+      subject(:webhook_endpoint) { resource.get(id) }
+
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/webhook_endpoints/#{id}")
+          .to_return(body: standard_webhooks_response, status: 200)
+      end
+
+      it_behaves_like 'a standard webhooks endpoint'
+    end
+
+    context 'when the response has an empty signing_keys list' do
+      before do
+        stub_request(:get, "https://api.getlago.com/api/v1/webhook_endpoints/#{id}")
+          .to_return(body: empty_signing_keys_response, status: 200)
+      end
+
+      it 'returns an empty list of signing keys' do
+        expect(resource.get(id).signing_keys).to eq([])
       end
     end
   end
