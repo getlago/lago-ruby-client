@@ -41,6 +41,7 @@ RSpec.describe Lago::Api::Resources::BillingEntity do
 
       expect(response.lago_id).to eq(billing_entity_id)
       expect(response.code).to eq(billing_entity_code)
+      expect(response.payment_term.term_type).to eq('due_on_receipt')
     end
 
     context 'when einvoicing is not given' do
@@ -48,6 +49,37 @@ RSpec.describe Lago::Api::Resources::BillingEntity do
 
       it 'does not send einvoicing' do
         expect(resource.create(params).lago_id).to eq(billing_entity_id)
+      end
+    end
+
+    context 'when payment_term is given' do
+      let(:params) { create(:create_billing_entity).to_h.merge(payment_term: { term_type: 'net', days: 15 }) }
+
+      it 'sends payment_term' do
+        expect(resource.create(params).lago_id).to eq(billing_entity_id)
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/billing_entities')
+            .with(body: { billing_entity: params }),
+        ).to have_been_made
+      end
+    end
+
+    context 'when payment_term is not given' do
+      let(:params) { create(:create_billing_entity).to_h.except(:payment_term) }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/billing_entities')
+          .to_return(body: billing_entity_response, status: 200)
+      end
+
+      it 'does not send payment_term' do
+        resource.create(params)
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/billing_entities').with do |req|
+            !JSON.parse(req.body)['billing_entity'].key?('payment_term')
+          end,
+        ).to have_been_made
       end
     end
 
@@ -135,6 +167,41 @@ RSpec.describe Lago::Api::Resources::BillingEntity do
 
       it 'does not send einvoicing' do
         expect(resource.update(params, billing_entity_code).lago_id).to eq(billing_entity_id)
+      end
+    end
+
+    context 'when payment_term is given' do
+      let(:params) do
+        create(:update_billing_entity).to_h.merge(payment_term: { term_type: 'end_of_month' })
+      end
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/billing_entities/#{billing_entity_code}")
+          .with(body: { billing_entity: params })
+          .to_return(body: billing_entity_response, status: 200)
+      end
+
+      it 'sends payment_term' do
+        expect(resource.update(params, billing_entity_code).lago_id).to eq(billing_entity_id)
+      end
+    end
+
+    context 'when payment_term is not given' do
+      let(:params) { create(:update_billing_entity).to_h.except(:payment_term) }
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/billing_entities/#{billing_entity_code}")
+          .to_return(body: billing_entity_response, status: 200)
+      end
+
+      it 'does not send payment_term' do
+        resource.update(params, billing_entity_code)
+
+        expect(
+          a_request(:put, "https://api.getlago.com/api/v1/billing_entities/#{billing_entity_code}").with do |req|
+            !JSON.parse(req.body)['billing_entity'].key?('payment_term')
+          end,
+        ).to have_been_made
       end
     end
 

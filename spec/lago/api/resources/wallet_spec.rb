@@ -97,6 +97,42 @@ RSpec.describe Lago::Api::Resources::Wallet do
       end
     end
 
+    context 'when payment_term is provided' do
+      let(:payment_term) { { 'term_type' => 'net', 'days' => 15 } }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
+          .to_return(body: response, status: 200)
+      end
+
+      it 'sends payment_term' do
+        resource.create(params.merge(payment_term:))
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/wallets').with do |req|
+            JSON.parse(req.body)['wallet']['payment_term'] == payment_term
+          end,
+        ).to have_been_made
+      end
+    end
+
+    context 'when payment_term is not provided' do
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
+          .to_return(body: response, status: 200)
+      end
+
+      it 'does not send payment_term' do
+        resource.create(params)
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/wallets').with do |req|
+            !JSON.parse(req.body)['wallet'].key?('payment_term')
+          end,
+        ).to have_been_made
+      end
+    end
+
     context 'when wallet failed to create' do
       before do
         stub_request(:post, 'https://api.getlago.com/api/v1/wallets')
@@ -420,6 +456,42 @@ RSpec.describe Lago::Api::Resources::Wallet do
 
         expect(wallet.lago_id).to eq('this-is-lago-id')
         expect(wallet.name).to eq(factory_wallet.name)
+      end
+    end
+
+    context 'when payment_term is provided' do
+      let(:payment_term) { { 'term_type' => 'day_of_month', 'day_of_month' => 15, 'month_offset' => 1 } }
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/wallets/#{id}")
+          .to_return(body: response, status: 200)
+      end
+
+      it 'sends payment_term' do
+        resource.update(params.merge(payment_term:), id)
+
+        expect(
+          a_request(:put, "https://api.getlago.com/api/v1/wallets/#{id}").with do |req|
+            JSON.parse(req.body)['wallet']['payment_term'] == payment_term
+          end,
+        ).to have_been_made
+      end
+    end
+
+    context 'when payment_term is not provided' do
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/wallets/#{id}")
+          .to_return(body: response, status: 200)
+      end
+
+      it 'does not send payment_term' do
+        resource.update(params, id)
+
+        expect(
+          a_request(:put, "https://api.getlago.com/api/v1/wallets/#{id}").with do |req|
+            !JSON.parse(req.body)['wallet'].key?('payment_term')
+          end,
+        ).to have_been_made
       end
     end
 

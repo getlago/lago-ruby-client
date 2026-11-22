@@ -35,6 +35,7 @@ RSpec.describe Lago::Api::Resources::Customer do
         expect(customer.name).to eq('Gavin Belson')
         expect(customer.currency).to eq('EUR')
         expect(customer.net_payment_term).to eq(nil)
+        expect(customer.payment_term).to eq(nil)
         expect(customer.tax_identification_number).to eq('EU123456789')
         expect(customer.billing_configuration.invoice_grace_period).to eq(3)
         expect(customer.billing_configuration.subscription_invoice_issuing_date_anchor).to eq("current_period_end")
@@ -85,6 +86,87 @@ RSpec.describe Lago::Api::Resources::Customer do
             body = JSON.parse(req.body)['customer']
             body.key?('account_type') && body['account_type'].nil? &&
               body.key?('external_salesforce_id') && body['external_salesforce_id'].nil?
+          end,
+        ).to have_been_made
+      end
+    end
+
+    context 'when only net_payment_term is given' do
+      let(:params) { { external_id: customer_external_id, net_payment_term: 30 } }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
+          .to_return(body: customer_response, status: 200)
+      end
+
+      it 'does not send payment_term' do
+        resource.create(params)
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/customers').with do |req|
+            body = JSON.parse(req.body)['customer']
+            body['net_payment_term'] == 30 && !body.key?('payment_term')
+          end,
+        ).to have_been_made
+      end
+    end
+
+    context 'when net_payment_term and payment_term are not given' do
+      let(:params) { { external_id: customer_external_id, name: 'Gavin Belson' } }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
+          .to_return(body: customer_response, status: 200)
+      end
+
+      it 'sends neither' do
+        resource.create(params)
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/customers').with do |req|
+            body = JSON.parse(req.body)['customer']
+            !body.key?('net_payment_term') && !body.key?('payment_term')
+          end,
+        ).to have_been_made
+      end
+    end
+
+    context 'when net_payment_term is explicitly nil' do
+      let(:params) { { external_id: customer_external_id, net_payment_term: nil } }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
+          .to_return(body: customer_response, status: 200)
+      end
+
+      it 'sends it as null' do
+        resource.create(params)
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/customers').with do |req|
+            body = JSON.parse(req.body)['customer']
+            body.key?('net_payment_term') && body['net_payment_term'].nil?
+          end,
+        ).to have_been_made
+      end
+    end
+
+    context 'when payment_term is given' do
+      let(:payment_term) { { term_type: 'day_of_month', day_of_month: 15, month_offset: 1 } }
+      let(:params) { { external_id: customer_external_id, payment_term: } }
+
+      before do
+        stub_request(:post, 'https://api.getlago.com/api/v1/customers')
+          .to_return(body: customer_response, status: 200)
+      end
+
+      it 'sends payment_term and not net_payment_term' do
+        resource.create(params)
+
+        expect(
+          a_request(:post, 'https://api.getlago.com/api/v1/customers').with do |req|
+            body = JSON.parse(req.body)['customer']
+            body['payment_term'] == payment_term.transform_keys(&:to_s) && !body.key?('net_payment_term')
           end,
         ).to have_been_made
       end

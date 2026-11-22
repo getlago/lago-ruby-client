@@ -59,6 +59,8 @@ module Lago
             :einvoicing
           ).compact
 
+          result_params[:payment_term] = params[:payment_term] if params.key?(:payment_term)
+
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|
             result_params[:billing_configuration] = config unless config.empty?
           end

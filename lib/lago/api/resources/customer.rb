@@ -94,7 +94,6 @@ module Lago
             email: params[:email],
             legal_name: params[:legal_name],
             legal_number: params[:legal_number],
-            net_payment_term: params[:net_payment_term],
             tax_identification_number: params[:tax_identification_number],
             logo_url: params[:logo_url],
             name: params[:name],
@@ -115,6 +114,8 @@ module Lago
           }
 
           result_hash[:account_type] = params[:account_type] if params.key?(:account_type)
+          result_hash[:net_payment_term] = params[:net_payment_term] if params.key?(:net_payment_term)
+          result_hash[:payment_term] = params[:payment_term] if params.key?(:payment_term)
           result_hash[:external_salesforce_id] = params[:external_salesforce_id] if params.key?(:external_salesforce_id)
 
           whitelist_billing_configuration(params[:billing_configuration]).tap do |config|

@@ -11,6 +11,7 @@
     "started_at": "2022-04-29T08:59:51Z",
     "ending_at": "2022-08-29T08:59:51Z",
     "status": "active",
+    "payment_term": { "term_type": "net", "days": 15 },
     "billing_time": "anniversary",
     "terminated_at": null,
     "on_termination_credit_note": "skip",

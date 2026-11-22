@@ -16,6 +16,7 @@
     "legal_name": null,
     "legal_number": null,
     "net_payment_term": 0,
+    "payment_term": { "term_type": "due_on_receipt" },
     "tax_identification_number": "EU123456789",
     "timezone": "America/New_York",
     "document_numbering": "per_customer",
