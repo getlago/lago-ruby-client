@@ -1527,4 +1527,69 @@ RSpec.describe Lago::Api::Resources::Subscription do
       end
     end
   end
+
+  describe 'identifiers with reserved URI characters' do
+    let(:external_id) { 'sub#A/b c' }
+    let(:escaped_id) { 'sub%23A%2Fb%20c' }
+    let(:base_url) { "https://api.getlago.com/api/v1/subscriptions/#{escaped_id}" }
+    let(:ok_body) { '{}' }
+
+    it 'escapes the subscription id in #lifetime_usage' do
+      stub = stub_request(:get, "#{base_url}/lifetime_usage").to_return(body: '{"lifetime_usage":{}}', status: 200)
+
+      resource.lifetime_usage(external_id)
+
+      expect(stub).to have_been_requested
+    end
+
+    it 'escapes the subscription id in #update_lifetime_usage' do
+      stub = stub_request(:put, "#{base_url}/lifetime_usage").to_return(body: '{"lifetime_usage":{}}', status: 200)
+
+      resource.update_lifetime_usage(external_id, external_historical_usage_amount_cents: 1)
+
+      expect(stub).to have_been_requested
+    end
+
+    it 'escapes the ids in entitlement endpoints' do
+      stub = stub_request(:delete, "#{base_url}/entitlements/f%2F1/privileges/p%231").to_return(
+        body: ok_body,
+        status: 200,
+      )
+
+      resource.delete_entitlement_privilege(external_id, 'f/1', 'p#1')
+
+      expect(stub).to have_been_requested
+    end
+
+    it 'escapes the ids in alert endpoints' do
+      stub = stub_request(:get, "#{base_url}/alerts/a%23b?subscription_status=active")
+        .to_return(body: '{"alert":{}}', status: 200)
+
+      resource.get_alert(external_id, 'a#b', subscription_status: 'active')
+
+      expect(stub).to have_been_requested
+    end
+
+    it 'escapes the ids in charge and fixed charge endpoints' do
+      charge = stub_request(:get, "#{base_url}/charges/c%231").to_return(body: '{"charge":{}}', status: 200)
+      fixed = stub_request(:get, "#{base_url}/fixed_charges/f%231").to_return(body: '{"fixed_charge":{}}', status: 200)
+
+      resource.get_charge(external_id, 'c#1')
+      resource.get_fixed_charge(external_id, 'f#1')
+
+      expect(charge).to have_been_requested
+      expect(fixed).to have_been_requested
+    end
+
+    it 'escapes the ids in charge filter endpoints' do
+      stub = stub_request(:get, "#{base_url}/charges/c%231/filters/fl%2F1").to_return(
+        body: '{"filter":{}}',
+        status: 200,
+      )
+
+      resource.get_charge_filter(external_id, 'c#1', 'fl/1')
+
+      expect(stub).to have_been_requested
+    end
+  end
 end
