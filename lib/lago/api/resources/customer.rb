@@ -64,6 +64,33 @@ module Lago
           )
         end
 
+        def attributed_usage(external_customer_id, external_subscription_id, options = {})
+          query_params = [['external_subscription_id', external_subscription_id]]
+          options.each do |key, value|
+            next if value.nil?
+
+            case key.to_sym
+            when :filters
+              value.each do |filter_key, filter_value|
+                if filter_value.is_a?(Array)
+                  query_params.concat(array_query_param("filters[#{filter_key}][]", filter_value))
+                else
+                  query_params << ["filters[#{filter_key}]", filter_value]
+                end
+              end
+            when :charge_codes
+              query_params.concat(array_query_param('charge_codes[]', Array(value)))
+            else
+              query_params << [key.to_s, value]
+            end
+          end
+
+          uri = URI(
+            "#{client.base_api_url}#{api_resource}/#{CGI.escapeURIComponent(external_customer_id)}/attributed_usage",
+          )
+          connection.get_all(query_params, uri)
+        end
+
         def portal_url(external_customer_id)
           uri = URI(
             "#{client.base_api_url}#{api_resource}/#{external_customer_id}/portal_url",
@@ -136,6 +163,13 @@ module Lago
 
         def filter_by_presentation_param(filter_by_presentation)
           filter_by_presentation.is_a?(String) ? filter_by_presentation : JSON.generate(filter_by_presentation)
+        end
+
+        # An empty array is sent as a valueless `key[]` so the API reads it as an empty selection, not a missing param
+        def array_query_param(key, values)
+          return [[key, nil]] if values.empty?
+
+          values.map { |value| [key, value] }
         end
 
         def whitelist_billing_configuration(billing_params)
