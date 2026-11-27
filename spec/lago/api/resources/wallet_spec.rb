@@ -35,6 +35,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
       factory_wallet.to_h.merge(
         transaction_name: 'wallet transaction name',
         purchase_order_number: 'PO-123',
+        invoice_usage_on_expiration: true,
         transaction_priority: 5,
         transaction_metadata: [{ 'key' => 'key', 'value' => 'value' }]
       )
@@ -52,6 +53,7 @@ RSpec.describe Lago::Api::Resources::Wallet do
           'expiration_at' => '2022-07-07T23:59:59Z',
           'transaction_name' => 'wallet transaction name',
           'purchase_order_number' => 'PO-123',
+          'invoice_usage_on_expiration' => true,
           'transaction_priority' => 5,
           'transaction_metadata' => [{ 'key' => 'key', 'value' => 'value' }],
           'recurring_transaction_rules' => [
@@ -420,6 +422,21 @@ RSpec.describe Lago::Api::Resources::Wallet do
 
         expect(wallet.lago_id).to eq('this-is-lago-id')
         expect(wallet.name).to eq(factory_wallet.name)
+      end
+    end
+
+    context 'when invoice_usage_on_expiration is turned off' do
+      let(:params) { factory_wallet.to_h.merge(invoice_usage_on_expiration: false) }
+      let(:body_turning_off) { { 'wallet' => body['wallet'].merge('invoice_usage_on_expiration' => false) } }
+
+      before do
+        stub_request(:put, "https://api.getlago.com/api/v1/wallets/#{id}")
+          .with(body: body_turning_off)
+          .to_return(body: response, status: 200)
+      end
+
+      it 'sends false' do
+        expect(resource.update(params, id).lago_id).to eq('this-is-lago-id')
       end
     end
 

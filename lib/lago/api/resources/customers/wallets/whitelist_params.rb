@@ -19,6 +19,7 @@ module Lago
                 :expiration_at,
                 :transaction_metadata,
                 :invoice_requires_successful_payment,
+                :invoice_usage_on_expiration,
                 :ignore_paid_top_up_limits_on_creation,
                 :transaction_name,
                 :transaction_priority,
